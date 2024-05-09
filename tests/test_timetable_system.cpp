@@ -1,6 +1,6 @@
-#include "/opt/catch_amalgamated.hpp"
-#include "../src/timetable_system.hpp"
-#include "/opt/datetime.h"
+#include "catch_amalgamated.hpp"
+#include "../src/systems/timetable_system.hpp"
+#include "../src/types/datetime.h"
 
 
 TEST_CASE("Test TimetableSystem init")
@@ -17,7 +17,7 @@ TEST_CASE("Test TimetableSystem add_entry")
     WorkerSystem w_system{};
     tt_system.bind_worker_system(w_system);
 
-    Pay pay{};
+    Pay pay{PaycheckMethod::Salary};
     Receptionist receptionist{"name", "id1", pay};
     jed_utils::datetime date1{ 2024, 4, 11 };
     TimetableEntry entry1{receptionist, date1, Shift::I};
@@ -32,7 +32,7 @@ TEST_CASE("Test TimetableSystem remove_entry")
     WorkerSystem w_system{};
     tt_system.bind_worker_system(w_system);
 
-    Pay pay{};
+    Pay pay{PaycheckMethod::Salary};
     Receptionist receptionist{"name", "id1", pay};
     jed_utils::datetime date1{ 2024, 4, 11 };
     jed_utils::datetime date2{ 2024, 4, 12 };
@@ -56,7 +56,7 @@ TEST_CASE("Test TimetableSystem add_entry less than 11-hour's break")
     TimetableSystem tt_system{};
     WorkerSystem w_system{};
     tt_system.bind_worker_system(w_system);
-    Pay pay{};
+    Pay pay{PaycheckMethod::Salary};
     Receptionist receptionist{"name", "id", pay};
     jed_utils::datetime date1{ 2024, 4, 11 };
     jed_utils::datetime date2{ 2024, 4, 12 };
@@ -72,7 +72,7 @@ TEST_CASE("Test TimetableSystem worker_entries")
     WorkerSystem w_system{};
     tt_system.bind_worker_system(w_system);
 
-    Pay pay{};
+    Pay pay{PaycheckMethod::Salary};
     Receptionist receptionist{"name", "id1", pay};
     Receptionist waiter{"name", "id2", pay};
     jed_utils::datetime date1{ 2024, 4, 11 };

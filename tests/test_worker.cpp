@@ -1,10 +1,10 @@
-#include "/opt/catch_amalgamated.hpp"
+#include "catch_amalgamated.hpp"
 #include "../src/workers/worker.hpp"
 #include "../src/workers/cook.hpp"
 #include "../src/workers/maid.hpp"
 #include "../src/workers/receptionist.hpp"
 #include "../src/workers/waiter.hpp"
-#include "../src/pay.hpp"
+#include "../src/types/pay.hpp"
 
 TEST_CASE("Test salary Worker init")
 {
