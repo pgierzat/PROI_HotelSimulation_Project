@@ -1,0 +1,1 @@
+#include "stay_system.hpp"
