@@ -2,6 +2,7 @@
 #define STAY_SYSTEM_HPP
 
 #include "../types/stay.hpp"
+#include "../rooms/hpp/rooms_list.hpp"
 
 
 class StaySystem
