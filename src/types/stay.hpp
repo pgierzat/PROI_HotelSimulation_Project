@@ -4,18 +4,16 @@
 #include "../rooms/hpp/room.hpp"
 #include "datetime.h"
 #include "timespan.h"
+#include "guest.hpp"
 
-class Guest;
-class GuestSystem;
-class RoomSystem;
 
 class Stay
 {
     public:
-        Stay(Guest, Room, jed_utils::datetime start, jed_utils::datetime end);
+        Stay(const Guest&, const Room&, const jed_utils::datetime& start, const jed_utils::datetime& end);
     private:
-        const Guest* guest;
-        const Room* room;
+        const Guest& guest;
+        const Room& room;
         jed_utils::datetime start;
         jed_utils::datetime end;
 };
