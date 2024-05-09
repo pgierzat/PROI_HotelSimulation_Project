@@ -16,7 +16,7 @@ std::optional<const Worker*> WorkerSystem::find_by_id(std::string id) const noex
 std::vector<const Worker*> WorkerSystem::get_workers() const
 {
     std::vector<const Worker*> vec{};
-    std::ranges::for_each(workers, [&](const std::unique_ptr<Worker>& pw){ vec.push_back(&*pw); });
+    std::ranges::for_each(workers, [&](const std::unique_ptr<Worker>& pw){ vec.push_back(pw.get()); });
     return vec;
 }
 
