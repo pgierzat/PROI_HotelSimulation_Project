@@ -1,5 +1,5 @@
-#include "/opt/datetime.h"
-#include "/opt/timespan.h"
+#include "datetime.h"
+#include "timespan.h"
 
 
 #ifndef TIME_INTERVAL_HPP

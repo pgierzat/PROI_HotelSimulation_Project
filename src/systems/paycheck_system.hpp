@@ -2,7 +2,7 @@
 #define PAYCHECK_SYSTEM_HPP
 
 #include "../workers/worker.hpp"
-#include "../paycheck.hpp"
+#include "../types/paycheck.hpp"
 #include "worker_system.hpp"
 
 class PaycheckSystem

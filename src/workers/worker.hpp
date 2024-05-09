@@ -2,8 +2,8 @@
 #include <map>
 #include <memory>
 #include "worker_enums.hpp"
-#include "../amount.hpp"
-#include "../pay.hpp"
+#include "../types/amount.hpp"
+#include "../types/pay.hpp"
 #include "../paycheck_calculators/paycheck_calculator.hpp"
 #include "../paycheck_calculators/salary_calculator.hpp"
 #include "../paycheck_calculators/wage_calculator.hpp"

@@ -1,6 +1,6 @@
-#include "workers/worker.hpp"
+#include "../workers/worker.hpp"
 #include "time_interval.hpp"
-#include "/opt/datetime.h"
+#include "datetime.h"
 #include <chrono>
 
 #ifndef TIMETABLE_ENTRY

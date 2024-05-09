@@ -1,7 +1,7 @@
 #include <vector>
 #include <ranges>
 #include <algorithm>
-#include "../timetable_entry.hpp"
+#include "../types/timetable_entry.hpp"
 #include "../workers/worker.hpp"
 #include "worker_system.hpp"
 

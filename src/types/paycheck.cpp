@@ -1,5 +1,5 @@
 #include "paycheck.hpp"
-#include "workers/worker.hpp"
+#include "../workers/worker.hpp"
 
 Paycheck::Paycheck(const Worker& worker, const Amount& amount) : worker{&worker}, amount{amount} {}
 

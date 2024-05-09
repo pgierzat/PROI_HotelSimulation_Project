@@ -1,5 +1,5 @@
-#include "../amount.hpp"
-#include "../paycheck.hpp"
+#include "../types/amount.hpp"
+#include "../types/paycheck.hpp"
 
 class Worker;
 

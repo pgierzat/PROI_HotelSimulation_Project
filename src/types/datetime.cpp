@@ -357,6 +357,13 @@ namespace jed_utils
 		timeInfo = new tm();
 		_copy_from(tm_new_time);
 	}
+	
+	void datetime::trunkate()
+	{
+		add_hours(-get_hour());
+		add_minutes(-get_minute());
+		add_seconds(-get_second());
+	}
 
 	bool datetime::is_leapyear()
 	{
@@ -602,5 +609,13 @@ namespace jed_utils
 	{
 		mdt -= odt;
 		return mdt;
+	}
+	
+	std::istream& operator>>(std::istream& is, jed_utils::datetime& datetime)
+	{
+		std::string text_datetime;
+		is >> text_datetime;
+		datetime = jed_utils::datetime::parse("yyyy-MM-dd", text_datetime);
+		return is;
 	}
 } // namespace jed_utils
