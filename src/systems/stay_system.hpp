@@ -3,6 +3,7 @@
 
 #include "../types/stay.hpp"
 #include "../rooms/hpp/rooms_list.hpp"
+#include "guest_system.hpp"
 
 
 class StaySystem
