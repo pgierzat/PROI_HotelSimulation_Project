@@ -1,20 +1,18 @@
-#include "/opt/catch_amalgamated.hpp"
-#include "/opt/datetime.h"
-#include "../src/timetable_entry.hpp"
+#include "catch_amalgamated.hpp"
+#include "../src/types/datetime.h"
+#include "../src/types/timetable_entry.hpp"
 #include "../src/workers/receptionist.hpp"
 #include "../src/workers/maid.hpp"
 
 
 TEST_CASE("Test TimetableEntry init")
 {
-    using namespace std::chrono;
-
     jed_utils::datetime date{ 2024, 4, 11, 2, 32, 55};
     jed_utils::datetime expected_date{ 2024, 4, 11 };
     jed_utils::datetime expected_start{ 2024, 4, 11, 22};
     jed_utils::datetime expected_end{ 2024, 4, 12, 6};
     TimeInterval expected_interval{expected_start, expected_end};
-    Pay pay{};
+    Pay pay{PaycheckMethod::Salary};
     Receptionist receptionist{"name", "id", pay};
     TimetableEntry entry{receptionist, date, Shift::III};
     REQUIRE( entry.get_date() == expected_date );
@@ -26,10 +24,8 @@ TEST_CASE("Test TimetableEntry init")
 
 TEST_CASE("Test TimetableEntry init invalid")
 {
-    using namespace std::chrono;
-
     jed_utils::datetime date{ 2024, 4, 11 };
-    Pay pay{};
+    Pay pay{PaycheckMethod::Salary};
     Maid maid{"name", "id", pay};
     // maids work 2 shifts
     REQUIRE_THROWS( TimetableEntry{maid, date, Shift::III} );
@@ -38,11 +34,9 @@ TEST_CASE("Test TimetableEntry init invalid")
 
 TEST_CASE("Test TimetableEntry operator==")
 {
-    using namespace std::chrono;
-
     jed_utils::datetime date1{ 2024, 4, 11 };
     jed_utils::datetime date2{ 2024, 4, 11 };
-    Pay pay{};
+    Pay pay{PaycheckMethod::Salary};
     Receptionist receptionist1{"name1", "id", pay};
     Receptionist receptionist2{"name2", "id", pay};
     TimetableEntry entry1{receptionist1, date1, Shift::II};
@@ -51,4 +45,3 @@ TEST_CASE("Test TimetableEntry operator==")
     TimetableEntry entry3 = entry1;
     REQUIRE( entry1 == entry3 );
 }
-
