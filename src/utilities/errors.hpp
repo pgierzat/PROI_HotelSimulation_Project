@@ -58,6 +58,13 @@ class GuestNotInSystemError : public std::invalid_argument
         const Guest& guest;
 };
 
+class RoomNotInSystemError : public std::invalid_argument
+{
+    public:
+        RoomNotInSystemError(std::string what, const Room&);
+        const Room& room;
+};
+
 class StayOverlapError : public std::invalid_argument
 {
     public:

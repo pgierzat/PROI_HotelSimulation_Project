@@ -21,5 +21,8 @@ RoomCapacityExceededError::RoomCapacityExceededError(std::string what, const Roo
 GuestNotInSystemError::GuestNotInSystemError(std::string what, const Guest& guest) :
     std::invalid_argument(what), guest{guest} {}
 
+RoomNotInSystemError::RoomNotInSystemError(std::string what, const Room&) :
+    std::invalid_argument(what), room{room} {}
+
 StayOverlapError::StayOverlapError(std::string what, const Stay& old_stay, const Stay& new_stay) :
     std::invalid_argument{what}, old_stay{old_stay}, new_stay{new_stay} {}
