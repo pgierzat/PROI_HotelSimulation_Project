@@ -25,18 +25,19 @@ class WorkerSystem
             void add_worker(const T&);
         std::optional<const Worker*> find_by_id(std::string id) const noexcept;
         std::vector<const Worker*> get_workers() const;
-        void set_hours_worked(std::string id, unsigned hours_worked);
-        void set_dishes_prepared(std::string id, unsigned dishes_prepared);
-        void set_rooms_serviced(std::string id, unsigned rooms_serviced);
-        void set_complaints(std::string id, unsigned complaints);
-        void set_orders_taken(std::string id, unsigned orders_taken);
+        void set_hours_worked(const Worker&, unsigned hours_worked);
+        void set_dishes_prepared(const Cook&, unsigned dishes_prepared);
+        void set_rooms_serviced(const Maid&, unsigned rooms_serviced);
+        void set_complaints(const Receptionist&, unsigned complaints);
+        void set_orders_taken(const Waiter&, unsigned orders_taken);
         void reset_hours_worked();
         void reset_stats();
         template <SupportedWorker T>
-            static T* cast_worker(Worker*);
+            static T& cast_worker(Worker&);
     private:
-        std::optional<Worker*> get_by_id(std::string id) const noexcept;
-        Worker* check_id(std::string id) const;
+        Worker& validate_worker(const Worker&);
+        template <SupportedWorker T>
+            T& validate_and_cast(const T&);
         std::vector<std::unique_ptr<Worker>> workers;
 };
 
@@ -54,16 +55,23 @@ void WorkerSystem::add_worker(const T& worker)
 }
 
 template <SupportedWorker T>
-T* WorkerSystem::cast_worker(Worker* worker)
+T& WorkerSystem::cast_worker(Worker& worker)
 {
     T* specific_worker = nullptr;
     try {
-        specific_worker = dynamic_cast<T*>(worker);
+        specific_worker = dynamic_cast<T&>(worker);
     }
     catch (const std::bad_cast& e) {
         throw IncorrectWorkerType("Attempted to make an incorrect cast", *worker, T::type);
     }
     return specific_worker;
+}
+
+template <SupportedWorker T>
+T& WorkerSystem::validate_and_cast(const T& worker)
+{
+    auto& worker_ref = validate_worker(worker);
+    return dynamic_cast<T&>(worker);
 }
 
 #endif
