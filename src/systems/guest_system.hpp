@@ -13,7 +13,7 @@ class GuestSystem
         void add_guest(Guest);
         void remove_guest(Guest) noexcept;
         std::optional<Guest> find_by_name(const std::string& name) const noexcept;
-        const std::vector<Guest> get_guests() const noexcept;
+        const std::vector<Guest>& get_guests() const noexcept;
     private:
         std::vector<Guest> guests;
 };

@@ -20,4 +20,4 @@ std::optional<Guest> GuestSystem::find_by_name(const std::string& name) const no
     return *p;
 }
 
-const std::vector<Guest> GuestSystem::get_guests() const noexcept { return guests; }
+const std::vector<Guest>& GuestSystem::get_guests() const noexcept { return guests; }
