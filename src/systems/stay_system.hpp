@@ -18,9 +18,13 @@ class StaySystem
         static const jed_utils::timespan checkout_time;
         static const jed_utils::timespan checkin_time;
     private:
+        void check_overlap(const Stay&);
+        void validate_guest(const Guest&);
+        void validate_guests(const Stay&);
         const GuestSystem* g_system = nullptr;
         const RoomsList* rooms_list = nullptr;
         std::vector<Stay> stays;
 };
+
 
 #endif

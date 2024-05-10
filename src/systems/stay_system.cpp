@@ -1,4 +1,5 @@
 #include "stay_system.hpp"
+#include "../utilities/errors.hpp"
 #include <ranges>
 #include <algorithm>
 
@@ -18,6 +19,18 @@ void StaySystem::bind_room_system(const RoomsList& rooms_list)
 
 void StaySystem::add_stay(const Stay& stay)
 {
+    validate_guests(stay);
+    check_overlap(stay);
+    
+    stays.push_back(stay);
+}
+
+void StaySystem::remove_stay(const Stay& stay) { std::erase(stays, stay); }
+
+std::vector<Stay> StaySystem::get_stays() const noexcept { return stays; }
+
+void StaySystem::check_overlap(const Stay& stay)
+{
     const auto& room = stay.get_room();
     auto interval = stay.get_interval();
     auto room_stays = std::ranges::filter_view(stays,
@@ -25,10 +38,20 @@ void StaySystem::add_stay(const Stay& stay)
     auto p = std::ranges::find_if(room_stays,
         [&](const auto& otr_stay){ return distance( interval, otr_stay.get_interval() ) < jed_utils::timespan{0}; });
     if ( p != room_stays.end() )
-        throw std::invalid_argument("This worker must have an 11-hour's break between shifts.");
-    stays.push_back(stay);
+        throw std::invalid_argument("That stay would overlap other stay.");
 }
 
-void StaySystem::remove_stay(const Stay& stay) { std::erase(stays, stay); }
+void StaySystem::validate_guest(const Guest& guest)
+{
+    if( !(g_system -> has_guest(guest)) )
+        throw GuestNotInSystemError("Tried to add a stay with unknown Guest.", guest);
+}
 
-std::vector<Stay> StaySystem::get_stays() const noexcept { return stays; }
+void StaySystem::validate_guests(const Stay& stay)
+{
+    auto stay_guests = stay.get_guests();
+    if (stay_guests.empty())
+        throw std::invalid_argument("Tried to add stay that has no guests.");
+    for (const Guest& guest : stay_guests)
+        validate_guest(guest);
+}
