@@ -10,9 +10,10 @@ class GuestSystem
 {
     public:
         GuestSystem() = default;
-        void add_guest(Guest);
-        void remove_guest(Guest) noexcept;
+        void add_guest(const Guest&);
+        void remove_guest(const Guest&) noexcept;
         std::optional<Guest> find_by_name(const std::string& name) const noexcept;
+        bool has_guest(const Guest&);
         const std::vector<Guest> get_guests() const noexcept;
     private:
         std::vector<Guest> guests;

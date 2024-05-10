@@ -1,7 +1,7 @@
 #include "guest_system.hpp"
 #include <algorithm>
 
-void GuestSystem::add_guest(Guest guest)
+void GuestSystem::add_guest(const Guest& guest)
 {
     auto p = std::ranges::find(guests, guest);
     if (p != guests.end())
@@ -9,7 +9,7 @@ void GuestSystem::add_guest(Guest guest)
     guests.push_back(guest);
 }
 
-void GuestSystem::remove_guest(Guest guest) noexcept { std::erase(guests, guest); }
+void GuestSystem::remove_guest(const Guest& guest) noexcept { std::erase(guests, guest); }
 
 std::optional<Guest> GuestSystem::find_by_name(const std::string& name) const noexcept
 {
@@ -18,6 +18,14 @@ std::optional<Guest> GuestSystem::find_by_name(const std::string& name) const no
     if (p == guests.end())
         return std::nullopt;
     return *p;
+}
+
+bool GuestSystem::has_guest(const Guest& guest)
+{
+    auto p = std::ranges::find(guests, guest);
+    if (p == guests.end())
+        return false;
+    return true;
 }
 
 const std::vector<Guest> GuestSystem::get_guests() const noexcept { return guests; }
