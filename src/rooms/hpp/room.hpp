@@ -17,6 +17,7 @@ class Room {
         virtual void display(std::ostream& os) const;
         unsigned getNumber() const;
         unsigned getCapacity() const;
+        virtual bool operator==(const Room&) const = default;
         friend std::ostream& operator<<(std::ostream& os, const Room& room);
 };
 
