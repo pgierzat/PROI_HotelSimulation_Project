@@ -2,7 +2,7 @@
 #include <ranges>
 #include <algorithm>
 
-const jed_utils::timespan StaySystem::minimal_break = jed_utils::timespan{1, 0, 0, 0};;
+const jed_utils::timespan StaySystem::minimal_break = jed_utils::timespan{1, 0, 0, 0};
 
 void StaySystem::bind_guest_system(const GuestSystem& g_system)
 {
@@ -27,12 +27,6 @@ void StaySystem::add_stay(const Stay& stay)
     stays.push_back(stay);
 }
 
-void StaySystem::remove_stay(const Stay&)
-{
+void StaySystem::remove_stay(const Stay& stay) { std::erase(stays, stay); }
 
-}
-
-std::vector<Stay> StaySystem::get_stays() const noexcept
-{
-    
-}
+std::vector<Stay> StaySystem::get_stays() const noexcept { return stays; }
