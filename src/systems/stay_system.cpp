@@ -20,8 +20,8 @@ void StaySystem::bind_room_system(const RoomsList& rooms_list)
 void StaySystem::add_stay(const Stay& stay)
 {
     validate_guests(stay);
+    validate_room(stay.get_room());
     check_overlap(stay);
-    
     stays.push_back(stay);
 }
 
@@ -54,4 +54,10 @@ void StaySystem::validate_guests(const Stay& stay)
         throw std::invalid_argument("Tried to add stay that has no guests.");
     for (const Guest& guest : stay_guests)
         validate_guest(guest);
+}
+
+void StaySystem::validate_room(const Room& room)
+{
+    if( !(rooms_list -> room_exists(room.getNumber())) )
+        throw RoomNotInSystemError("Tried to add a stay with unknown Room.", room);
 }

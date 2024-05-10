@@ -20,7 +20,8 @@ class StaySystem
     private:
         void check_overlap(const Stay&);
         void validate_guest(const Guest&);
-        void validate_guests(const Stay&);
+        void validate_guests(const Stay&); 
+        void validate_room(const Room&); 
         const GuestSystem* g_system = nullptr;
         const RoomsList* rooms_list = nullptr;
         std::vector<Stay> stays;
