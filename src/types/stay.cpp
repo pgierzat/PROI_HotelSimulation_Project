@@ -1,14 +1,21 @@
 #include "stay.hpp"
+#include "../utilities/errors.hpp"
+#include <algorithm>
 
-Stay::Stay(const Guest& guest, const Room& room, const jed_utils::datetime& start,
-    const jed_utils::datetime& end) : guest{guest}, room{room}, start{start}, end{end}
+Stay::Stay(const Room& room, const jed_utils::datetime& start,
+    const jed_utils::datetime& end) : room{room}, start{start}, end{end}
 {
     (this -> start).trunkate();
     (this -> end).trunkate();
     validate_duration(start, end);
 }
 
-Guest Stay::get_guest() const { return guest; }
+std::vector<Guest> Stay::get_guests() const
+{
+    std::vector<Guest> guests_vec;
+    std::ranges::for_each(guests, [&](const Guest* guest){ guests_vec.push_back(*guest); });
+    return guests_vec;
+}
 
 Room Stay::get_room() const { return room; }
 
@@ -17,6 +24,18 @@ jed_utils::datetime Stay::get_start() const noexcept { return start; }
 jed_utils::datetime Stay::get_end() const noexcept { return end; }
 
 TimeInterval Stay::get_interval() const noexcept { return TimeInterval{start, end}; }
+
+void Stay::add_guest(const Guest& guest)
+{
+    if (guests.size() + 1 > room.getCapacity())
+        throw RoomCapacityExceededError("Tried to add 'na waleta' Guest", room);
+    auto p = std::ranges::find_if(guests, [&](const Guest* otr_guest){ return *otr_guest == guest; });
+    if (p != guests.end())
+        throw std::invalid_argument("Tried to add duplicate Guest.");
+    guests.push_back(&guest);
+}
+
+void Stay::remove_guest(const Guest& guest) { std::erase(guests, guest); }
 
 void Stay::set_start(const jed_utils::datetime start)
 {
