@@ -17,3 +17,6 @@ IncorrectWorkerType::IncorrectWorkerType(std::string what, const Worker& worker,
 
 RoomCapacityExceededError::RoomCapacityExceededError(std::string what, const Room& room) : 
     std::invalid_argument(what), room{room} {}
+
+GuestNotInSystemError::GuestNotInSystemError(std::string what, const Guest& guest) :
+    std::invalid_argument(what), guest{guest} {}

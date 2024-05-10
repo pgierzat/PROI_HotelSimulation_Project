@@ -5,6 +5,7 @@
 #include <string>
 #include "../workers/worker.hpp"
 #include "../rooms/hpp/room.hpp"
+#include "../types/guest.hpp"
 
 class UnsupportedWorkerTypeError : public std::invalid_argument
 {
@@ -45,8 +46,15 @@ class IncorrectWorkerType : public std::invalid_argument
 class RoomCapacityExceededError : public std::invalid_argument
 {
     public:
-        RoomCapacityExceededError(std::string what, const Room& room);
+        RoomCapacityExceededError(std::string what, const Room&);
         const Room& room;
+};
+
+class GuestNotInSystemError : public std::invalid_argument
+{
+    public:
+        GuestNotInSystemError(std::string what, const Guest&);
+        const Guest& guest;
 };
 
 #endif
