@@ -28,4 +28,4 @@ bool GuestSystem::has_guest(const Guest& guest) const noexcept
     return true;
 }
 
-const std::vector<Guest> GuestSystem::get_guests() const noexcept { return guests; }
+const std::vector<Guest>& GuestSystem::get_guests() const noexcept { return guests; }
