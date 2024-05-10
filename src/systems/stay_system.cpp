@@ -38,7 +38,7 @@ void StaySystem::check_overlap(const Stay& stay)
     auto p = std::ranges::find_if(room_stays,
         [&](const auto& otr_stay){ return distance( interval, otr_stay.get_interval() ) < jed_utils::timespan{0}; });
     if ( p != room_stays.end() )
-        throw std::invalid_argument("That stay would overlap other stay.");
+        throw StayOverlapError("Attempt to add overlapping stay.", *p, stay);
 }
 
 void StaySystem::validate_guest(const Guest& guest)

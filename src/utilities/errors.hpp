@@ -6,6 +6,7 @@
 #include "../workers/worker.hpp"
 #include "../rooms/hpp/room.hpp"
 #include "../types/guest.hpp"
+#include "../types/stay.hpp"
 
 class UnsupportedWorkerTypeError : public std::invalid_argument
 {
@@ -55,6 +56,14 @@ class GuestNotInSystemError : public std::invalid_argument
     public:
         GuestNotInSystemError(std::string what, const Guest&);
         const Guest& guest;
+};
+
+class StayOverlapError : public std::invalid_argument
+{
+    public:
+        StayOverlapError(std::string what, const Stay& old_stay, const Stay& new_stay);
+        const Stay& old_stay;
+        const Stay& new_stay;
 };
 
 #endif
