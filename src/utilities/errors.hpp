@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <string>
 #include "../workers/worker.hpp"
+#include "../rooms/hpp/room.hpp"
 
 class UnsupportedWorkerTypeError : public std::invalid_argument
 {
@@ -39,6 +40,13 @@ class IncorrectWorkerType : public std::invalid_argument
         IncorrectWorkerType(std::string what, const Worker&, WorkerType);
         const Worker& worker;
         WorkerType type;
+};
+
+class RoomCapacityExceededError : public std::invalid_argument
+{
+    public:
+        RoomCapacityExceededError(std::string what, const Room& room);
+        const Room& room;
 };
 
 #endif

@@ -14,3 +14,6 @@ IDNotFoundError::IDNotFoundError(std::string what, const std::string& id) :
 
 IncorrectWorkerType::IncorrectWorkerType(std::string what, const Worker& worker, WorkerType type) :
     std::invalid_argument(what), worker{worker}, type{type} {}
+
+RoomCapacityExceededError::RoomCapacityExceededError(std::string what, const Room& room) : 
+    std::invalid_argument(what), room{room} {}
