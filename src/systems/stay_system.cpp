@@ -27,7 +27,7 @@ void StaySystem::add_stay(const Stay& stay)
 
 void StaySystem::remove_stay(const Stay& stay) { std::erase(stays, stay); }
 
-std::vector<Stay> StaySystem::get_stays() const noexcept { return stays; }
+const std::vector<Stay>& StaySystem::get_stays() const noexcept { return stays; }
 
 void StaySystem::check_overlap(const Stay& stay)
 {
@@ -52,8 +52,8 @@ void StaySystem::validate_guests(const Stay& stay)
     auto stay_guests = stay.get_guests();
     if (stay_guests.empty())
         throw std::invalid_argument("Tried to add stay that has no guests.");
-    for (const Guest& guest : stay_guests)
-        validate_guest(guest);
+    for (const Guest* guest : stay_guests)
+        validate_guest(*guest);
 }
 
 void StaySystem::validate_room(const Room& room)

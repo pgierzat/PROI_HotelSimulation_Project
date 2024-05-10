@@ -14,7 +14,7 @@ class StaySystem
         void bind_room_system(const RoomsList&);
         void add_stay(const Stay&);
         void remove_stay(const Stay&);
-        std::vector<Stay> get_stays() const noexcept;
+        const std::vector<Stay>& get_stays() const noexcept;
         static const jed_utils::timespan checkout_time;
         static const jed_utils::timespan checkin_time;
     private:

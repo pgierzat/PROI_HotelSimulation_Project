@@ -10,12 +10,7 @@ Stay::Stay(const Room& room, const jed_utils::datetime& start,
     validate_duration(start, end);
 }
 
-std::vector<Guest> Stay::get_guests() const
-{
-    std::vector<Guest> guests_vec;
-    std::ranges::for_each(guests, [&](const Guest* guest){ guests_vec.push_back(*guest); });
-    return guests_vec;
-}
+const std::vector<const Guest*>& Stay::get_guests() const { return guests; }
 
 Room Stay::get_room() const { return room; }
 

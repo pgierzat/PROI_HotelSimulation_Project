@@ -13,7 +13,7 @@ class Stay
 {
     public:
         Stay(const Room&, const jed_utils::datetime& start, const jed_utils::datetime& end);
-        std::vector<Guest> get_guests() const;
+        const std::vector<const Guest*>& get_guests() const;
         Room get_room() const;
         jed_utils::datetime get_start() const noexcept;
         jed_utils::datetime get_end() const noexcept;
