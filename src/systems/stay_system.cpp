@@ -2,7 +2,9 @@
 #include <ranges>
 #include <algorithm>
 
-const jed_utils::timespan StaySystem::minimal_break = jed_utils::timespan{1, 0, 0, 0};
+const jed_utils::timespan StaySystem::checkout_time = jed_utils::timespan{0, 10, 0, 0};
+
+const jed_utils::timespan StaySystem::checkin_time = jed_utils::timespan{0, 16, 0, 0};
 
 void StaySystem::bind_guest_system(const GuestSystem& g_system)
 {
@@ -21,7 +23,7 @@ void StaySystem::add_stay(const Stay& stay)
     auto room_stays = std::ranges::filter_view(stays,
         [&](const auto & otr_stay){ return otr_stay.get_room() == room; });
     auto p = std::ranges::find_if(room_stays,
-        [&](const auto& otr_stay){ return distance( interval, otr_stay.get_interval() ) < minimal_break; });
+        [&](const auto& otr_stay){ return distance( interval, otr_stay.get_interval() ) < jed_utils::timespan{0}; });
     if ( p != room_stays.end() )
         throw std::invalid_argument("This worker must have an 11-hour's break between shifts.");
     stays.push_back(stay);
