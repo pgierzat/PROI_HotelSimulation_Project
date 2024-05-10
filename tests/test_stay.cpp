@@ -18,9 +18,10 @@ TEST_CASE("Test Stay init")
     REQUIRE( stay.get_room() == room );
     REQUIRE( stay.get_start() == jed_utils::datetime{2012, 12, 12} );
     REQUIRE( stay.get_end() == jed_utils::datetime{2012, 12, 14} );
+    REQUIRE( stay.get_interval() == TimeInterval{start, end} );
 }
 
-TEST_CASE("Test Stay init invalid, end b4 start")
+TEST_CASE("Test Stay init invalid, end before start")
 {
     Room room{237, 2};
     jed_utils::datetime start{2012, 12, 14};
@@ -40,7 +41,7 @@ TEST_CASE("Test Stay, too many guests")
     REQUIRE_THROWS_AS(stay.add_guest(guest2), RoomCapacityExceededError);
 }
 
-TEST_CASE("Test Stay setters")
+TEST_CASE("Test Stay, setters")
 {
     Guest guest{"name1"};
     Room room{237, 2};
