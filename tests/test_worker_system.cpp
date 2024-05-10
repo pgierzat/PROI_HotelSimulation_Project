@@ -42,11 +42,11 @@ TEST_CASE("Test WorkerSystem")
     SECTION("find by id hit")
     {
         const Worker& found_worker = *system.find_by_id("2222").value();
-        REQUIRE( found_worker == receptionist );
+        REQUIRE( found_worker == maid );
     }
 
     SECTION("find by id miss")
     {
-        REQUIRE( system.find_by_id("3333") == std::nullopt );
+        REQUIRE( system.find_by_id("5555") == std::nullopt );
     }
 }
