@@ -12,9 +12,14 @@ class StaySystem
         StaySystem() = default;
         void bind_guest_system(const GuestSystem&);
         void bind_room_system(const RoomsList&); 
+        void add_stay(const Stay&);
+        void remove_stay(const Stay&);
+        std::vector<Stay> get_stays() const noexcept;
+        static const jed_utils::timespan minimal_break;
     private:
-        GuestSystem* g_system = nullptr;
-        RoomsList* rooms_list = nullptr;
+        const GuestSystem* g_system = nullptr;
+        const RoomsList* rooms_list = nullptr;
+        std::vector<Stay> stays;
 };
 
 #endif

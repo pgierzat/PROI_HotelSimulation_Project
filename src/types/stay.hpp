@@ -5,6 +5,7 @@
 #include "datetime.h"
 #include "timespan.h"
 #include "guest.hpp"
+#include "time_interval.hpp"
 
 
 class Stay
@@ -15,6 +16,7 @@ class Stay
         Room get_room() const;
         jed_utils::datetime get_start() const noexcept;
         jed_utils::datetime get_end() const noexcept;
+        TimeInterval get_interval() const noexcept;
         void set_start(const jed_utils::datetime start);
         void set_end(const jed_utils::datetime end);
     private:

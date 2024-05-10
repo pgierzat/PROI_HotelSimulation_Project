@@ -16,6 +16,8 @@ jed_utils::datetime Stay::get_start() const noexcept { return start; }
 
 jed_utils::datetime Stay::get_end() const noexcept { return end; }
 
+TimeInterval Stay::get_interval() const noexcept { return TimeInterval{start, end}; }
+
 void Stay::set_start(const jed_utils::datetime start)
 {
     validate_duration(start, end);
