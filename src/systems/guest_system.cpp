@@ -4,7 +4,7 @@
 void GuestSystem::add_guest(Guest guest)
 {
     auto p = std::ranges::find(guests, guest);
-    if (p == guests.end())
+    if (p != guests.end())
         throw std::invalid_argument("Tried to add duplicate Guest.");
     guests.push_back(guest);
 }
