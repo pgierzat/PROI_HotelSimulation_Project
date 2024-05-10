@@ -73,7 +73,10 @@ void Worker::set_hours_worked(unsigned hours_worked) { this -> hours_worked = ho
 
 bool Worker::operator==(const Worker& other) const
 {
-    return this->get_id() == other.get_id();
+    return name == other.name &&
+        id == other.id &&
+        pay == other.pay &&
+        hours_worked == other.hours_worked;
 }
 
 std::unique_ptr<PaycheckCalculator> Worker::create_calculator(Worker* that, PaycheckMethod method)
