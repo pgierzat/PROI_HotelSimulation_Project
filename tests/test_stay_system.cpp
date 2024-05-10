@@ -17,7 +17,7 @@ TEST_CASE("test StaySystem")
     s_system.bind_room_system(rooms_list);
     jed_utils::datetime start1{2024, 5, 10};
     jed_utils::datetime end1{2024, 5, 14};
-    auto stays = s_system.get_stays();
+    const auto& stays = s_system.get_stays();
 
     SECTION("simple use")
     {

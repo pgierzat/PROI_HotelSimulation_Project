@@ -8,7 +8,7 @@ TEST_CASE("test GuestSystem")
     Guest guest2{"name2"};
     g_system.add_guest(guest1);
     g_system.add_guest(guest2);
-    auto guests = g_system.get_guests();
+    const auto& guests = g_system.get_guests();
 
     SECTION("add guest")
     {
