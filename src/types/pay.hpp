@@ -26,6 +26,7 @@ class Pay
         PaycheckMethod get_method() const noexcept;
         void set_salary(const Amount&);
         void set_wage(const Amount&);
+        bool operator==(const Pay&) const;
     private:
         PaycheckMethod method = PaycheckMethod::NoneType;
         PayType amount;
