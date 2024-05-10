@@ -20,7 +20,7 @@ std::optional<Guest> GuestSystem::find_by_name(const std::string& name) const no
     return *p;
 }
 
-bool GuestSystem::has_guest(const Guest& guest)
+bool GuestSystem::has_guest(const Guest& guest) const noexcept
 {
     auto p = std::ranges::find(guests, guest);
     if (p == guests.end())
