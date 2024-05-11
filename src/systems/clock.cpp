@@ -23,6 +23,8 @@ Clock& Clock::operator++()
     return *this;
 }
 
+bool Clock::operator==(const Clock& other) { return time == other.time; }
+
 Clock operator++(Clock& clock, int)
 {
     Clock old{clock};
