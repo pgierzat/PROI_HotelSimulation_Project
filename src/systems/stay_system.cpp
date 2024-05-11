@@ -1,5 +1,6 @@
 #include "stay_system.hpp"
 #include "../utilities/errors.hpp"
+#include "../utilities/useful.hpp"
 #include <ranges>
 #include <algorithm>
 
@@ -17,6 +18,16 @@ void StaySystem::bind_room_system(const RoomsList& rooms_list)
     this -> rooms_list = &rooms_list;
 }
 
+void StaySystem::set_time(const jed_utils::datetime& time)
+{
+    if (time < this -> time)
+        throw std::invalid_argument("Tried to turn StaySystem's time back.");
+    this -> time = time;
+    auto previous_stays = active_stays;
+    refresh_active_stays();
+    refresh_ending_stays(previous_stays);
+}
+
 void StaySystem::add_stay(const Stay& stay)
 {
     validate_guests(stay);
@@ -28,6 +39,34 @@ void StaySystem::add_stay(const Stay& stay)
 void StaySystem::remove_stay(const Stay& stay) { std::erase(stays, stay); }
 
 const std::vector<Stay>& StaySystem::get_stays() const noexcept { return stays; }
+
+std::vector<const Stay*> StaySystem::get_active_stays() const noexcept
+{
+    return const_ptr_vec(active_stays);
+}
+
+std::vector<const Stay*> StaySystem::get_ending_stays() const noexcept
+{
+    return const_ptr_vec(ending_stays);
+}
+
+void StaySystem::refresh_active_stays()
+{
+    active_stays.clear();
+    for (auto& stay : stays)
+    {
+        if (is_in(time, stay.get_interval()))
+            active_stays.push_back(&stay);
+    }
+    std::ranges::sort(active_stays);
+}
+
+void StaySystem::refresh_ending_stays(const std::vector<Stay*>& previous_stays)
+
+{
+    ending_stays.clear();
+    std::ranges::set_difference(previous_stays, active_stays, std::back_inserter(ending_stays));
+}
 
 void StaySystem::check_overlap(const Stay& stay)
 {

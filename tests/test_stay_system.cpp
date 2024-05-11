@@ -19,7 +19,7 @@ TEST_CASE("test StaySystem")
     jed_utils::datetime end1{2024, 5, 14};
     const auto& stays = s_system.get_stays();
 
-    SECTION("simple use")
+    SECTION("add stay")
     {
         Stay stay1{room1, start1, end1};
         stay1.add_guest(guest1);
@@ -71,5 +71,21 @@ TEST_CASE("test StaySystem")
         stay2.add_guest(guest1);
         s_system.add_stay(stay1);
         REQUIRE_THROWS_AS(s_system.add_stay(stay2), StayOverlapError);
+    }
+
+    SECTION("time test")
+    {
+        Stay stay1{room1, start1, end1};
+        stay1.add_guest(guest1);
+        stay1.add_guest(guest2);
+        s_system.add_stay(stay1);
+        REQUIRE( s_system.get_active_stays().empty() );
+        REQUIRE( s_system.get_ending_stays().empty() );
+        s_system.set_time(start1);
+        REQUIRE( *s_system.get_active_stays().at(0) == stay1 );
+        REQUIRE( s_system.get_ending_stays().empty() );
+        s_system.set_time(end1 + jed_utils::timespan{1});
+        REQUIRE( s_system.get_active_stays().empty() ); 
+        REQUIRE( *s_system.get_ending_stays().at(0) == stay1 );
     }
 }
