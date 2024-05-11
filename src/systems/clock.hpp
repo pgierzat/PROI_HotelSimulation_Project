@@ -15,8 +15,9 @@ class Clock
         void set_unit_delta(const jed_utils::timespan&);
         Clock& operator+=(const jed_utils::timespan&);
         Clock& operator++();
+        bool operator==(const Clock&);
     private:
-        jed_utils::datetime time{0, 0, 0};
+        jed_utils::datetime time{1970, 1, 1};
         jed_utils::timespan unit_delta{1};
 };
 

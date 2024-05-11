@@ -1,7 +1,7 @@
 #include "clock.hpp"
 
 
-explicit Clock::Clock(jed_utils::timespan unit_delta) : unit_delta{unit_delta} {}
+Clock::Clock(jed_utils::timespan unit_delta) : unit_delta{unit_delta} {}
 
 jed_utils::datetime Clock::get_time() const noexcept { return time; }
 
