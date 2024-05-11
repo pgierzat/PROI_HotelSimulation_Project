@@ -2,20 +2,11 @@
 #include <stdexcept>
 
 TimetableEntry::TimetableEntry(const Worker& worker, const jed_utils::datetime& date, Shift shift) : 
-    TimetableEntry{date, shift}
-{
-    this -> worker = &worker;
-    check_worker_shift(this -> worker, shift);
-}
-
-TimetableEntry::TimetableEntry(const jed_utils::datetime& date, Shift shift) : date{date}, shift{shift}
+    worker{&worker}, date{date}, shift{shift}
 {
     (this -> date).trunkate();
+    check_worker_shift(*(this -> worker), shift);
 }
-
-TimetableEntry::TimetableEntry(const Worker& worker) : TimetableEntry{worker, jed_utils::datetime{1970, 1, 1}, Shift::I} {}
-
-TimetableEntry::TimetableEntry(const jed_utils::datetime& date) : TimetableEntry{date, Shift::I} {}
 
 const Worker& TimetableEntry::get_worker() const noexcept { return *worker; }
 
@@ -33,13 +24,13 @@ Shift TimetableEntry::get_shift() const noexcept { return shift; }
 
 void TimetableEntry::set_worker(const Worker& worker)
 {
-    check_worker_shift(&worker, shift);
+    check_worker_shift(worker, shift);
     this -> worker = &worker;
 }
 
 void TimetableEntry::set_shift(Shift shift)
 {
-    check_worker_shift(worker, shift);
+    check_worker_shift(*worker, shift);
     this -> shift = shift;
 }
 
@@ -56,11 +47,9 @@ bool TimetableEntry::operator==(const TimetableEntry& other) const
         shift == other.get_shift();
 }
 
-void TimetableEntry::check_worker_shift(const Worker* worker, Shift shift)
+void TimetableEntry::check_worker_shift(const Worker& worker, Shift shift)
 {
-    if (!worker)
-        return;
-    if (worker -> get_shifts() < unsigned(shift))
+    if (worker.get_shifts() < unsigned(shift))
         throw std::invalid_argument("There is no such shift for these workers.");
 }
 

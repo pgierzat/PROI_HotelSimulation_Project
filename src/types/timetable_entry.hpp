@@ -11,9 +11,6 @@ class TimetableEntry
 {
     public:
         TimetableEntry(const Worker&, const jed_utils::datetime&, Shift);
-        TimetableEntry(const Worker&);
-        TimetableEntry(const jed_utils::datetime&, Shift);
-        TimetableEntry(const jed_utils::datetime&);
         TimetableEntry() = default;
         const Worker& get_worker() const noexcept;
         jed_utils::datetime get_date() const noexcept;
@@ -25,7 +22,7 @@ class TimetableEntry
         void set_date(const jed_utils::datetime&);
         bool operator==(const TimetableEntry&) const;
     private:
-        static void check_worker_shift(const Worker*, Shift);
+        static void check_worker_shift(const Worker&, Shift);
 
         const Worker* worker = nullptr;
         jed_utils::datetime date;
