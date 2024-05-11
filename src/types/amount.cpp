@@ -91,6 +91,11 @@ Amount operator-(const Amount& amount)
     return Amount{ -amount.get_dollars(), -amount.get_cents() };
 }
 
+Amount operator+(Amount lhs, const Amount& rhs)
+{
+    return lhs += rhs;
+}
+
 Amount operator*(Amount amount, int rhs)
 {
     amount *= rhs;

@@ -28,7 +28,10 @@ class Amount {
         int cents = 0;
 };
 
+
 Amount operator-(const Amount&);
+
+Amount operator+(Amount lhs, const Amount& rhs);
 
 Amount operator*(Amount, int rhs);
 
