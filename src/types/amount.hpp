@@ -33,6 +33,8 @@ Amount operator-(const Amount&);
 
 Amount operator+(Amount lhs, const Amount& rhs);
 
+Amount operator-(Amount lhs, const Amount& rhs);
+
 Amount operator*(Amount, int rhs);
 
 std::ostream& operator<<(std::ostream&, const Amount&);
