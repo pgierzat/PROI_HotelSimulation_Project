@@ -17,3 +17,8 @@ jed_utils::timespan distance(const TimeInterval& i1, const TimeInterval& i2)
 {
     return std::max({ i2.get_start() - i1.get_end(), i1.get_start() - i2.get_end() });
 }
+
+bool is_in(const jed_utils::datetime time, const TimeInterval& interval)
+{
+    return interval.get_start() <= time && time <= interval.get_end();
+}

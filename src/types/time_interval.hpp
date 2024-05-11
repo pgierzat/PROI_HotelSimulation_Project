@@ -20,4 +20,6 @@ class TimeInterval
 
 jed_utils::timespan distance(const TimeInterval& i1, const TimeInterval& i2);
 
+bool is_in(const jed_utils::datetime, const TimeInterval&);
+
 #endif
