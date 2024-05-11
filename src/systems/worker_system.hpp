@@ -43,8 +43,7 @@ class WorkerSystem
 template<SupportedWorker T>
 void WorkerSystem::add_worker(const T& worker)
 {
-    if (worker.get_name().empty() || worker.get_id().empty() ||
-            worker.get_paycheck_method() == PaycheckMethod::NoneType)
+    if (worker.get_name().empty() || worker.get_id().empty())
         throw InvalidWorkerError("Cannot add worker", worker);
     if ( find_by_id(worker.get_id()) )
         throw DuplicateWorkerIDError("Cannot add worker", worker);
@@ -56,7 +55,7 @@ template <SupportedWorker T>
 T& WorkerSystem::validate_and_cast(const T& worker)
 {
     auto& worker_ref = validate_worker(worker);
-    return dynamic_cast<T&>(worker);
+    return dynamic_cast<T&>(worker_ref);
 }
 
 #endif
