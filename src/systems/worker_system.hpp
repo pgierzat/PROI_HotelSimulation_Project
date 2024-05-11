@@ -32,8 +32,6 @@ class WorkerSystem
         void set_orders_taken(const Waiter&, unsigned orders_taken);
         void reset_hours_worked();
         void reset_stats();
-        template <SupportedWorker T>
-            static T& cast_worker(Worker&);
     private:
         Worker& validate_worker(const Worker&);
         template <SupportedWorker T>
@@ -52,19 +50,6 @@ void WorkerSystem::add_worker(const T& worker)
         throw DuplicateWorkerIDError("Cannot add worker", worker);
     auto p = std::make_unique<T>(worker);
     workers.push_back(std::move(p));
-}
-
-template <SupportedWorker T>
-T& WorkerSystem::cast_worker(Worker& worker)
-{
-    T* specific_worker = nullptr;
-    try {
-        specific_worker = dynamic_cast<T&>(worker);
-    }
-    catch (const std::bad_cast& e) {
-        throw IncorrectWorkerType("Attempted to make an incorrect cast", *worker, T::type);
-    }
-    return specific_worker;
 }
 
 template <SupportedWorker T>
