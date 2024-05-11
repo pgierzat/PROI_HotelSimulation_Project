@@ -12,7 +12,7 @@
 TEST_CASE("Test WorkerSystem")
 {
     WorkerSystem system{};
-    Pay pay{PaycheckMethod::Salary};
+    Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
     Cook cook{"name1", "1111", pay};
     Maid maid{"name2", "2222", pay};
     Receptionist receptionist{"name3", "3333", pay};

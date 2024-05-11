@@ -8,7 +8,7 @@
 TEST_CASE("Test TimetableEntry")
 {
     jed_utils::datetime date{ 2024, 4, 11 };
-    Pay pay{PaycheckMethod::Salary};
+    Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
     Receptionist receptionist{"name", "id", pay};
 
     SECTION("init")
@@ -31,13 +31,13 @@ TEST_CASE("Test TimetableEntry")
         REQUIRE_THROWS( TimetableEntry{maid, date, Shift::III} );
     }
 
-    SECTION("init, invalid, wrong shift")
+    SECTION("opearator ==")
     {
         jed_utils::datetime date1{ 2024, 4, 11 };
         jed_utils::datetime date2{ 2024, 4, 11 };
-        Pay pay{PaycheckMethod::Salary};
+        Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
         Receptionist receptionist1{"name1", "id", pay};
-        Receptionist receptionist2{"name2", "id", pay};
+        Receptionist receptionist2{"name1", "id", pay};
         TimetableEntry entry1{receptionist1, date1, Shift::II};
         TimetableEntry entry2{receptionist2, date2, Shift::II};
         REQUIRE( entry1 == entry2 );

@@ -24,13 +24,13 @@ Shift TimetableEntry::get_shift() const noexcept { return shift; }
 
 void TimetableEntry::set_worker(const Worker& worker)
 {
-    check_worker_shift(&worker, shift);
+    check_worker_shift(worker, shift);
     this -> worker = &worker;
 }
 
 void TimetableEntry::set_shift(Shift shift)
 {
-    check_worker_shift(worker, shift);
+    check_worker_shift(*worker, shift);
     this -> shift = shift;
 }
 

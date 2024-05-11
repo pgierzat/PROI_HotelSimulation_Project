@@ -8,7 +8,7 @@ TEST_CASE("Test TimetableSystem")
     TimetableSystem tt_system{};
     WorkerSystem w_system{};
     tt_system.bind_worker_system(w_system);
-    Pay pay{PaycheckMethod::Salary};
+    Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
     Receptionist receptionist{"name", "id1", pay};
     jed_utils::datetime date1{ 2024, 4, 11 };
     const auto& entries = tt_system.get_entries();
