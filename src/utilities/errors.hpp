@@ -73,4 +73,11 @@ class StayOverlapError : public std::invalid_argument
         const Stay& new_stay;
 };
 
+class WorkerNotInSystemError : public std::invalid_argument
+{
+    public:
+        WorkerNotInSystemError(std::string what, const Worker&);
+        const Worker& worker;
+};
+
 #endif

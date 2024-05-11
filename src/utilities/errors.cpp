@@ -26,3 +26,6 @@ RoomNotInSystemError::RoomNotInSystemError(std::string what, const Room&) :
 
 StayOverlapError::StayOverlapError(std::string what, const Stay& old_stay, const Stay& new_stay) :
     std::invalid_argument{what}, old_stay{old_stay}, new_stay{new_stay} {}
+
+WorkerNotInSystemError::WorkerNotInSystemError(std::string what, const Worker& worker) :
+    std::invalid_argument(what), worker{worker} {}

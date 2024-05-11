@@ -45,11 +45,7 @@ std::string Worker::get_name() const noexcept { return name; }
 
 std::string Worker::get_id() const noexcept { return id; }
 
-PaycheckMethod Worker::get_paycheck_method() const noexcept { return pay.get_method(); }
-
-Amount Worker::get_salary() const { return pay.get_salary(); }
-
-Amount Worker::get_wage() const { return pay.get_wage(); }
+Pay Worker::get_pay() const noexcept { return pay; }
 
 unsigned Worker::get_hours_worked() const noexcept { return hours_worked; }
 
@@ -59,21 +55,20 @@ void Worker::set_name(const std::string& name) { this -> name = name; }
 
 void Worker::set_id(const std::string& id) { this -> id = id; };
 
-void Worker::set_paycheck_method(PaycheckMethod method)
+void Worker::set_pay(const Pay& pay)
 {
-    pay = Pay{method};
-    calculator = create_calculator(this, method);
+    this -> pay = pay;
+    calculator = create_calculator(this, pay.get_method());
 }
-
-void Worker::set_salary(const Amount& amount) { pay.set_salary(amount); }
-
-void Worker::set_wage(const Amount& amount) { pay.set_wage(amount); }
 
 void Worker::set_hours_worked(unsigned hours_worked) { this -> hours_worked = hours_worked; }
 
 bool Worker::operator==(const Worker& other) const
 {
-    return this->get_id() == other.get_id();
+    return name == other.name &&
+        id == other.id &&
+        pay == other.pay &&
+        hours_worked == other.hours_worked;
 }
 
 std::unique_ptr<PaycheckCalculator> Worker::create_calculator(Worker* that, PaycheckMethod method)

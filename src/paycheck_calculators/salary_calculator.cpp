@@ -6,5 +6,5 @@ SalaryCalculator::SalaryCalculator(const Worker& worker) :
 
 Amount SalaryCalculator::calculate_paycheck() const noexcept
 {
-    return worker -> get_salary();
+    return (worker -> get_pay()).get_salary();
 }

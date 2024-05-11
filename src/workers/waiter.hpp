@@ -21,6 +21,7 @@ class Waiter : public Worker
         void reset_stats() override;
 
         static const WorkerType type = WorkerType::Waiter;
+        static const Amount bonus;
     private:
         unsigned orders_taken = 0;
         static unsigned shifts;

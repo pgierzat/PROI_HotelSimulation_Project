@@ -21,6 +21,7 @@ class Maid : public Worker
         void reset_stats() override;
 
         static const WorkerType type = WorkerType::Maid;
+        static const Amount bonus;
     private:
         unsigned rooms_serviced = 0;
         static const unsigned shifts;

@@ -6,11 +6,10 @@
 
 std::optional<const Worker*> WorkerSystem::find_by_id(std::string id) const noexcept
 {
-    auto worker_opt = get_by_id(id);
-    std::optional<const Worker*> c_worker_opt = std::nullopt;
-    if (worker_opt)
-        c_worker_opt = worker_opt.value();
-    return c_worker_opt;
+    auto p = std::ranges::find_if(workers, [&](const auto& worker){ return worker -> get_id() == id; });
+    if (p == workers.end())
+        return std::nullopt;
+    return (*p).get();
 }
 
 std::vector<const Worker*> WorkerSystem::get_workers() const
@@ -20,34 +19,34 @@ std::vector<const Worker*> WorkerSystem::get_workers() const
     return vec;
 }
 
-void WorkerSystem::set_hours_worked(std::string id, unsigned hours_worked)
+void WorkerSystem::set_hours_worked(const Worker& worker, unsigned hours_worked)
 {
-    auto worker = check_id(id);
-    worker -> set_hours_worked(hours_worked);
+    auto& worker_ref = validate_worker(worker);
+    worker_ref.set_hours_worked(hours_worked);
 }
 
-void WorkerSystem::set_dishes_prepared(std::string id, unsigned dishes_prepared)
+void WorkerSystem::set_dishes_prepared(const Cook& cook, unsigned dishes_prepared)
 {
-    auto& cook = *cast_worker<Cook>(check_id(id));
-    cook.set_dishes_prepared(dishes_prepared);
+    Cook& cook_ref = validate_and_cast(cook);
+    cook_ref.set_dishes_prepared(dishes_prepared);
 }
 
-void WorkerSystem::set_rooms_serviced(std::string id, unsigned rooms_serviced)
+void WorkerSystem::set_rooms_serviced(const Maid& maid, unsigned rooms_serviced)
 {
-    auto& maid = *cast_worker<Maid>(check_id(id));
-    maid.set_rooms_serviced(rooms_serviced);
+    Maid& maid_ref = validate_and_cast(maid);
+    maid_ref.set_rooms_serviced(rooms_serviced);
 }
 
-void WorkerSystem::set_complaints(std::string id, unsigned complaints)
+void WorkerSystem::set_complaints(const Receptionist& receptionist, unsigned complaints)
 {
-    auto& receptionist = *cast_worker<Receptionist>(check_id(id));
-    receptionist.set_complaints(complaints);
+    Receptionist& receptionist_ref = validate_and_cast(receptionist);
+    receptionist_ref.set_complaints(complaints);
 }
 
-void WorkerSystem::set_orders_taken(std::string id, unsigned orders_taken)
+void WorkerSystem::set_orders_taken(const Waiter& waiter, unsigned orders_taken)
 {
-    auto& waiter = *cast_worker<Waiter>(check_id(id));
-    waiter.set_orders_taken(orders_taken);
+    Waiter& waiter_ref = validate_and_cast(waiter);
+    waiter_ref.set_orders_taken(orders_taken);
 }
 
 void WorkerSystem::reset_hours_worked()
@@ -62,18 +61,10 @@ void WorkerSystem::reset_stats()
         worker -> reset_stats();
 }
 
-std::optional<Worker*> WorkerSystem::get_by_id(std::string id) const noexcept
+Worker& WorkerSystem::validate_worker(const Worker& worker)
 {
-    auto p = std::ranges::find_if(workers, [&id](const std::unique_ptr<Worker>& pw){ return pw -> get_id() == id; });
-    if ( p == workers.end() )
-        return std::nullopt;
-    return &**p;
-}
-
-Worker* WorkerSystem::check_id(std::string id) const
-{
-    auto worker = get_by_id(id).value_or(nullptr);
-    if (!worker)
-        throw IDNotFoundError("ID not found", id);
-    return worker;
-}
+    auto p = std::ranges::find_if(workers, [&](const auto& otr_worker){ return *otr_worker == worker; });
+    if (p == workers.end())
+        throw WorkerNotInSystemError("Unsuccesfull worker validation", worker);
+    return **p;
+}    

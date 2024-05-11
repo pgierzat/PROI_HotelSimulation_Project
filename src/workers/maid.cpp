@@ -5,6 +5,8 @@
 
 const unsigned Maid::shifts = 2;
 
+const Amount Maid::bonus{1, 50};
+
 const jed_utils::timespan Maid::shift_duration = jed_utils::timespan(0, 6);
 
 const std::map<Shift, jed_utils::timespan> Maid::shifts_to_hours = {
@@ -17,7 +19,7 @@ Maid::Maid(std::string name, std::string id, const Pay& pay) : Worker{name, id, 
 Amount Maid::calculate_paycheck() const noexcept
 {
     Amount base = calculate_base_paycheck();
-    return base += Amount(1, 50) * rooms_serviced;
+    return base += bonus * rooms_serviced;
 }
 
 WorkerType Maid::get_type() const noexcept { return type; }

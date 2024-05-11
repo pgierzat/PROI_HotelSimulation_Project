@@ -21,6 +21,7 @@ class Cook : public Worker
         void reset_stats() override;
 
         static const WorkerType type = WorkerType::Cook;
+        static const Amount bonus;
     private:
         unsigned dishes_prepared = 0;
         static unsigned shifts;

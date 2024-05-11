@@ -21,6 +21,7 @@ class Receptionist : public Worker
         void reset_stats() override;
 
         static const WorkerType type = WorkerType::Receptionist;
+        static const Amount penalty;
     private:
         unsigned complaints;
         static unsigned shifts;
