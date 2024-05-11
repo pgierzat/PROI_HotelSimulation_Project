@@ -7,7 +7,12 @@ jed_utils::datetime Clock::get_time() const noexcept { return time; }
 
 jed_utils::timespan Clock::get_unit_delta() const noexcept { return unit_delta; }
 
-void Clock::set_time(const jed_utils::datetime& time) { this -> time = time; }
+void Clock::set_time(const jed_utils::datetime& time)
+{
+    if (time < this -> time)
+        throw std::invalid_argument("can't decrese clock's time.");
+    this -> time = time;
+}
 
 void Clock::set_unit_delta(const jed_utils::timespan& unit_delta) { this -> unit_delta = unit_delta; }
 
