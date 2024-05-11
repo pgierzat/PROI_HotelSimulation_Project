@@ -22,6 +22,7 @@ void StaySystem::set_time(const jed_utils::datetime& time)
 {
     if (time < this -> time)
         throw std::invalid_argument("Tried to turn StaySystem's time back.");
+    this -> time = time;
     auto previous_stays = active_stays;
     refresh_active_stays();
     refresh_ending_stays(previous_stays);
@@ -57,9 +58,11 @@ void StaySystem::refresh_active_stays()
         if (is_in(time, stay.get_interval()))
             active_stays.push_back(&stay);
     }
+    std::ranges::sort(active_stays);
 }
 
 void StaySystem::refresh_ending_stays(const std::vector<Stay*>& previous_stays)
+
 {
     ending_stays.clear();
     std::ranges::set_difference(previous_stays, active_stays, std::back_inserter(ending_stays));
