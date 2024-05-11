@@ -18,19 +18,16 @@ class Worker
 {
     protected:
         Worker(std::string name, std::string id, const Pay&);
-        Worker(const Worker&);
         Worker() = default;
+        Worker(const Worker&);
         Worker(Worker&&);
         Worker& operator=(const Worker&);
         Worker& operator=(Worker&&);
     public:
         virtual ~Worker() = default;
-
         std::string get_name() const noexcept;
         std::string get_id() const noexcept;
-        PaycheckMethod get_paycheck_method() const noexcept;
-        Amount get_salary() const;
-        Amount get_wage() const;
+        Pay get_pay() const noexcept;
         unsigned get_hours_worked() const noexcept;
         virtual WorkerType get_type() const noexcept = 0;
         virtual unsigned get_shifts() const noexcept = 0;
@@ -42,18 +39,16 @@ class Worker
 
         void set_name(const std::string&);
         void set_id(const std::string&);
-        void set_paycheck_method(PaycheckMethod method);
-        void set_salary(const Amount&);
-        void set_wage(const Amount&);
+        void set_pay(const Pay&);
         void set_hours_worked(unsigned);
         virtual void reset_stats() = 0;
 
         bool operator==(const Worker&) const;
     private:
-        std::string name = "";
-        std::string id = "";
-        Pay pay = Pay{};
-        unsigned hours_worked = 0;
+        std::string name;
+        std::string id;
+        Pay pay;
+        unsigned hours_worked;
     protected:
         std::unique_ptr<PaycheckCalculator> calculator = nullptr;
         static std::unique_ptr<PaycheckCalculator> create_calculator(Worker*, PaycheckMethod);
