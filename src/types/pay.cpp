@@ -4,11 +4,11 @@ Pay::Pay(PaycheckMethod method, Amount amount) : method{method}
 {
     if (method == PaycheckMethod::Salary)
         (this -> amount).salary = amount;
-    else
+    else if (method == PaycheckMethod::Wage)
         (this -> amount).wage = amount;
+    else
+        throw std::invalid_argument("Tried to construct Pay with unsupported PaycheckMethod.");
 }
-
-Pay::Pay(PaycheckMethod method) : Pay{method, Amount{}} {}
 
 Amount Pay::get_salary() const
 {
@@ -45,5 +45,6 @@ bool Pay::operator==(const Pay& other) const
         return false;
     if (method == PaycheckMethod::Salary)
         return amount.salary == other.amount.salary;
+    
     return amount.wage == other.amount.wage;
 }

@@ -4,22 +4,20 @@
 #define PAY_HPP
 
 enum class PaycheckMethod : unsigned char {
-    NoneType,
     Salary,
     Wage
 };
 
 class Pay
 {
-        union PayType
+        union PayUnion
         {
-            PayType() { salary = Amount{}; }
+            PayUnion() { salary = Amount{}; }
             Amount salary;
             Amount wage;
         };
     public:
         Pay(PaycheckMethod method, Amount amount);
-        Pay(PaycheckMethod method);
         Pay() = default;
         Amount get_salary() const;
         Amount get_wage() const;
@@ -28,8 +26,8 @@ class Pay
         void set_wage(const Amount&);
         bool operator==(const Pay&) const;
     private:
-        PaycheckMethod method = PaycheckMethod::NoneType;
-        PayType amount;
+        PaycheckMethod method;
+        PayUnion amount;
 };
 
 #endif
