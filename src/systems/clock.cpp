@@ -23,9 +23,9 @@ Clock& Clock::operator++()
     return *this;
 }
 
-Clock Clock::operator++(int)
+Clock operator++(Clock& clock, int)
 {
-    Clock old{*this};
-    time += unit_delta;
+    Clock old{clock};
+    ++clock;
     return old;
 }

@@ -15,10 +15,11 @@ class Clock
         void set_unit_delta(const jed_utils::timespan&);
         Clock& operator+=(const jed_utils::timespan&);
         Clock& operator++();
-        Clock operator++(int);
     private:
         jed_utils::datetime time{0, 0, 0};
         jed_utils::timespan unit_delta{1};
 };
+
+Clock operator++(Clock&, int);
 
 #endif
