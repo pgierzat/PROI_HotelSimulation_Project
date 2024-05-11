@@ -5,6 +5,8 @@
 
 unsigned Waiter::shifts = 1;
 
+const Amount Waiter::bonus;
+
 const jed_utils::timespan Waiter::shift_duration = jed_utils::timespan(0, 12);
 
 const std::map<Shift, jed_utils::timespan> Waiter::shifts_to_hours = {
@@ -16,7 +18,7 @@ Waiter::Waiter(std::string name, std::string id, const Pay& pay) : Worker{name, 
 Amount Waiter::calculate_paycheck() const noexcept
 {
     Amount base = calculate_base_paycheck();
-    return base += Amount(0, 50) * orders_taken;
+    return base += bonus * orders_taken;
 }
 
 WorkerType Waiter::get_type() const noexcept { return type; }

@@ -4,6 +4,8 @@
 
 unsigned Receptionist::shifts = 3;
 
+const Amount Receptionist::penalty{10, 0};
+
 const jed_utils::timespan Receptionist::shift_duration = jed_utils::timespan(0, 8);
 
 const std::map<Shift, jed_utils::timespan> Receptionist::shifts_to_hours = {
@@ -17,7 +19,7 @@ Receptionist::Receptionist(std::string name, std::string id, const Pay& pay) : W
 Amount Receptionist::calculate_paycheck() const noexcept
 {
     Amount base = calculate_base_paycheck();
-    return base -= Amount(10, 0) * complaints;
+    return base -= penalty * complaints;
 }
 
 WorkerType Receptionist::get_type() const noexcept { return type; }
