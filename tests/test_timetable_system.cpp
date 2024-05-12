@@ -54,4 +54,35 @@ TEST_CASE("Test TimetableSystem")
         REQUIRE( *receptionist_entries.at(0) == entry1 );
         REQUIRE( *receptionist_entries.at(1) == entry3 );
     }
+
+    SECTION("time test")
+    {
+        TimetableEntry entry1{receptionist, date1, Shift::I};
+        tt_system.add_entry(entry1);
+        // uninitiated state
+        REQUIRE( tt_system.get_active_entries().empty() );
+        REQUIRE( tt_system.get_ending_entries().empty() );
+        // before entry starts
+        jed_utils::datetime start1{entry1.get_start()};
+        jed_utils::datetime end1{entry1.get_end()};
+        tt_system.set_time(start1 - jed_utils::timespan{1});
+        REQUIRE( tt_system.get_active_entries().empty() );
+        REQUIRE( tt_system.get_ending_entries().empty() );
+        // entry starts
+        tt_system.set_time(start1);
+        REQUIRE( *tt_system.get_active_entries().at(0) == entry1 );
+        REQUIRE( tt_system.get_ending_entries().empty() );
+        // entry hasn't yet end
+        tt_system.set_time(end1 - jed_utils::timespan{0, 1});
+        REQUIRE( *tt_system.get_active_entries().at(0) == entry1 );
+        REQUIRE( tt_system.get_ending_entries().empty() );
+        //  entry ends
+        tt_system.set_time(end1 + jed_utils::timespan{1});
+        REQUIRE( tt_system.get_active_entries().empty() ); 
+        REQUIRE( *tt_system.get_ending_entries().at(0) == entry1 );
+        // entry has ended before
+        tt_system.set_time(end1 + jed_utils::timespan{2});
+        REQUIRE( tt_system.get_active_entries().empty() ); 
+        REQUIRE( tt_system.get_ending_entries().empty() );
+    }
 }
