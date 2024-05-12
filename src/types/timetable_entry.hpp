@@ -14,6 +14,8 @@ class TimetableEntry
         TimetableEntry() = default;
         const Worker& get_worker() const noexcept;
         jed_utils::datetime get_date() const noexcept;
+        jed_utils::datetime get_start() const noexcept;
+        jed_utils::datetime get_end() const noexcept;
         TimeInterval get_interval() const noexcept;
         Shift get_shift() const noexcept;
 

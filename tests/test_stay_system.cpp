@@ -79,13 +79,28 @@ TEST_CASE("test StaySystem")
         stay1.add_guest(guest1);
         stay1.add_guest(guest2);
         s_system.add_stay(stay1);
+        // uninitiated state
         REQUIRE( s_system.get_active_stays().empty() );
         REQUIRE( s_system.get_ending_stays().empty() );
+        // before stay starts
+        s_system.set_time(start1 - jed_utils::timespan{1});
+        REQUIRE( s_system.get_active_stays().empty() );
+        REQUIRE( s_system.get_ending_stays().empty() );
+        // stay starts
         s_system.set_time(start1);
         REQUIRE( *s_system.get_active_stays().at(0) == stay1 );
         REQUIRE( s_system.get_ending_stays().empty() );
+        // stay hasn't yet end
+        s_system.set_time(end1 - jed_utils::timespan{0, 1});
+        REQUIRE( *s_system.get_active_stays().at(0) == stay1 );
+        REQUIRE( s_system.get_ending_stays().empty() );
+        //  stay ends
         s_system.set_time(end1 + jed_utils::timespan{1});
         REQUIRE( s_system.get_active_stays().empty() ); 
         REQUIRE( *s_system.get_ending_stays().at(0) == stay1 );
+        // stay has ended before
+        s_system.set_time(end1 + jed_utils::timespan{2});
+        REQUIRE( s_system.get_active_stays().empty() ); 
+        REQUIRE( s_system.get_ending_stays().empty() );
     }
 }

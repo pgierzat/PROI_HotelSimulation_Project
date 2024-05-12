@@ -12,12 +12,19 @@ const Worker& TimetableEntry::get_worker() const noexcept { return *worker; }
 
 jed_utils::datetime TimetableEntry::get_date() const noexcept { return date; }
 
+jed_utils::datetime TimetableEntry::get_start() const noexcept
+{
+    return date + worker -> get_shift_start(shift);
+}
+
+jed_utils::datetime TimetableEntry::get_end() const noexcept
+{
+    return date + worker -> get_shift_start(shift) + worker -> get_shift_duration();
+}
+
 TimeInterval TimetableEntry::get_interval() const noexcept
 {
-    jed_utils::timespan start_delta = worker -> get_shift_start(shift);
-    jed_utils::datetime start_dt = date + start_delta;
-    jed_utils::timespan duration = worker -> get_shift_duration();
-    return TimeInterval{start_dt, start_dt + duration};
+    return TimeInterval{get_start(), get_end()};
 }
 
 Shift TimetableEntry::get_shift() const noexcept { return shift; }
