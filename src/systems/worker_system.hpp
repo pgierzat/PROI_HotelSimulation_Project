@@ -25,12 +25,10 @@ class WorkerSystem
             void add_worker(const T&);
         std::optional<const Worker*> find_by_id(std::string id) const noexcept;
         std::vector<const Worker*> get_workers() const;
-        void set_hours_worked(const Worker&, unsigned hours_worked);
         void set_dishes_prepared(const Cook&, unsigned dishes_prepared);
         void set_rooms_serviced(const Maid&, unsigned rooms_serviced);
         void set_complaints(const Receptionist&, unsigned complaints);
         void set_orders_taken(const Waiter&, unsigned orders_taken);
-        void reset_hours_worked();
         void reset_stats();
     private:
         Worker& validate_worker(const Worker&);

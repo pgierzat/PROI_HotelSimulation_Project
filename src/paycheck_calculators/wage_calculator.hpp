@@ -9,7 +9,7 @@ class WageCalculator : public PaycheckCalculator
 {
     public:
         WageCalculator(const Worker& worker);
-        Amount calculate_paycheck() const noexcept override;
+        Amount calculate_paycheck(unsigned hours_worked) const noexcept override;
 };
 
 #endif

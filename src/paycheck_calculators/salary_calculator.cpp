@@ -4,7 +4,7 @@
 SalaryCalculator::SalaryCalculator(const Worker& worker) :
     PaycheckCalculator{worker} {}
 
-Amount SalaryCalculator::calculate_paycheck() const noexcept
+Amount SalaryCalculator::calculate_paycheck(unsigned hours_worked) const noexcept
 {
     return (worker -> get_pay()).get_salary();
 }

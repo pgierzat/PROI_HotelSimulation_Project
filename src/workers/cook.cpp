@@ -15,9 +15,9 @@ const std::map<Shift, jed_utils::timespan> Cook::shifts_to_hours = {
 
 Cook::Cook(std::string name, std::string id, const Pay& pay) : Worker{name, id, pay} {}
 
-Amount Cook::calculate_paycheck() const noexcept
+Amount Cook::calculate_paycheck(unsigned hours_worked) const noexcept
 {
-    Amount base = calculate_base_paycheck();
+    Amount base = calculate_base_paycheck(hours_worked);
     return base += bonus * dishes_prepared;
 }
 

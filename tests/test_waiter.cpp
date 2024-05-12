@@ -46,8 +46,8 @@ TEST_CASE("Test Waiter")
             Waiter* waiter = &waiter_obj;
 
             waiter -> set_orders_taken(10);
-            REQUIRE( waiter -> calculate_paycheck() ==
-                waiter -> calculate_base_paycheck() + Waiter::bonus * 10 );
+            REQUIRE( waiter -> calculate_paycheck(0) ==
+                waiter -> calculate_base_paycheck(0) + Waiter::bonus * 10 );
         }
 
         SECTION("hours + bonus")
@@ -55,9 +55,8 @@ TEST_CASE("Test Waiter")
             Waiter waiter_obj{"name1", "1111", wage};
             Waiter* waiter = &waiter_obj;
 
-            waiter -> set_hours_worked(15);
             waiter -> set_orders_taken(10);
-            REQUIRE( waiter -> calculate_paycheck() ==
+            REQUIRE( waiter -> calculate_paycheck(15) ==
                 wage.get_wage() * 15 + Waiter::bonus * 10 );
         }
     }

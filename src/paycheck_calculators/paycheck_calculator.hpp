@@ -12,7 +12,7 @@ class PaycheckCalculator
         PaycheckCalculator(const Worker&);
         const Worker* worker;
     public:
-        virtual Amount calculate_paycheck() const noexcept = 0;
+        virtual Amount calculate_paycheck(unsigned hours_worked) const noexcept = 0;
 };
 
 #endif

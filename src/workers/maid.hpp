@@ -10,7 +10,7 @@ class Maid : public Worker
     public:
         Maid(std::string name, std::string id, const Pay&);
         Maid() = default;
-        Amount calculate_paycheck() const noexcept override;
+        Amount calculate_paycheck(unsigned hours_worked) const noexcept override;
         WorkerType get_type() const noexcept override;
         unsigned get_shifts() const noexcept override;
         jed_utils::timespan get_shift_start(Shift) const override;

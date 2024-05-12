@@ -42,23 +42,19 @@ TEST_CASE("Test Worker")
                 SECTION("init")
                 {
                     REQUIRE( worker -> get_pay() == salary );
-                    REQUIRE( worker -> get_hours_worked() == 0 );
-                    REQUIRE( worker -> calculate_base_paycheck() == salary_amount);
+                    REQUIRE( worker -> calculate_base_paycheck(0) == salary_amount);
                 }
 
                 SECTION("setters")
                 {
                     Pay npay{PaycheckMethod::Salary, Amount{3400, 0}};
                     worker -> set_pay(npay);
-                    worker -> set_hours_worked(10);
                     REQUIRE( worker -> get_pay() == npay );
-                    REQUIRE( worker -> get_hours_worked() == 10 );
                 }
 
                 SECTION("hours worked, doesn't affect base paycheck")
                 {
-                    worker -> set_hours_worked(10);
-                    REQUIRE( worker -> calculate_base_paycheck() == salary_amount);
+                    REQUIRE( worker -> calculate_base_paycheck(10) == salary_amount);
                 }
             }
 
@@ -70,23 +66,19 @@ TEST_CASE("Test Worker")
                 SECTION("init")
                 {
                     REQUIRE( worker -> get_pay() == wage );
-                    REQUIRE( worker -> get_hours_worked() == 0 );
-                    REQUIRE( worker -> calculate_base_paycheck() == Amount{0, 0} );
+                    REQUIRE( worker -> calculate_base_paycheck(0) == Amount{0, 0} );
                 }
 
                 SECTION("setters")
                 {
                     Pay npay{PaycheckMethod::Wage, Amount{30, 0}};
                     worker -> set_pay(npay);
-                    worker -> set_hours_worked(10);
                     REQUIRE( worker -> get_pay() == npay );
-                    REQUIRE( worker -> get_hours_worked() == 10 );
                 }
 
                 SECTION("hours worked, affects base paycheck")
                 {
-                    worker -> set_hours_worked(10);
-                    REQUIRE( worker -> calculate_base_paycheck() == wage_amount * 10 );
+                    REQUIRE( worker -> calculate_base_paycheck(10) == wage_amount * 10 );
                 }
             }
         }
