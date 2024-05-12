@@ -19,12 +19,6 @@ std::vector<const Worker*> WorkerSystem::get_workers() const
     return vec;
 }
 
-void WorkerSystem::set_hours_worked(const Worker& worker, unsigned hours_worked)
-{
-    auto& worker_ref = validate_worker(worker);
-    worker_ref.set_hours_worked(hours_worked);
-}
-
 void WorkerSystem::set_dishes_prepared(const Cook& cook, unsigned dishes_prepared)
 {
     Cook& cook_ref = validate_and_cast(cook);
@@ -47,12 +41,6 @@ void WorkerSystem::set_orders_taken(const Waiter& waiter, unsigned orders_taken)
 {
     Waiter& waiter_ref = validate_and_cast(waiter);
     waiter_ref.set_orders_taken(orders_taken);
-}
-
-void WorkerSystem::reset_hours_worked()
-{
-    for (const std::unique_ptr<Worker>& worker : workers)
-        worker -> set_hours_worked(0);
 }
 
 void WorkerSystem::reset_stats()

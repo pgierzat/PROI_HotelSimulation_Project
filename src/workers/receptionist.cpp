@@ -16,9 +16,9 @@ const std::map<Shift, jed_utils::timespan> Receptionist::shifts_to_hours = {
 
 Receptionist::Receptionist(std::string name, std::string id, const Pay& pay) : Worker{name, id, pay} {}
 
-Amount Receptionist::calculate_paycheck() const noexcept
+Amount Receptionist::calculate_paycheck(unsigned hours_worked) const noexcept
 {
-    Amount base = calculate_base_paycheck();
+    Amount base = calculate_base_paycheck(hours_worked);
     return base -= penalty * complaints;
 }
 

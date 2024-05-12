@@ -46,7 +46,7 @@ TEST_CASE("Test Cook")
             Cook* cook = &cook_obj;
 
             cook -> set_dishes_prepared(10);
-            REQUIRE( cook -> calculate_paycheck() == cook -> calculate_base_paycheck() + Cook::bonus * 10 );
+            REQUIRE( cook -> calculate_paycheck(0) == cook -> calculate_base_paycheck(0) + Cook::bonus * 10 );
         }
 
         SECTION("hours + bonus")
@@ -54,9 +54,8 @@ TEST_CASE("Test Cook")
             Cook cook_obj{"name1", "1111", wage};
             Cook* cook = &cook_obj;
 
-            cook -> set_hours_worked(15);
             cook -> set_dishes_prepared(10);
-            REQUIRE( cook -> calculate_paycheck() == wage.get_wage() * 15 + Cook::bonus * 10 );
+            REQUIRE( cook -> calculate_paycheck(15) == wage.get_wage() * 15 + Cook::bonus * 10 );
         }
     }
 

@@ -46,8 +46,8 @@ TEST_CASE("Test Receptionist")
             Receptionist* receptionist = &receptionist_obj;
 
             receptionist -> set_complaints(10);
-            REQUIRE( receptionist -> calculate_paycheck() ==
-                receptionist -> calculate_base_paycheck() - Receptionist::penalty * 10 );
+            REQUIRE( receptionist -> calculate_paycheck(0) ==
+                receptionist -> calculate_base_paycheck(0) - Receptionist::penalty * 10 );
         }
 
         SECTION("hours + bonus")
@@ -55,9 +55,8 @@ TEST_CASE("Test Receptionist")
             Receptionist receptionist_obj{"name1", "1111", wage};
             Receptionist* receptionist = &receptionist_obj;
 
-            receptionist -> set_hours_worked(15);
             receptionist -> set_complaints(10);
-            REQUIRE( receptionist -> calculate_paycheck() ==
+            REQUIRE( receptionist -> calculate_paycheck(15) ==
                 wage.get_wage() * 15 - Receptionist::penalty * 10 );
         }
     }

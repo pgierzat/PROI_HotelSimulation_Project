@@ -28,19 +28,16 @@ class Worker
         std::string get_name() const noexcept;
         std::string get_id() const noexcept;
         Pay get_pay() const noexcept;
-        unsigned get_hours_worked() const noexcept;
         virtual WorkerType get_type() const noexcept = 0;
         virtual unsigned get_shifts() const noexcept = 0;
         virtual jed_utils::timespan get_shift_start(Shift) const = 0;
         virtual jed_utils::timespan get_shift_duration() const noexcept = 0;
-
-        Amount calculate_base_paycheck() const noexcept;
-        virtual Amount calculate_paycheck() const noexcept = 0;
+        Amount calculate_base_paycheck(unsigned hours_worked) const noexcept;
+        virtual Amount calculate_paycheck(unsigned hours_worked) const noexcept = 0;
 
         void set_name(const std::string&);
         void set_id(const std::string&);
         void set_pay(const Pay&);
-        void set_hours_worked(unsigned);
         virtual void reset_stats() = 0;
 
         bool operator==(const Worker&) const;
@@ -48,7 +45,6 @@ class Worker
         std::string name;
         std::string id;
         Pay pay;
-        unsigned hours_worked;
     protected:
         std::unique_ptr<PaycheckCalculator> calculator = nullptr;
         static std::unique_ptr<PaycheckCalculator> create_calculator(Worker*, PaycheckMethod);
