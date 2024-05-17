@@ -49,4 +49,49 @@ TEST_CASE("Test WorkerSystem")
     {
         REQUIRE( system.find_by_id("5555") == std::nullopt );
     }
+
+    SECTION("set dishes prepared")
+    {
+        system.set_dishes_prepared(cook, 5);
+        auto real_cook = dynamic_cast<const Cook*>( system.find_by_id(cook.get_id()).value() );
+        REQUIRE( real_cook -> get_dishes_prepared() == 5 );
+    }
+
+    SECTION("set rooms serviced")
+    {
+        system.set_rooms_serviced(maid, 5);
+        auto real_maid = dynamic_cast<const Maid*>( system.find_by_id(maid.get_id()).value() );
+        REQUIRE( real_maid -> get_rooms_serviced() == 5 );
+    }
+
+    SECTION("set complaints")
+    {
+        system.set_complaints(receptionist, 5);
+        auto real_receptionist = dynamic_cast<const Receptionist*>( system.find_by_id(receptionist.get_id()).value() );
+        REQUIRE( real_receptionist -> get_complaints() == 5 );
+    }
+
+    SECTION("set orders taken")
+    {
+        system.set_orders_taken(waiter, 5);
+        auto real_waiter = dynamic_cast<const Waiter*>( system.find_by_id(waiter.get_id()).value() );
+        REQUIRE( real_waiter -> get_orders_taken() == 5 );
+    }
+
+    SECTION("reset stats")
+    {
+        system.set_dishes_prepared(cook, 5);
+        system.set_rooms_serviced(maid, 5);
+        system.set_complaints(receptionist, 5);
+        system.set_orders_taken(waiter, 5);
+        auto real_cook = dynamic_cast<const Cook*>( system.find_by_id(cook.get_id()).value() );
+        auto real_maid = dynamic_cast<const Maid*>( system.find_by_id(maid.get_id()).value() );
+        auto real_waiter = dynamic_cast<const Waiter*>( system.find_by_id(waiter.get_id()).value() );
+        auto real_receptionist = dynamic_cast<const Receptionist*>( system.find_by_id(receptionist.get_id()).value() );
+        system.reset_stats();
+        REQUIRE( real_cook -> get_dishes_prepared() == 0 );
+        REQUIRE( real_maid -> get_rooms_serviced() == 0 );
+        REQUIRE( real_receptionist -> get_complaints() == 0 );
+        REQUIRE( real_waiter -> get_orders_taken() == 0 );
+    }
 }
