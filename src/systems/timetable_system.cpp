@@ -1,6 +1,6 @@
 #include "timetable_system.hpp"
-#include "/opt/datetime.h"
-#include "/opt/timespan.h"
+#include "../types/datetime.h"
+#include "../types/timespan.h"
 
 
 const jed_utils::timespan TimetableSystem::minimal_break = jed_utils::timespan{0, 11, 0, 0};;
@@ -13,7 +13,7 @@ void TimetableSystem::bind_worker_system(WorkerSystem& worker_system)
 void TimetableSystem::set_time(const jed_utils::datetime& time)
 {
     if (time < this -> time)
-        throw std::invalid_argument("Tried to turn TimetableSystem's time back.");
+        throw TurnBackTimeError("Tried to turn TimetableSystem's time back.", time);
     this -> time = time;
     auto previous_entries = active_entries;
     refresh_active_entries();
@@ -63,4 +63,22 @@ void TimetableSystem::refresh_ending_entries(const std::vector<TimetableEntry*> 
 {
     ending_entries.clear();
     std::ranges::set_difference(previous_entries, active_entries, std::back_inserter(ending_entries));
+}
+
+std::vector<const TimetableEntry*> interval_entries(const std::vector<const TimetableEntry*>& entries,
+    const TimeInterval& interval)
+{
+    std::vector<const TimetableEntry*> output;
+    for (auto entry : entries)
+    {
+        if (is_in(entry -> get_date(), interval))
+            output.push_back(entry);
+    }
+    return output;
+}
+
+std::vector<const TimetableEntry*> month_entries(const std::vector<const TimetableEntry*>& entries,
+    std::chrono::year_month month)
+{
+    return interval_entries(entries, TimeInterval::month_to_interval(month));
 }

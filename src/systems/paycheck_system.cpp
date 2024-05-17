@@ -1,20 +1,42 @@
 #include "paycheck_system.hpp"
+#include "../utilities/errors.hpp"
 
 
-void PaycheckSystem::bind_worker_system(WorkerSystem& wsystem) { worker_system = &wsystem; }
+void PaycheckSystem::bind_worker_system(WorkerSystem& w_system) { this -> w_system = &w_system; }
 
-void PaycheckSystem::close_month()
+void PaycheckSystem::bind_timetable_system(TimetableSystem& tt_system) { this -> tt_system = &tt_system; }
+
+// Time has to be set at least once a month. Every "bonus" that is assigned to worker between
+// the start of a month and the moment of time set is included in previous month's paycheck.
+// So it is best to synchonise all systems with the same time and process Tasks (assigning bonus attributes)
+// after synchronising.
+void PaycheckSystem::set_time(const jed_utils::datetime& time)
 {
-    worker_system -> reset_stats();
+    if (time < this -> time)
+        throw TurnBackTimeError("Tried to turn PaycheckSystem's time back.", time);
+    this -> time = time;
+    auto month = time.get_year_month();
+    if (month != current_month)
+    {
+        calculate_paychecks();
+        close_month();
+        current_month = month;
+    }
 }
 
-std::vector<Paycheck> PaycheckSystem::calculate_paychecks()
+const std::vector<Paycheck>& PaycheckSystem::get_paychecks() const noexcept { return paychecks; }
+void PaycheckSystem::close_month() { w_system -> reset_stats(); }
+
+void PaycheckSystem::calculate_paychecks()
 {
-    std::vector<Paycheck> paychecks{};
-    for (const Worker* worker : worker_system -> get_workers())
+    paychecks.clear();
+    for (const Worker* worker : w_system -> get_workers())
     {
-        unsigned hours_worked = 0;  // calculate it
-        paychecks.emplace_back(*worker, worker -> calculate_paycheck(hours_worked));
+        auto all_entries = tt_system -> worker_entries(*worker);
+        auto prev_month = time.get_year_month() - std::chrono::months{1};
+        auto entries = month_entries(all_entries, prev_month);
+        unsigned hours_worked = (worker -> get_shift_duration() * entries.size()).get_hours();
+        if (hours_worked != 0)
+            paychecks.emplace_back(*worker, worker -> calculate_paycheck(hours_worked));
     }
-    return paychecks;
 }

@@ -34,4 +34,9 @@ class TimetableSystem
         jed_utils::datetime time{1970, 1, 1};
 };
 
+std::vector<const TimetableEntry*> interval_entries(const std::vector<const TimetableEntry*>&,
+    const TimeInterval&);
+std::vector<const TimetableEntry*> month_entries(const std::vector<const TimetableEntry*>&,
+    std::chrono::year_month);
+
 #endif

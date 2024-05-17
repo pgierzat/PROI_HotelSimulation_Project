@@ -11,35 +11,35 @@
 class UnsupportedWorkerTypeError : public std::invalid_argument
 {
     public:
-        UnsupportedWorkerTypeError(std::string what, const Worker&);
+        UnsupportedWorkerTypeError(const std::string& what, const Worker&);
         const Worker& worker;
 };
 
 class DuplicateWorkerIDError : public std::invalid_argument
 {
     public:
-        DuplicateWorkerIDError(std::string what, const Worker&);
+        DuplicateWorkerIDError(const std::string& what, const Worker&);
         const Worker& worker;
 };
 
 class InvalidWorkerError : public std::invalid_argument
 {
     public:
-        InvalidWorkerError(std::string what, const Worker&);
+        InvalidWorkerError(const std::string& what, const Worker&);
         const Worker& worker;
 };
 
 class IDNotFoundError : public std::invalid_argument
 {
     public:
-        IDNotFoundError(std::string what, const std::string& id);
+        IDNotFoundError(const std::string& what, const std::string& id);
         std::string id;
 };
 
 class IncorrectWorkerType : public std::invalid_argument
 {
     public:
-        IncorrectWorkerType(std::string what, const Worker&, WorkerType);
+        IncorrectWorkerType(const std::string& what, const Worker&, WorkerType);
         const Worker& worker;
         WorkerType type;
 };
@@ -47,28 +47,28 @@ class IncorrectWorkerType : public std::invalid_argument
 class RoomCapacityExceededError : public std::invalid_argument
 {
     public:
-        RoomCapacityExceededError(std::string what, const Room&);
+        RoomCapacityExceededError(const std::string& what, const Room&);
         const Room& room;
 };
 
 class GuestNotInSystemError : public std::invalid_argument
 {
     public:
-        GuestNotInSystemError(std::string what, const Guest&);
+        GuestNotInSystemError(const std::string& what, const Guest&);
         const Guest& guest;
 };
 
 class RoomNotInSystemError : public std::invalid_argument
 {
     public:
-        RoomNotInSystemError(std::string what, const Room&);
+        RoomNotInSystemError(const std::string& what, const Room&);
         const Room& room;
 };
 
 class StayOverlapError : public std::invalid_argument
 {
     public:
-        StayOverlapError(std::string what, const Stay& old_stay, const Stay& new_stay);
+        StayOverlapError(const std::string& what, const Stay& old_stay, const Stay& new_stay);
         const Stay& old_stay;
         const Stay& new_stay;
 };
@@ -76,8 +76,15 @@ class StayOverlapError : public std::invalid_argument
 class WorkerNotInSystemError : public std::invalid_argument
 {
     public:
-        WorkerNotInSystemError(std::string what, const Worker&);
+        WorkerNotInSystemError(const std::string& what, const Worker&);
         const Worker& worker;
+};
+
+class TurnBackTimeError : public std::invalid_argument
+{
+    public:
+        TurnBackTimeError(const std::string& what, const jed_utils::datetime& time);
+        jed_utils::datetime time;
 };
 
 #endif

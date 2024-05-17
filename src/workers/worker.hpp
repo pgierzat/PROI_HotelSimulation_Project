@@ -8,7 +8,7 @@
 #include "../paycheck_calculators/salary_calculator.hpp"
 #include "../paycheck_calculators/wage_calculator.hpp"
 #include "../paycheck_calculators/paycheck_calculator.hpp"
-#include "/opt/timespan.h"
+#include "../types/timespan.h"
 
 #ifndef WORKER_HPP
 #define WORKER_HPP

@@ -12,6 +12,7 @@ class Paycheck
         Paycheck(const Worker&, const Amount&);
         const Worker& get_worker() const noexcept;
         Amount get_amount() const noexcept;
+        bool operator==(const Paycheck&) const;
     private:
         const Worker* worker;
         Amount amount;

@@ -7,6 +7,12 @@ const Worker& Paycheck::get_worker() const noexcept { return *worker; }
 
 Amount Paycheck::get_amount() const noexcept { return amount; }
 
+bool Paycheck::operator==(const Paycheck& other) const
+{
+    return amount == other.amount &&
+        *worker == *other.worker;
+}
+
 std::ostream& operator<<(std::ostream& os, const Paycheck& paycheck)
 {
     return os << paycheck.get_worker().get_id() << ' ' << paycheck.get_amount();

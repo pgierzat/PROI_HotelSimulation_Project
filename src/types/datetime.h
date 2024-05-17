@@ -10,6 +10,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <chrono>
 
 #ifdef _WIN32
 	#ifdef DATETIME_EXPORTS  
@@ -21,6 +22,7 @@
 	#define DATETIME_API
 #endif
 
+
 namespace jed_utils
 {
 	enum weekday { sunday, monday, tuesday, wednesday, thursday, friday, saturday };
@@ -31,6 +33,7 @@ namespace jed_utils
 	public:
 		datetime();
 		datetime(int year, int month, int day, int hour = 0, int minute = 0, int second = 0, period day_period = period::undefined);
+		datetime(std::chrono::year_month_day);
 		datetime(const datetime& other); //Copy constructor
 		datetime& operator=(const datetime& other); //Copy assignment
 		datetime(datetime&& other) noexcept; //Move constructor
@@ -52,7 +55,10 @@ namespace jed_utils
 		std::string to_string(const std::string& format) const;
 		std::string to_shortdate_string() const;
 		int get_year() const;
+		std::chrono::year get_std_year() const;
 		int get_month() const;
+		std::chrono::month get_std_month() const;
+		std::chrono::year_month get_year_month() const;
 		int get_day() const;
 		int get_hour() const;
 		int get_minute() const;

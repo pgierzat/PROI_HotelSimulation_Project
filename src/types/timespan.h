@@ -45,8 +45,10 @@ namespace jed_utils
 		TIMESPAN_API friend timespan operator-(const timespan& mts);
 		TIMESPAN_API timespan& operator-=(const timespan& ots);
 		TIMESPAN_API timespan& operator+=(const timespan& ots);
+		TIMESPAN_API timespan& operator*=(long rhs);
 		TIMESPAN_API friend timespan operator-(timespan mts, const timespan& ots);
 		TIMESPAN_API friend timespan operator+(timespan mts, const timespan& ots);
+		TIMESPAN_API friend timespan operator*(timespan lhs, long rhs);
 	private:
 		void normalise_self();
 		static dhms normalise(int days, int hours, int minutes, int seconds);
