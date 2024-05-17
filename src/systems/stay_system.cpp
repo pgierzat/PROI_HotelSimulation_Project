@@ -21,7 +21,7 @@ void StaySystem::bind_room_system(const RoomsList& rooms_list)
 void StaySystem::set_time(const jed_utils::datetime& time)
 {
     if (time < this -> time)
-        throw std::invalid_argument("Tried to turn StaySystem's time back.");
+        throw TurnBackTimeError("Tried to turn StaySystem's time back.", time);
     this -> time = time;
     auto previous_stays = active_stays;
     refresh_active_stays();

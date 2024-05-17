@@ -4,21 +4,25 @@
 #include "../workers/worker.hpp"
 #include "../types/paycheck.hpp"
 #include "worker_system.hpp"
+#include "timetable_system.hpp"
+#include <chrono>
 
 class PaycheckSystem
 {
     public:
         PaycheckSystem() = default;
-        PaycheckSystem(const PaycheckSystem&) = delete;
-        PaycheckSystem(PaycheckSystem&&) = delete;
-        PaycheckSystem& operator=(const PaycheckSystem&) = delete;
-        PaycheckSystem& operator=(PaycheckSystem&&) = delete;
-
         void bind_worker_system(WorkerSystem&);
-        void close_month();
-        std::vector<Paycheck> calculate_paychecks();
+        void bind_timetable_system(TimetableSystem&);
+        void set_time(const jed_utils::datetime&);
+        const std::vector<Paycheck>& get_paychecks() const noexcept;
     private:
-        WorkerSystem* worker_system = nullptr;
+        void calculate_paychecks();
+        void close_month();
+        WorkerSystem* w_system = nullptr;
+        TimetableSystem* tt_system = nullptr;
+        std::vector<Paycheck> paychecks;
+        jed_utils::datetime time{1970, 1, 1};
+        std::chrono::year_month current_month{time.get_year_month()};
 };
 
 #endif

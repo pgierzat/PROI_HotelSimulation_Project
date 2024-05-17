@@ -73,6 +73,26 @@ namespace jed_utils
 		mktime(timeInfo);
 	}
 
+	datetime::datetime(std::chrono::year_month_day ymd)
+	{
+		if (!ymd.ok())
+			throw invalid_argument("year_month_day must be ok.");
+		int year_int = static_cast<int>(ymd.year());
+		unsigned month_u = static_cast<unsigned>(ymd.month());
+		int month_int = static_cast<int>(month_u);
+		unsigned day_u = static_cast<unsigned>(ymd.day());
+		int day_int = static_cast<int>(day_u);
+		timeInfo = new tm();
+		timeInfo->tm_year = year_int - 1900;
+		timeInfo->tm_mon = month_int - 1;
+		timeInfo->tm_mday = day_int;
+		timeInfo->tm_hour = 0;
+		timeInfo->tm_min = 0;
+		timeInfo->tm_sec = 0;
+		timeInfo->tm_isdst = -1;
+		mktime(timeInfo);
+	}
+
 	//Copy constructor
 	datetime::datetime(const datetime& other)
 	{
@@ -277,9 +297,24 @@ namespace jed_utils
 		return timeInfo->tm_year + 1900;
 	}
 
+	std::chrono::year datetime::get_std_year() const
+	{
+		return std::chrono::year{get_year()};
+	}
+
 	int datetime::get_month() const
 	{
 		return timeInfo->tm_mon + 1;
+	}
+
+	std::chrono::month datetime::get_std_month() const
+	{
+		return std::chrono::month{static_cast<unsigned>(get_month())};
+	}
+
+	std::chrono::year_month datetime::get_year_month() const
+	{
+		return std::chrono::year_month{get_std_year(), get_std_month()};		
 	}
 
 	int datetime::get_day() const

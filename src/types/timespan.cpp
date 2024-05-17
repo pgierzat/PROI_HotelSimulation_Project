@@ -149,6 +149,16 @@ namespace jed_utils
 		return *this;
 	}
 
+	timespan& timespan::operator*=(long rhs)
+	{
+		days *= rhs;
+		hours *= rhs;
+		minutes *= rhs;
+		seconds *= rhs;
+		normalise_self();
+		return *this;
+	}
+
 	timespan operator-(timespan mts, const timespan& ots)
 	{
 		mts -= ots;
@@ -159,6 +169,12 @@ namespace jed_utils
 	{
 		mts += ots;
 		return mts;
+	}
+
+	timespan operator*(timespan lhs, long rhs)
+	{
+		lhs *= rhs;
+		return lhs;
 	}
 
 	void timespan::normalise_self()
