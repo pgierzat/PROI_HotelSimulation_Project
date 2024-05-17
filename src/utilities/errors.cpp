@@ -32,3 +32,6 @@ WorkerNotInSystemError::WorkerNotInSystemError(const std::string& what, const Wo
 
 TurnBackTimeError::TurnBackTimeError(const std::string& what, const jed_utils::datetime& time) :
     std::invalid_argument(what), time{time} {}
+
+TaskStatusError::TaskStatusError(const std::string& what, const Task&) :
+    std::invalid_argument(what), task{task} {}
