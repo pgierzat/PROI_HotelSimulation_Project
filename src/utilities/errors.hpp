@@ -95,4 +95,12 @@ class TaskStatusError : public std::invalid_argument
         const Task& task;
 };
 
+class TaskAssignmentError : public std::invalid_argument
+{
+    public:
+        TaskAssignmentError(const std::string& what, const Task&, const Worker&);
+        const Task& task;
+        const Worker& worker;
+};
+
 #endif

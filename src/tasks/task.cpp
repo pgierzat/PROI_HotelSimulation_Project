@@ -16,3 +16,9 @@ void Task::mark_completed()
         throw TaskStatusError("Task has to be assigned first before completion.", *this);
     this -> status = TaskStatus::completed;
 }
+
+void Task::can_assign(const Worker& worker)
+{
+    if (status == TaskStatus::completed)
+        throw TaskAssignmentError{"Tried to assign worker to a completed task", *this, worker};
+}

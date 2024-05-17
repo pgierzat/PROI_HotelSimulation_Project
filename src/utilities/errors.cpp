@@ -35,3 +35,6 @@ TurnBackTimeError::TurnBackTimeError(const std::string& what, const jed_utils::d
 
 TaskStatusError::TaskStatusError(const std::string& what, const Task&) :
     std::invalid_argument(what), task{task} {}
+
+TaskAssignmentError::TaskAssignmentError(const std::string& what, const Task&, const Worker&) :
+    std::invalid_argument(what), task{task}, worker{worker} {}

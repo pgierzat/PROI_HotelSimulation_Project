@@ -20,11 +20,13 @@ class Task
         const std::string& get_description() const noexcept;
         TaskStatus get_status() const noexcept;
         void mark_completed();
+        virtual void unassign() noexcept = 0;
         virtual const Worker& get_assignee() const = 0;
-    private:
+    protected:
+        void can_assign(const Worker&);
         std::string id;
         std::string description;
-        TaskStatus status;
+        TaskStatus status{TaskStatus::unassigned};
 };
 
 #endif
