@@ -1,5 +1,5 @@
-#include "/opt/datetime.h"
-#include "/opt/timespan.h"
+#include "../src/types/datetime.h"
+#include "../src/types/timespan.h"
 #include "/opt/catch_amalgamated.hpp"
 
 TEST_CASE("Test datetime operator-=, operator+=")
