@@ -7,6 +7,7 @@
 #include "../rooms/hpp/room.hpp"
 #include "../types/guest.hpp"
 #include "../types/stay.hpp"
+#include "../tasks/task.hpp"
 
 class UnsupportedWorkerTypeError : public std::invalid_argument
 {
@@ -85,6 +86,13 @@ class TurnBackTimeError : public std::invalid_argument
     public:
         TurnBackTimeError(const std::string& what, const jed_utils::datetime& time);
         jed_utils::datetime time;
+};
+
+class TaskStatusError : public std::invalid_argument
+{
+    public:
+        TaskStatusError(const std::string& what, const Task&);
+        const Task& task;
 };
 
 #endif
