@@ -7,19 +7,13 @@
 #include "../rooms/hpp/room.hpp"
 
 
-class RoomCleaningTask : public BigTask
+class RoomCleaningTask : public BigTask<Maid>
 {
     public:
         RoomCleaningTask(const std::string& id, const Room&);
-
         const Room& get_room() const noexcept;
-        void assign(const Maid&);
-        void unassign() noexcept override;
-        const std::vector<const Maid*>& get_assignees() const noexcept;
-        std::vector<const Worker*> get_workers() const noexcept override;
     protected:
         const Room& room;
-        std::vector<const Maid*> assignees;
 };
 
 

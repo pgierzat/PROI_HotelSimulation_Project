@@ -6,18 +6,13 @@
 #include "../types/dish.hpp"
 
 
-class PrepareDishTask : public SmallTask
+class PrepareDishTask : public SmallTask<Cook>
 {
     public:
         PrepareDishTask(const std::string& id, Dish);
-
         Dish get_dish() const noexcept;
-        void assign(const Cook&);
-        void unassign() noexcept override;
-        const Cook& get_assignee() const override;
     protected:
         Dish dish;
-        const Cook* assignee = nullptr;
 };
 
 
