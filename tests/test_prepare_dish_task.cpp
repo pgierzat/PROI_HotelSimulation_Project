@@ -6,6 +6,7 @@
 TEST_CASE("Test PrepareDishTask")
 {
     PrepareDishTask preptask{"1111", Dish::Omelette};
+    SmallTask& smalltask = preptask;
     Task& task = preptask;
     Cook cook{"name1", "id1", Pay{PaycheckMethod::Salary, Amount{3100, 0}}};
 
@@ -14,10 +15,21 @@ TEST_CASE("Test PrepareDishTask")
         REQUIRE(preptask.get_dish() == Dish::Omelette);
     }
 
+    SECTION("unassignment of an unassigned task")
+    {
+        task.unassign();
+        REQUIRE(task.get_status() == TaskStatus::unassigned);
+    }
+
+    SECTION("get assignee without previous assignment")
+    {
+        REQUIRE_THROWS_AS(smalltask.get_assignee(), TaskStatusError);;
+    }
+
     SECTION("assignment")
     {
         preptask.assign(cook);
-        REQUIRE(task.get_assignee() == cook);
+        REQUIRE(smalltask.get_assignee() == cook);
         REQUIRE(task.get_status() == TaskStatus::assigned);
     }
 
@@ -26,7 +38,6 @@ TEST_CASE("Test PrepareDishTask")
         preptask.assign(cook);
         task.unassign();
         REQUIRE(task.get_status() == TaskStatus::unassigned);
-        REQUIRE_THROWS_AS(task.get_assignee(), TaskStatusError);
     }
 
     SECTION("assignment of a completed task")

@@ -41,3 +41,6 @@ TaskAssignmentError::TaskAssignmentError(const std::string& what, const Task&, c
 
 DuplicateClientError::DuplicateClientError(const std::string& what, const Table& table, const Guest& client) :
     std::invalid_argument(what), table{table}, client{client} {}
+
+TaskCapacityError::TaskCapacityError(const std::string& what, const Task& task, const Worker& worker) :
+    std::invalid_argument(what), task{task}, worker{worker} {}

@@ -2,7 +2,7 @@
 #include "../utilities/errors.hpp"
 
 TaxiTask::TaxiTask(const std::string& id, const Guest& room, const jed_utils::datetime& time) :
-    Task{id, "Order a taxi for a guest."}, guest{room}, time{time} {}
+    SmallTask{id, "Order a taxi for a guest."}, guest{room}, time{time} {}
 
 const Guest& TaxiTask::get_guest() const noexcept { return guest; }
 

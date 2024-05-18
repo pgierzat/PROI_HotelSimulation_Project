@@ -2,7 +2,7 @@
 #include "../utilities/errors.hpp"
 
 BringDishTask::BringDishTask(const std::string& id, Dish dish, const Table& table) :
-    Task{id, "Prepare a dish"}, dish{dish}, table{table} {}
+    SmallTask{id, "Bring a dish to a table"}, dish{dish}, table{table} {}
 
 Dish BringDishTask::get_dish() const noexcept { return dish; }
 

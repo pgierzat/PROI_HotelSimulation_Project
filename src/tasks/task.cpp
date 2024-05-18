@@ -17,7 +17,7 @@ void Task::mark_completed()
     this -> status = TaskStatus::completed;
 }
 
-void Task::can_assign(const Worker& worker)
+void Task::can_assign(const Worker& worker) const
 {
     if (status == TaskStatus::completed)
         throw TaskAssignmentError{"Tried to assign worker to a completed task", *this, worker};

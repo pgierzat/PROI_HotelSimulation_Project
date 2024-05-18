@@ -9,6 +9,7 @@ TEST_CASE("Test WakeTask")
     Room room{237, 1};
     jed_utils::datetime time{2024, 5, 18, 6, 45};
     WakeTask waketask{"1111", room, time};
+    SmallTask& smalltask = waketask;
     Task& task = waketask;
     Maid maid{"name1", "id1", Pay{PaycheckMethod::Salary, Amount{3100, 0}}};
 
@@ -21,7 +22,7 @@ TEST_CASE("Test WakeTask")
     SECTION("assignment")
     {
         waketask.assign(maid);
-        REQUIRE(task.get_assignee() == maid);
+        REQUIRE(smalltask.get_assignee() == maid);
         REQUIRE(task.get_status() == TaskStatus::assigned);
     }
 
@@ -30,7 +31,17 @@ TEST_CASE("Test WakeTask")
         waketask.assign(maid);
         task.unassign();
         REQUIRE(task.get_status() == TaskStatus::unassigned);
-        REQUIRE_THROWS_AS(task.get_assignee(), TaskStatusError);
+    }
+
+    SECTION("unassignment of an unassigned task")
+    {
+        task.unassign();
+        REQUIRE(task.get_status() == TaskStatus::unassigned);
+    }
+
+    SECTION("get assignee without previous assignment")
+    {
+        REQUIRE_THROWS_AS(smalltask.get_assignee(), TaskStatusError);;
     }
 
     SECTION("assignment of a completed task")

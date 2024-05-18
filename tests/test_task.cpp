@@ -13,7 +13,6 @@ TEST_CASE("Test Task")
         REQUIRE(task.get_description() == "Prepare a dish");
         REQUIRE(task.get_id() == "1111");
         REQUIRE(task.get_status() == TaskStatus::unassigned);
-        REQUIRE_THROWS_AS(task.get_assignee(), TaskStatusError);
     }
 
     SECTION("completion before assignment")
