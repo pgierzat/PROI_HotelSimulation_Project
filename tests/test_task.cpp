@@ -10,7 +10,7 @@ TEST_CASE("Test Task")
 
     SECTION("init")
     {
-        REQUIRE(task.get_description() == "Prepare a dish");
+        REQUIRE(task.get_description() == "Prepare a dish.");
         REQUIRE(task.get_id() == "1111");
         REQUIRE(task.get_status() == TaskStatus::unassigned);
     }

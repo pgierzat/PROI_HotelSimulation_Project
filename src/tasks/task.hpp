@@ -20,9 +20,10 @@ class Task
         const std::string& get_description() const noexcept;
         TaskStatus get_status() const noexcept;
         void mark_completed();
-        virtual void unassign() noexcept = 0;
+        virtual void unassign() = 0;
     protected:
         virtual void can_assign(const Worker&) const;
+        virtual void can_unassign() const;
         std::string id;
         std::string description;
         TaskStatus status{TaskStatus::unassigned};

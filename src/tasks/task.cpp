@@ -22,3 +22,9 @@ void Task::can_assign(const Worker& worker) const
     if (status == TaskStatus::completed)
         throw TaskAssignmentError{"Tried to assign worker to a completed task", *this, worker};
 }
+
+void Task::can_unassign() const
+{
+    if (status == TaskStatus::completed)
+        throw TaskStatusError("Tried to unassign a completed Task.", *this);
+}
