@@ -3,13 +3,7 @@
 
 #include "task.hpp"
 #include "../workers/cook.hpp"
-
-enum class Dish {
-    PoachedEggs,
-    ScrambledEggs,
-    Omelette,
-    FrenchToasts
-};
+#include "../types/dish.hpp"
 
 
 class PrepareDishTask : public Task

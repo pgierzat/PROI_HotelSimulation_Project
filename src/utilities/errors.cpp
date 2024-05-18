@@ -38,3 +38,6 @@ TaskStatusError::TaskStatusError(const std::string& what, const Task&) :
 
 TaskAssignmentError::TaskAssignmentError(const std::string& what, const Task&, const Worker&) :
     std::invalid_argument(what), task{task}, worker{worker} {}
+
+DuplicateClientError::DuplicateClientError(const std::string& what, const Table& table, const Guest& client) :
+    std::invalid_argument(what), table{table}, client{client} {}
