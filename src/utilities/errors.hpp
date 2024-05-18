@@ -6,6 +6,7 @@
 #include "../workers/worker.hpp"
 #include "../rooms/hpp/room.hpp"
 #include "../types/guest.hpp"
+#include "../types/table.hpp"
 #include "../types/stay.hpp"
 #include "../tasks/task.hpp"
 
@@ -101,6 +102,14 @@ class TaskAssignmentError : public std::invalid_argument
         TaskAssignmentError(const std::string& what, const Task&, const Worker&);
         const Task& task;
         const Worker& worker;
+};
+
+class DuplicateClientError : public std::invalid_argument
+{
+    public:
+        DuplicateClientError(const std::string& what, const Table&, const Guest&);
+        const Table& table;
+        const Guest& client;
 };
 
 #endif
