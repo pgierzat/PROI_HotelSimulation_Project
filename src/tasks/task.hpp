@@ -21,9 +21,8 @@ class Task
         TaskStatus get_status() const noexcept;
         void mark_completed();
         virtual void unassign() noexcept = 0;
-        virtual const Worker& get_assignee() const = 0;
     protected:
-        void can_assign(const Worker&);
+        virtual void can_assign(const Worker&) const;
         std::string id;
         std::string description;
         TaskStatus status{TaskStatus::unassigned};

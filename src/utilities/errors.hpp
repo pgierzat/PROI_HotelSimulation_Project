@@ -112,4 +112,12 @@ class DuplicateClientError : public std::invalid_argument
         const Guest& client;
 };
 
+class TaskCapacityError : public std::invalid_argument
+{
+    public:
+        TaskCapacityError(const std::string& what, const Task&, const Worker&);
+        const Task& task;
+        const Worker& worker;
+};
+
 #endif

@@ -1,12 +1,12 @@
 #ifndef PREPARE_DISH_TASK_HPP
 #define PREPARE_DISH_TASK_HPP
 
-#include "task.hpp"
+#include "small_task.hpp"
 #include "../workers/cook.hpp"
 #include "../types/dish.hpp"
 
 
-class PrepareDishTask : public Task
+class PrepareDishTask : public SmallTask
 {
     public:
         PrepareDishTask(const std::string& id, Dish);

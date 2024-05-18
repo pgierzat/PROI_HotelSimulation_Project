@@ -1,12 +1,12 @@
 #ifndef WAKE_TASK_HPP
 #define WAKE_TASK_HPP
 
-#include "task.hpp"
+#include "small_task.hpp"
 #include "../rooms/hpp/room.hpp"
 #include "../types/datetime.h"
 #include "../workers/maid.hpp"
 
-class WakeTask : public Task
+class WakeTask : public SmallTask
 {
     public:
         WakeTask(const std::string& id, const Room&, const jed_utils::datetime&);
