@@ -20,7 +20,9 @@ class Task
         const std::string& get_description() const noexcept;
         TaskStatus get_status() const noexcept;
         void mark_completed();
+        virtual void assign(const Worker&) = 0;
         virtual void unassign() = 0;
+        bool operator==(const Task&) const = default;
     protected:
         virtual void can_assign(const Worker&) const;
         virtual void can_unassign() const;

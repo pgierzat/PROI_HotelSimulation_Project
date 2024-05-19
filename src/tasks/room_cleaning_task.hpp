@@ -1,5 +1,5 @@
-#ifndef PREPARE_DISH_TASK_HPP
-#define PREPARE_DISH_TASK_HPP
+#ifndef ROOM_CLEANING_TASK_HPP
+#define ROOM_CLEANING_TASK_HPP
 
 #include <vector>
 #include "big_task.hpp"

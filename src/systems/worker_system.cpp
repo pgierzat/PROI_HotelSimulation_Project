@@ -12,6 +12,16 @@ std::optional<const Worker*> WorkerSystem::find_by_id(std::string id) const noex
     return (*p).get();
 }
 
+bool WorkerSystem::has_worker(const Worker& worker) const noexcept
+{
+    auto opt = find_by_id(worker.get_id());
+    if (not opt)
+        return false;
+    if (*opt.value() == worker)
+        return true;
+    return false;
+}
+
 std::vector<const Worker*> WorkerSystem::get_workers() const
 {
     std::vector<const Worker*> vec{};

@@ -24,6 +24,13 @@ class DuplicateWorkerIDError : public std::invalid_argument
         const Worker& worker;
 };
 
+class DuplicateTaskIDError : public std::invalid_argument
+{
+    public:
+        DuplicateTaskIDError(const std::string& what, const Task&);
+        const Task& task;
+};
+
 class InvalidWorkerError : public std::invalid_argument
 {
     public:
@@ -82,6 +89,13 @@ class WorkerNotInSystemError : public std::invalid_argument
         const Worker& worker;
 };
 
+class TaskNotInSystemError : public std::invalid_argument
+{
+    public:
+        TaskNotInSystemError(const std::string& what, const Task&);
+        const Task& task;
+};
+
 class TurnBackTimeError : public std::invalid_argument
 {
     public:
@@ -118,6 +132,12 @@ class TaskCapacityError : public std::invalid_argument
         TaskCapacityError(const std::string& what, const Task&, const Worker&);
         const Task& task;
         const Worker& worker;
+};
+
+class SystemNotBoundError : public std::invalid_argument
+{
+    public:
+        SystemNotBoundError(const std::string& what);
 };
 
 #endif

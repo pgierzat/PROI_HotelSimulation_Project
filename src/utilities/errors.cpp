@@ -6,6 +6,9 @@ UnsupportedWorkerTypeError::UnsupportedWorkerTypeError(const std::string& what, 
 DuplicateWorkerIDError::DuplicateWorkerIDError(const std::string& what, const Worker& worker) :
     std::invalid_argument(what), worker{worker} {}
 
+DuplicateTaskIDError::DuplicateTaskIDError(const std::string& what, const Task& task) :
+    std::invalid_argument(what), task{task} {}
+
 InvalidWorkerError::InvalidWorkerError(const std::string& what, const Worker& worker) :
     std::invalid_argument(what), worker{worker} {}
 
@@ -30,6 +33,9 @@ StayOverlapError::StayOverlapError(const std::string& what, const Stay& old_stay
 WorkerNotInSystemError::WorkerNotInSystemError(const std::string& what, const Worker& worker) :
     std::invalid_argument(what), worker{worker} {}
 
+TaskNotInSystemError::TaskNotInSystemError(const std::string& what, const Task& task) :
+    std::invalid_argument(what), task{task} {}
+
 TurnBackTimeError::TurnBackTimeError(const std::string& what, const jed_utils::datetime& time) :
     std::invalid_argument(what), time{time} {}
 
@@ -44,3 +50,6 @@ DuplicateClientError::DuplicateClientError(const std::string& what, const Table&
 
 TaskCapacityError::TaskCapacityError(const std::string& what, const Task& task, const Worker& worker) :
     std::invalid_argument(what), task{task}, worker{worker} {}
+
+SystemNotBoundError::SystemNotBoundError(const std::string& what)
+    : std::invalid_argument(what) {}

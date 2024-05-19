@@ -2,6 +2,7 @@
 #define BIG_TASK_HPP
 
 #include <vector>
+#include <algorithm>
 #include "task.hpp"
 #include "../utilities/errors.hpp"
 #include "../utilities/concepts.hpp"
@@ -17,6 +18,7 @@ class BigTask : public Task
         std::vector<const T*> assignees;
     public:
         void assign(const T&);
+        void assign(const Worker&) override;
         void unassign() override;
         const std::vector<const T*>& get_assignees() const noexcept;
         unsigned get_required() const noexcept;
@@ -45,6 +47,15 @@ void BigTask<T>::assign(const T& worker)
     if (++assigned == required)
         status = TaskStatus::assigned;
     assignees.push_back(&worker);
+}
+
+template<SupportedWorker T>
+void BigTask<T>::assign(const Worker& worker)
+{
+    auto cast = dynamic_cast<const T*>(&worker);
+    if (not cast)
+        throw TaskAssignmentError("Tried to assign worker of incorrect type", *this, worker);
+    assign(*cast);
 } 
 
 template<SupportedWorker T>

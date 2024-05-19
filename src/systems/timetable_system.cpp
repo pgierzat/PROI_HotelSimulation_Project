@@ -5,9 +5,9 @@
 
 const jed_utils::timespan TimetableSystem::minimal_break = jed_utils::timespan{0, 11, 0, 0};;
 
-void TimetableSystem::bind_worker_system(WorkerSystem& worker_system)
+void TimetableSystem::bind_worker_system(WorkerSystem& w_system)
 {
-    this -> worker_system = &worker_system;
+    this -> w_system = &w_system;
 }
 
 void TimetableSystem::set_time(const jed_utils::datetime& time)
@@ -20,10 +20,9 @@ void TimetableSystem::set_time(const jed_utils::datetime& time)
     refresh_ending_entries(previous_entries);
 }
 
-const WorkerSystem& TimetableSystem::get_worker_system() const { return *worker_system; }
-
 void TimetableSystem::add_entry(const TimetableEntry& entry)
 {
+    validate_entry_worker(entry);
     const auto& worker = entry.get_worker();
     const auto& interval = entry.get_interval();
     auto worker_entries = std::ranges::filter_view(entries, SameWorker(worker));
@@ -46,6 +45,20 @@ std::vector<const TimetableEntry*> TimetableSystem::worker_entries(const Worker&
     for (const auto& entry : entries | std::views::filter(SameWorker(worker)))
         vec.push_back(&entry);
     return vec;
+}
+
+WorkerSystem& TimetableSystem::get_w_system() const
+{
+    if (not w_system)
+        throw SystemNotBoundError("WorkerSystem not bound to TimeTableSystem.");
+    return *w_system;
+}
+
+void TimetableSystem::validate_entry_worker(const TimetableEntry& entry) const
+{
+    const auto& worker = entry.get_worker();
+    if (not w_system -> has_worker(worker))
+        throw WorkerNotInSystemError("Entry's worker not in WorkerSystem", worker);
 }
 
 void TimetableSystem::refresh_active_entries()
