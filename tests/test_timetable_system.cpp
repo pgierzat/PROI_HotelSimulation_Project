@@ -6,14 +6,18 @@
 TEST_CASE("Test TimetableSystem")
 {
     TimetableSystem tt_system{};
+    const auto& entries = tt_system.get_entries();
+
+    SECTION("init") { REQUIRE(entries.empty()); }
+
     WorkerSystem w_system{};
     tt_system.bind_worker_system(w_system);
     Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
-    Receptionist receptionist{"name", "id1", pay};
+    Receptionist receptionist{"name1", "id1", pay};
+    Receptionist waiter{"name2", "id2", pay};
+    w_system.add_worker(receptionist);
+    w_system.add_worker(waiter);
     jed_utils::datetime date1{ 2024, 4, 11 };
-    const auto& entries = tt_system.get_entries();
-
-    REQUIRE( &tt_system.get_worker_system() == &w_system );
 
     SECTION("simple use")
     {
@@ -29,6 +33,13 @@ TEST_CASE("Test TimetableSystem")
         REQUIRE( entries == expected2 );
     }
 
+    SECTION("add entry of an unknown worker")
+    {
+        Cook cook{"name3", "id3", pay};
+        TimetableEntry entry1{cook, date1, Shift::I};
+        REQUIRE_THROWS_AS(tt_system.add_entry(entry1), WorkerNotInSystemError);
+    }
+
     SECTION("add_entry less than 11-hour's break")
     {
         jed_utils::datetime date1{ 2024, 4, 11 };
@@ -41,7 +52,6 @@ TEST_CASE("Test TimetableSystem")
 
     SECTION("worker entries")
     {
-        Receptionist waiter{"name", "id2", pay};
         jed_utils::datetime date1{ 2024, 4, 11 };
         jed_utils::datetime date2{ 2024, 4, 12 };
         TimetableEntry entry1{receptionist, date1, Shift::I};
@@ -51,13 +61,16 @@ TEST_CASE("Test TimetableSystem")
         tt_system.add_entry(entry2);
         tt_system.add_entry(entry3);
         auto receptionist_entries = tt_system.worker_entries(receptionist);
-        REQUIRE( *receptionist_entries.at(0) == entry1 );
-        REQUIRE( *receptionist_entries.at(1) == entry3 );
+        std::vector exp{entry1, entry3};
+        REQUIRE( std::ranges::equal(receptionist_entries, exp,
+            [](auto p, const auto& entry){ return *p == entry; }) );
     }
 
     SECTION("time test")
     {
         TimetableEntry entry1{receptionist, date1, Shift::I};
+        std::vector exp{entry1};
+        auto lambda = [](auto p, const auto& entry){ return *p == entry; };
         tt_system.add_entry(entry1);
         // uninitiated state
         REQUIRE( tt_system.get_active_entries().empty() );
@@ -70,16 +83,16 @@ TEST_CASE("Test TimetableSystem")
         REQUIRE( tt_system.get_ending_entries().empty() );
         // entry starts
         tt_system.set_time(start1);
-        REQUIRE( *tt_system.get_active_entries().at(0) == entry1 );
+        std::ranges::equal(tt_system.get_active_entries(), exp, lambda);
         REQUIRE( tt_system.get_ending_entries().empty() );
         // entry hasn't yet end
         tt_system.set_time(end1 - jed_utils::timespan{0, 1});
-        REQUIRE( *tt_system.get_active_entries().at(0) == entry1 );
+        std::ranges::equal(tt_system.get_active_entries(), exp, lambda);
         REQUIRE( tt_system.get_ending_entries().empty() );
         //  entry ends
         tt_system.set_time(end1 + jed_utils::timespan{1});
         REQUIRE( tt_system.get_active_entries().empty() ); 
-        REQUIRE( *tt_system.get_ending_entries().at(0) == entry1 );
+        std::ranges::equal(tt_system.get_ending_entries(), exp, lambda);
         // entry has ended before
         tt_system.set_time(end1 + jed_utils::timespan{2});
         REQUIRE( tt_system.get_active_entries().empty() ); 

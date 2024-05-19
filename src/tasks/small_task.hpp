@@ -14,6 +14,7 @@ class SmallTask : public Task
     public:
         const T& get_assignee() const;
         void assign(const T&);
+        void assign(const Worker&) override;
         void unassign() override;
 };
 
@@ -37,6 +38,15 @@ void SmallTask<T>::assign(const T& worker)
     status = TaskStatus::assigned;
     assignee = &worker;
 }
+
+template<SupportedWorker T>
+void SmallTask<T>::assign(const Worker& worker)
+{
+    auto cast = dynamic_cast<const T*>(&worker);
+    if (not cast)
+        throw TaskAssignmentError("Tried to assign worker of incorrect type", *this, worker);
+    assign(*cast);
+} 
 
 template<SupportedWorker T>
 void SmallTask<T>::unassign()

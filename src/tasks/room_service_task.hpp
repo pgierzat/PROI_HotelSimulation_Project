@@ -1,5 +1,5 @@
-#ifndef ORDER_TAXI_TASK
-#define ORDER_TAXI_TASK
+#ifndef ROOM_SERVICE_TASK_HPP
+#define ROOM_SERVICE_TASK_HPP
 
 #include "small_task.hpp"
 #include "../rooms/hpp/room.hpp"

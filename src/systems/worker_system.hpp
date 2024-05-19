@@ -24,6 +24,7 @@ class WorkerSystem
         template<SupportedWorker T>
             void add_worker(const T&);
         std::optional<const Worker*> find_by_id(std::string id) const noexcept;
+        bool has_worker(const Worker&) const noexcept;
         std::vector<const Worker*> get_workers() const;
         void set_dishes_prepared(const Cook&, unsigned dishes_prepared);
         void set_rooms_serviced(const Maid&, unsigned rooms_serviced);

@@ -15,7 +15,6 @@ class TimetableSystem
         TimetableSystem() = default;
         
         void bind_worker_system(WorkerSystem&); 
-        const WorkerSystem& get_worker_system() const;
         void set_time(const jed_utils::datetime&);
         void add_entry(const TimetableEntry&);
         void remove_entry(const TimetableEntry&);
@@ -25,12 +24,14 @@ class TimetableSystem
         std::vector<const TimetableEntry*> worker_entries(const Worker&) const noexcept;
         static const jed_utils::timespan minimal_break;
     private:
+        WorkerSystem& get_w_system() const;
+        void validate_entry_worker(const TimetableEntry& entry) const;
         void refresh_active_entries();
         void refresh_ending_entries(const std::vector<TimetableEntry*> previous_entries);
         std::vector<TimetableEntry> entries;
         std::vector<TimetableEntry*> active_entries;
         std::vector<TimetableEntry*> ending_entries;
-        WorkerSystem* worker_system = nullptr;
+        WorkerSystem* w_system = nullptr;
         jed_utils::datetime time{1970, 1, 1};
 };
 

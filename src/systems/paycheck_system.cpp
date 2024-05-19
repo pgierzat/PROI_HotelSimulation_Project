@@ -25,14 +25,29 @@ void PaycheckSystem::set_time(const jed_utils::datetime& time)
 }
 
 const std::vector<Paycheck>& PaycheckSystem::get_paychecks() const noexcept { return paychecks; }
-void PaycheckSystem::close_month() { w_system -> reset_stats(); }
+
+void PaycheckSystem::close_month() { get_w_system().reset_stats(); }
+
+WorkerSystem& PaycheckSystem::get_w_system() const
+{
+    if (not w_system)
+        throw SystemNotBoundError("WorkerSystem not bound to PaycheckSystem.");
+    return *w_system;
+}
+
+TimetableSystem& PaycheckSystem::get_tt_system() const
+{
+    if (not tt_system)
+        throw SystemNotBoundError("WorkerSystem not bound to PaycheckSystem.");
+    return *tt_system;
+}
 
 void PaycheckSystem::calculate_paychecks()
 {
     paychecks.clear();
-    for (const Worker* worker : w_system -> get_workers())
+    for (const Worker* worker : get_w_system().get_workers())
     {
-        auto all_entries = tt_system -> worker_entries(*worker);
+        auto all_entries = get_tt_system().worker_entries(*worker);
         auto prev_month = time.get_year_month() - std::chrono::months{1};
         auto entries = month_entries(all_entries, prev_month);
         unsigned hours_worked = (worker -> get_shift_duration() * entries.size()).get_hours();

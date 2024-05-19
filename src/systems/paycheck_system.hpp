@@ -16,6 +16,8 @@ class PaycheckSystem
         void set_time(const jed_utils::datetime&);
         const std::vector<Paycheck>& get_paychecks() const noexcept;
     private:
+        WorkerSystem& get_w_system() const;
+        TimetableSystem& get_tt_system() const;
         void calculate_paychecks();
         void close_month();
         WorkerSystem* w_system = nullptr;
