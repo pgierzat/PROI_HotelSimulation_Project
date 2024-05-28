@@ -6,7 +6,7 @@ TwoRoom::TwoRoom(unsigned number) :
 Room(number, capacity=2)
 {}
 
-unsigned TwoRoom::calculatePrice() const
+Amount TwoRoom::calculatePrice() const
 {
     return base_price * 1.8;
 }

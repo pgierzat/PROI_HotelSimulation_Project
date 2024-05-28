@@ -2,18 +2,20 @@
 #define ROOM_HPP
 
 #include <iostream>
+#include "../../types/amount.hpp"
 
 class Room {
 
     protected:
         unsigned number;
         unsigned capacity;
-        unsigned base_price;
+        static const Amount base_price;
 
     public:
         Room(unsigned number, unsigned capacity);
+        virtual ~Room() = default;
         virtual unsigned calculatePersonel() const;
-        virtual unsigned calculatePrice() const;
+        virtual Amount calculatePrice() const;
         virtual void display(std::ostream& os) const;
         unsigned getNumber() const;
         unsigned getCapacity() const;

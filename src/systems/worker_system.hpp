@@ -18,13 +18,10 @@ class WorkerSystem
     public:
         WorkerSystem() = default;
         WorkerSystem(const WorkerSystem&) = delete;
-        WorkerSystem(WorkerSystem&&) = delete;
-        WorkerSystem& operator=(const WorkerSystem&) = delete;
-        WorkerSystem& operator=(WorkerSystem&&) = delete;
         template<SupportedWorker T>
             void add_worker(const T&);
         std::optional<const Worker*> find_by_id(std::string id) const noexcept;
-        bool has_worker(const Worker&) const noexcept;
+        const Worker& get_by_id(std::string id) const;
         std::vector<const Worker*> get_workers() const;
         void set_dishes_prepared(const Cook&, unsigned dishes_prepared);
         void set_rooms_serviced(const Maid&, unsigned rooms_serviced);
@@ -42,8 +39,6 @@ class WorkerSystem
 template<SupportedWorker T>
 void WorkerSystem::add_worker(const T& worker)
 {
-    if (worker.get_name().empty() || worker.get_id().empty())
-        throw InvalidWorkerError("Cannot add worker", worker);
     if ( find_by_id(worker.get_id()) )
         throw DuplicateWorkerIDError("Cannot add worker", worker);
     auto p = std::make_unique<T>(worker);

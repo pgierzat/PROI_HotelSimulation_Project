@@ -1,3 +1,6 @@
+#ifndef USEFUL_HPP
+#define USEFUL_HPP
+
 #include <vector>
 #include <algorithm>
 
@@ -8,3 +11,5 @@ std::vector<const T*> const_ptr_vec(const std::vector<T*>& vec)
     std::ranges::for_each(vec, [&](T* elem){ ret.push_back(elem); });
     return ret;
 }
+
+#endif

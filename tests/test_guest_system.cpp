@@ -4,8 +4,8 @@
 TEST_CASE("test GuestSystem")
 {
     GuestSystem g_system{};
-    Guest guest1{"name1"};
-    Guest guest2{"name2"};
+    Guest guest1{"id1", "name1"};
+    Guest guest2{"id2", "name2"};
     g_system.add_guest(guest1);
     g_system.add_guest(guest2);
     const auto& guests = g_system.get_guests();
@@ -18,13 +18,13 @@ TEST_CASE("test GuestSystem")
 
     SECTION("find by name hit")
     {
-        auto found1 = (g_system.find_by_name("name1")).value();
-        REQUIRE( found1.get_name() == "name1" );
+        auto found1 = (g_system.find_by_id("id1")).value();
+        REQUIRE( *found1 == guest1 );
     }
 
     SECTION("find by name miss")
     {
-        REQUIRE( !g_system.find_by_name("name3").has_value() );
+        REQUIRE( !g_system.find_by_id("id3").has_value() );
     }
 
     SECTION("remove guest")

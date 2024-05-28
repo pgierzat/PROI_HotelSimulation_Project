@@ -23,7 +23,7 @@ class Receptionist : public Worker
         static const WorkerType type = WorkerType::Receptionist;
         static const Amount penalty;
     private:
-        unsigned complaints;
+        unsigned complaints = 0;
         static unsigned shifts;
         static const jed_utils::timespan shift_duration;
         static const std::map<Shift, jed_utils::timespan> shifts_to_hours;

@@ -3,12 +3,23 @@
 
 #include <stdexcept>
 #include <string>
-#include "../workers/worker.hpp"
-#include "../rooms/hpp/room.hpp"
-#include "../types/guest.hpp"
-#include "../types/table.hpp"
-#include "../types/stay.hpp"
-#include "../tasks/task.hpp"
+
+
+class Worker;
+enum class WorkerType : unsigned;
+class Room;
+class Guest;
+class Table;
+class Stay;
+enum class StayStatus : unsigned;
+class Service;
+class Task;
+class TimetableEntry;
+namespace jed_utils {
+    class datetime;
+    class timespan;
+}
+
 
 class UnsupportedWorkerTypeError : public std::invalid_argument
 {
@@ -56,22 +67,26 @@ class IncorrectWorkerType : public std::invalid_argument
 class RoomCapacityExceededError : public std::invalid_argument
 {
     public:
-        RoomCapacityExceededError(const std::string& what, const Room&);
-        const Room& room;
+        RoomCapacityExceededError(const std::string& what, const Stay&);
+        const Stay& stay;
 };
 
 class GuestNotInSystemError : public std::invalid_argument
 {
     public:
         GuestNotInSystemError(const std::string& what, const Guest&);
-        const Guest& guest;
+        GuestNotInSystemError(const std::string& what, const std::string& guest_id);
+        const Guest* guest = nullptr;
+        const std::string& guest_id ="";
 };
 
 class RoomNotInSystemError : public std::invalid_argument
 {
     public:
         RoomNotInSystemError(const std::string& what, const Room&);
-        const Room& room;
+        RoomNotInSystemError(const std::string& what, unsigned room_nr);
+        const Room* room = nullptr;
+        unsigned room_nr = -1;
 };
 
 class StayOverlapError : public std::invalid_argument
@@ -86,21 +101,25 @@ class WorkerNotInSystemError : public std::invalid_argument
 {
     public:
         WorkerNotInSystemError(const std::string& what, const Worker&);
-        const Worker& worker;
+        WorkerNotInSystemError(const std::string& what, const std::string& worker_id);
+        const Worker* worker = nullptr;
+        const std::string worker_id = "";
 };
 
 class TaskNotInSystemError : public std::invalid_argument
 {
     public:
         TaskNotInSystemError(const std::string& what, const Task&);
-        const Task& task;
+        TaskNotInSystemError(const std::string& what, const std::string& task_id);
+        const Task* task = nullptr;
+        const std::string& task_id = "";
 };
 
 class TurnBackTimeError : public std::invalid_argument
 {
     public:
         TurnBackTimeError(const std::string& what, const jed_utils::datetime& time);
-        jed_utils::datetime time;
+        const jed_utils::datetime& time;
 };
 
 class TaskStatusError : public std::invalid_argument
@@ -138,6 +157,73 @@ class SystemNotBoundError : public std::invalid_argument
 {
     public:
         SystemNotBoundError(const std::string& what);
+};
+
+class ServiceStatusError : public std::invalid_argument
+{
+    public:
+        ServiceStatusError(const std::string& what, const Service&);
+        const Service& service;
+};
+
+class UnknownStayStatusError : public std::invalid_argument
+{
+    public:
+        UnknownStayStatusError(const std::string& what, StayStatus);
+        StayStatus status;
+};
+
+class StayStatusError : public std::invalid_argument
+{
+    public:
+        StayStatusError(const std::string& what, const Stay& stay);
+        const Stay& stay;
+};
+
+class StayBackwardBookError : public std::invalid_argument
+{
+    public:
+        StayBackwardBookError(const std::string& what, const Stay&, const jed_utils::datetime&);
+        const Stay& stay;
+};
+
+class StayNotInSystemError : public std::invalid_argument
+{
+    public:
+        StayNotInSystemError(const std::string& what, const Stay&);
+        StayNotInSystemError(const std::string& what, const std::string& stay_id);
+        const Stay* stay = nullptr;
+        const std::string& stay_id = "";
+};
+
+class UninitializedServiceError : public std::invalid_argument
+{
+    public:
+        UninitializedServiceError(const std::string& what, const Service&);
+        const Service& service;
+};
+
+class EntryScheduleError : public std::invalid_argument
+{
+    public:
+        EntryScheduleError(const std::string& what, const TimetableEntry&);
+        const TimetableEntry& entry;
+};
+
+class EntryStatusError : public std::invalid_argument
+{
+    public:
+        EntryStatusError(const std::string& what, const TimetableEntry&);
+        const TimetableEntry& entry;
+};
+
+class ServiceNotInSystemError : public std::invalid_argument
+{
+    public:
+        ServiceNotInSystemError(const std::string& what, const Service&);
+        ServiceNotInSystemError(const std::string& what, const std::string service_id);
+        const Service* service = nullptr;
+        std::string service_id = "";
 };
 
 #endif

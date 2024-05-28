@@ -2,24 +2,29 @@
 #define TASK_SYSTEM_HPP
 
 #include "worker_system.hpp"
+#include "guest_system.hpp"
+#include "../rooms/hpp/rooms_list.hpp"
+#include "../tasks/task.hpp"
 
 class TaskSystem
 {
     public:
-        TaskSystem() = default;
-        void bind_worker_system(WorkerSystem&) noexcept;
+        TaskSystem(WorkerSystem&, RoomsList&, GuestSystem&);
         void assign_task(const Task&, const Worker&);
         void unassign_task(const Task&);
         void complete_task(const Task&);
         std::optional<const Task*> find_by_id(const std::string& id) const noexcept;
+        const Task& get_by_id(const std::string& id) const;
         template<SupportedTask T>
             void add_task(const T&);
         void remove_task(const Task&) noexcept;
         std::vector<const Task*> get_tasks() const noexcept;
+        bool operator==(const TaskSystem&) const = default;
     private:
-        WorkerSystem& get_w_system() const;
         Task& validate_task(const Task&) const;
-        WorkerSystem* w_system = nullptr;
+        WorkerSystem* w_system;
+        RoomsList* rooms_list;
+        GuestSystem* g_system;
         std::vector<std::unique_ptr<Task>> tasks;
 };
 

@@ -7,7 +7,7 @@ FourApartment::FourApartment(unsigned number) :
 Room(number, capacity=4)
 {}
 
-unsigned FourApartment::calculatePrice() const
+Amount FourApartment::calculatePrice() const
 {
     return base_price * 5;
 }

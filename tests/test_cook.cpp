@@ -1,10 +1,12 @@
 #include "catch_amalgamated.hpp"
 #include "../src/workers/cook.hpp"
+#include "../src/systems/worker_system.hpp"
 #include "../src/types/pay.hpp"
 
 
 TEST_CASE("Test Cook")
 {
+    auto w_system = WorkerSystem{};
     Amount salary_amount{3200, 0};
     Pay salary{PaycheckMethod::Salary, salary_amount};
     Amount wage_amount{25, 0};
@@ -13,6 +15,7 @@ TEST_CASE("Test Cook")
     SECTION("Regular interface")
     {
         Cook cook_obj{"name1", "1111", salary};
+        w_system.add_worker(cook_obj);
         Cook* cook = &cook_obj;
 
         SECTION("init")
@@ -26,6 +29,7 @@ TEST_CASE("Test Cook")
         SECTION("regular")
         {
             Cook cook_obj{"name1", "1111", salary};
+            w_system.add_worker(cook_obj);
             Cook* cook = &cook_obj;
 
             SECTION("init")
@@ -43,6 +47,7 @@ TEST_CASE("Test Cook")
         SECTION("bonus")
         {
             Cook cook_obj{"name1", "1111", salary};
+            w_system.add_worker(cook_obj);
             Cook* cook = &cook_obj;
 
             cook -> set_dishes_prepared(10);
@@ -52,6 +57,7 @@ TEST_CASE("Test Cook")
         SECTION("hours + bonus")
         {
             Cook cook_obj{"name1", "1111", wage};
+            w_system.add_worker(cook_obj);
             Cook* cook = &cook_obj;
 
             cook -> set_dishes_prepared(10);
@@ -62,6 +68,7 @@ TEST_CASE("Test Cook")
     SECTION("TimeTable interface")
     {
         Cook cook_obj{"name1", "1111", salary};
+        w_system.add_worker(cook_obj);
         Worker* cook = &cook_obj;
 
         REQUIRE( cook -> get_shifts() == 1 );
