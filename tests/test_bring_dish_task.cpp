@@ -1,12 +1,18 @@
 #include "catch_amalgamated.hpp"
 #include "../src/tasks/bring_dish_task.hpp"
+#include "../src/systems/task_system.hpp"
 #include "../src/utilities/errors.hpp"
 
 
 TEST_CASE("Test BringDishTask")
 {
+    auto rooms_list = RoomsList{};
+    auto w_system = WorkerSystem{};
+    auto g_system = GuestSystem{};
+    auto t_system = TaskSystem{w_system, rooms_list, g_system};
     Table table{"25"};
     BringDishTask bringtask{"1111", Dish::Omelette, table};
+    t_system.add_task(bringtask);
     Task& task = bringtask;
 
     SECTION("init")

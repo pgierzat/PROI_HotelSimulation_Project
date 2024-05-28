@@ -2,9 +2,11 @@
 #include "../src/workers/worker.hpp"
 #include "../src/workers/cook.hpp"
 #include "../src/types/pay.hpp"
+#include "../src/systems/worker_system.hpp"
 
 TEST_CASE("Test Worker")
 {
+    auto w_system = WorkerSystem{};
     Amount salary_amount{3200, 0};
     Pay salary{PaycheckMethod::Salary, salary_amount};
     Amount wage_amount{25, 0};

@@ -1,29 +1,26 @@
 #include <vector>
 #include <algorithm>
 #include "task_system.hpp"
+#include "../functions/has_elem.hpp"
 
-void TaskSystem::bind_worker_system(WorkerSystem& w_system) noexcept
-{ this -> w_system = &w_system; }
+TaskSystem::TaskSystem(WorkerSystem& w_system, RoomsList& rooms_list, GuestSystem& g_system) :
+    w_system{&w_system}
+{
+    Task::set_w_system(w_system);
+    Task::set_rooms_list(rooms_list);
+    Task::set_g_system(g_system);
+}
 
 void TaskSystem::assign_task(const Task& task, const Worker& worker)
 {
-    auto& task_obj = validate_task(task);
-    if (not get_w_system().has_worker(worker))
+    if (!has_elem_ptr(w_system -> get_workers(), worker))
         throw WorkerNotInSystemError("Cannot assign task to an unknown worker.", worker);
-    task_obj.assign(worker);
+    validate_task(task).assign(worker);
 }
 
-void TaskSystem::unassign_task(const Task& task)
-{
-    auto& task_obj = validate_task(task);
-    task_obj.unassign();
-}
+void TaskSystem::unassign_task(const Task& task) { validate_task(task).unassign(); }
 
-void TaskSystem::complete_task(const Task& task)
-{
-    auto& task_obj = validate_task(task);
-    task_obj.mark_completed();
-}
+void TaskSystem::complete_task(const Task& task) { validate_task(task).mark_completed(); }
 
 std::optional<const Task*> TaskSystem::find_by_id(const std::string& id) const noexcept
 {
@@ -31,6 +28,14 @@ std::optional<const Task*> TaskSystem::find_by_id(const std::string& id) const n
     if (p == tasks.end())
         return std::nullopt;
     return &**p;
+}
+
+const Task& TaskSystem::get_by_id(const std::string& id) const
+{
+    auto p = std::ranges::find_if(tasks, [&](const auto& otr_task){ return otr_task -> get_id() == id; });
+    if (p == tasks.end())
+        throw TaskNotInSystemError("TaskSystem::get_by_id failed", id);
+    return **p;
 }
 
 void TaskSystem::remove_task(const Task& task) noexcept
@@ -43,13 +48,6 @@ std::vector<const Task*> TaskSystem::get_tasks() const noexcept
     std::vector<const Task*> tasks_cp{};
     std::ranges::for_each(tasks, [&](const auto& ptr){ tasks_cp.push_back(&*ptr); });
     return tasks_cp;
-}
-
-WorkerSystem& TaskSystem::get_w_system() const
-{
-    if (!w_system)
-        throw SystemNotBoundError("WorkerSystem not bound to TaskSystem");
-    return *w_system;
 }
 
 Task& TaskSystem::validate_task(const Task& task) const

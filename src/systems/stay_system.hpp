@@ -9,29 +9,26 @@
 class StaySystem
 {
     public:
-        StaySystem() = default;
-        void bind_guest_system(const GuestSystem&);
-        void bind_room_system(const RoomsList&);
+        StaySystem(const GuestSystem&, const RoomsList&);
+        const GuestSystem& get_cguest_system() const;
+        const RoomsList& get_crooms_list() const;
         void set_time(const jed_utils::datetime&);
         void add_stay(const Stay&);
         void remove_stay(const Stay&);
+        std::optional<const Stay*> find_by_id(const std::string&) const noexcept;
+        const Stay& get_by_id(const std::string&) const;
         const std::vector<Stay>& get_stays() const noexcept;
-        std::vector<const Stay*> get_active_stays() const noexcept;
-        std::vector<const Stay*> get_ending_stays() const noexcept;
+        void check_in(const Stay&);
+        void check_out(const Stay&);
         static const jed_utils::timespan checkout_time;
         static const jed_utils::timespan checkin_time;
     private:
-        void refresh_active_stays();
-        void refresh_ending_stays(const std::vector<Stay*>& previous_stays);
-        void check_overlap(const Stay&);
-        void validate_guest(const Guest&);
-        void validate_guests(const Stay&); 
-        void validate_room(const Room&); 
-        const GuestSystem* g_system = nullptr;
-        const RoomsList* rooms_list = nullptr;
+        std::optional<Stay*> get_stay(const Stay&) const noexcept;
+        Stay& validate_stay(const Stay&) const;
+        void check_overlap(const Stay&) const;
+        const GuestSystem* g_system;
+        const RoomsList* rooms_list;
         std::vector<Stay> stays;
-        std::vector<Stay*> active_stays;
-        std::vector<Stay*> ending_stays;
         jed_utils::datetime time{1970, 1, 1};
 };
 

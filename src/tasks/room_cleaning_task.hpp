@@ -13,7 +13,7 @@ class RoomCleaningTask : public BigTask<Maid>
         RoomCleaningTask(const std::string& id, const Room&);
         const Room& get_room() const noexcept;
     protected:
-        const Room& room;
+        unsigned room_nr;
 };
 
 

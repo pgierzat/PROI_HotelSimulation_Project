@@ -7,8 +7,7 @@ class ThreeRoom: public Room
 {
     public:
         ThreeRoom(unsigned number);
-        unsigned calculatePrice() const override;
-
+        Amount calculatePrice() const override;
 };
 
 #endif

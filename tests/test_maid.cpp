@@ -1,10 +1,12 @@
 #include "catch_amalgamated.hpp"
 #include "../src/workers/maid.hpp"
+#include "../src/systems/worker_system.hpp"
 #include "../src/types/pay.hpp"
 
 
 TEST_CASE("Test Maid")
 {
+    auto w_system = WorkerSystem{};
     Amount salary_amount{3200, 0};
     Pay salary{PaycheckMethod::Salary, salary_amount};
     Amount wage_amount{25, 0};
@@ -13,6 +15,7 @@ TEST_CASE("Test Maid")
     SECTION("Regular interface")
     {
         Maid maid_obj{"name1", "1111", salary};
+        w_system.add_worker(maid_obj);
         Maid* maid = &maid_obj;
 
         SECTION("init")
@@ -26,6 +29,7 @@ TEST_CASE("Test Maid")
         SECTION("regular")
         {
             Maid maid_obj{"name1", "1111", salary};
+            w_system.add_worker(maid_obj);
             Maid* maid = &maid_obj;
 
             SECTION("init")
@@ -43,6 +47,7 @@ TEST_CASE("Test Maid")
         SECTION("bonus")
         {
             Maid maid_obj{"name1", "1111", salary};
+            w_system.add_worker(maid_obj);
             Maid* maid = &maid_obj;
 
             maid -> set_rooms_serviced(10);
@@ -53,6 +58,7 @@ TEST_CASE("Test Maid")
         SECTION("hours + bonus")
         {
             Maid maid_obj{"name1", "1111", wage};
+            w_system.add_worker(maid_obj);
             Maid* maid = &maid_obj;
 
             maid -> set_rooms_serviced(10);
@@ -63,6 +69,7 @@ TEST_CASE("Test Maid")
     SECTION("TimeTable interface")
     {
         Maid maid_obj{"name1", "1111", salary};
+        w_system.add_worker(maid_obj);
         Worker* maid = &maid_obj;
 
         REQUIRE( maid -> get_shifts() == 2 );

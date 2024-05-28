@@ -6,11 +6,8 @@ TEST_CASE("Test PaycheckSystem")
     using namespace std::chrono;
 
     WorkerSystem w_system{};
-    TimetableSystem tt_system{};
-    tt_system.bind_worker_system(w_system);
-    PaycheckSystem pc_system{};
-    pc_system.bind_worker_system(w_system);
-    pc_system.bind_timetable_system(tt_system);
+    TimetableSystem tt_system{w_system};
+    PaycheckSystem pc_system{w_system, tt_system};
     const auto& paychecks = pc_system.get_paychecks();
 
     Amount amount1{3200, 0};
@@ -34,19 +31,20 @@ TEST_CASE("Test PaycheckSystem")
         REQUIRE( paychecks.empty() );
         jed_utils::datetime time1{2024y/May/11d};
         pc_system.set_time(time1);
-        REQUIRE( paychecks.empty() );
+        Paycheck exp_waiter_pc{waiter, amount1};
+        std::vector expected_pcs1{exp_waiter_pc};
+        REQUIRE( paychecks == expected_pcs1 );
         jed_utils::datetime time2{2024y/June/1d};
         pc_system.set_time(time2);
-        Paycheck exp_waiter_pc{waiter, amount1};
         Paycheck exp_maid_pc{maid, amount2 * maid.get_shift_duration().get_hours()};
-        std::vector expected_pcs{exp_waiter_pc, exp_maid_pc};
-        REQUIRE( paychecks == expected_pcs );
+        std::vector expected_pcs2{exp_waiter_pc, exp_maid_pc};
+        REQUIRE( paychecks == expected_pcs2 );
         jed_utils::datetime time3{2024y/June/2d};
         pc_system.set_time(time3);
-        REQUIRE( paychecks == expected_pcs );
+        REQUIRE( paychecks == expected_pcs2 );
         jed_utils::datetime time4{2024y/July/2d};
         pc_system.set_time(time4);
-        REQUIRE( paychecks.empty() );
+        REQUIRE( paychecks == expected_pcs1 );
     }
 
     SECTION("turn back time")

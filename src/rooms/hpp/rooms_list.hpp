@@ -3,6 +3,7 @@
 
 #include "room.hpp"
 #include <list>
+#include <optional>
 #include <memory>
 #include <vector>
 
@@ -19,9 +20,10 @@ class RoomsList
         void add_two_apartment(unsigned number);
         void add_four_apartment(unsigned number);
 
-        unsigned calculate_total_price() const noexcept;
+        Amount calculate_total_price() const noexcept;
         unsigned calculate_total_rooms() const noexcept;
-        Room find_by_number(unsigned number) const;
+        std::optional<const Room*> find_by_number(unsigned number) const noexcept;
+        const Room& get_by_number(unsigned number) const;
         std::list<std::unique_ptr<Room>>& getRooms() noexcept;
         void display() const;
         bool room_exists(unsigned number) const;

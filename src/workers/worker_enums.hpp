@@ -19,7 +19,7 @@ extern const std::map<Shift, std::string> shift_to_str;
 
 extern const std::map<std::string, Shift> str_to_shift;
 
-enum class WorkerType : unsigned char {
+enum class WorkerType : unsigned {
     Cook,
     Maid,
     Receptionist,

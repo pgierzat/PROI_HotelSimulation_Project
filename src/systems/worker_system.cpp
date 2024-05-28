@@ -9,17 +9,15 @@ std::optional<const Worker*> WorkerSystem::find_by_id(std::string id) const noex
     auto p = std::ranges::find_if(workers, [&](const auto& worker){ return worker -> get_id() == id; });
     if (p == workers.end())
         return std::nullopt;
-    return (*p).get();
+    return p -> get();
 }
 
-bool WorkerSystem::has_worker(const Worker& worker) const noexcept
+const Worker& WorkerSystem::get_by_id(std::string id) const
 {
-    auto opt = find_by_id(worker.get_id());
-    if (not opt)
-        return false;
-    if (*opt.value() == worker)
-        return true;
-    return false;
+    auto p = std::ranges::find_if(workers, [&](const auto& worker){ return worker -> get_id() == id; });
+    if (p == workers.end())
+        throw WorkerNotInSystemError("WorkerSystem::get_by_id failed", id);
+    return **p;
 }
 
 std::vector<const Worker*> WorkerSystem::get_workers() const

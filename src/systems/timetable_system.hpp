@@ -9,35 +9,29 @@
 #ifndef TIMETABLE_SYSTEM_HPP
 #define TIMETABLE_SYSTEM_HPP
 
+enum class EntryStatus {
+    scheduled,
+    in_progress,
+    finished
+};
+
 class TimetableSystem
 {
     public:
-        TimetableSystem() = default;
-        
-        void bind_worker_system(WorkerSystem&); 
+        TimetableSystem(WorkerSystem&);
+        const WorkerSystem& get_cw_system() const noexcept;
+        const jed_utils::datetime& get_time() const noexcept;
         void set_time(const jed_utils::datetime&);
         void add_entry(const TimetableEntry&);
         void remove_entry(const TimetableEntry&);
         const std::vector<TimetableEntry>& get_entries() const noexcept;
-        std::vector<TimetableEntry*> get_active_entries() const noexcept;
-        std::vector<TimetableEntry*> get_ending_entries() const noexcept;
-        std::vector<const TimetableEntry*> worker_entries(const Worker&) const noexcept;
+        EntryStatus get_entry_status(const TimetableEntry&) const noexcept;
+        std::vector<const Worker*> workers_available() const noexcept;
         static const jed_utils::timespan minimal_break;
     private:
-        WorkerSystem& get_w_system() const;
-        void validate_entry_worker(const TimetableEntry& entry) const;
-        void refresh_active_entries();
-        void refresh_ending_entries(const std::vector<TimetableEntry*> previous_entries);
         std::vector<TimetableEntry> entries;
-        std::vector<TimetableEntry*> active_entries;
-        std::vector<TimetableEntry*> ending_entries;
         WorkerSystem* w_system = nullptr;
         jed_utils::datetime time{1970, 1, 1};
 };
-
-std::vector<const TimetableEntry*> interval_entries(const std::vector<const TimetableEntry*>&,
-    const TimeInterval&);
-std::vector<const TimetableEntry*> month_entries(const std::vector<const TimetableEntry*>&,
-    std::chrono::year_month);
 
 #endif

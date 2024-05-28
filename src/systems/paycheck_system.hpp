@@ -7,21 +7,18 @@
 #include "timetable_system.hpp"
 #include <chrono>
 
+class HotelSystem;
+
 class PaycheckSystem
 {
     public:
-        PaycheckSystem() = default;
-        void bind_worker_system(WorkerSystem&);
-        void bind_timetable_system(TimetableSystem&);
+        PaycheckSystem(WorkerSystem&, TimetableSystem&);
         void set_time(const jed_utils::datetime&);
         const std::vector<Paycheck>& get_paychecks() const noexcept;
     private:
-        WorkerSystem& get_w_system() const;
-        TimetableSystem& get_tt_system() const;
         void calculate_paychecks();
-        void close_month();
-        WorkerSystem* w_system = nullptr;
-        TimetableSystem* tt_system = nullptr;
+        WorkerSystem* w_system;
+        const TimetableSystem* tt_system;
         std::vector<Paycheck> paychecks;
         jed_utils::datetime time{1970, 1, 1};
         std::chrono::year_month current_month{time.get_year_month()};

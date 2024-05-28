@@ -6,7 +6,7 @@ OneRoom::OneRoom(unsigned number) :
 Room(number, capacity=1)
 {}
 
-unsigned OneRoom::calculatePrice() const
+Amount OneRoom::calculatePrice() const
 {
     return base_price;
 }

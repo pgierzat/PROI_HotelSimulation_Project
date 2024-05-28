@@ -22,31 +22,31 @@ TEST_CASE("Test TaskSystem")
     w_system.add_worker(maid2);
     w_system.add_worker(receptionist);
     w_system.add_worker(waiter);
-    TaskSystem t_system{};
+    RoomsList rooms_list{};
+    GuestSystem g_system{};
+    TaskSystem t_system{w_system, rooms_list, g_system};
 
     SECTION("init") { REQUIRE(t_system.get_tasks().empty()); }
 
-    t_system.bind_worker_system(w_system);
-    PrepareDishTask preptask{"id1", Dish::FrenchToasts};
-    RoomCleaningTask roomtask{"id2", TwoApartment{237}};
-    TaxiTask taxitask{"id3", Guest{"name"}, jed_utils::datetime{2024, 5, 19}};
-    BringDishTask bringtask{"id4", Dish::FrenchToasts, Table{"10"}};
-
-    t_system.add_task(preptask);
-    t_system.add_task(roomtask);
-    t_system.add_task(taxitask);
-    t_system.add_task(bringtask);
+    t_system.add_task(PrepareDishTask{"id1", Dish::FrenchToasts});
+    t_system.add_task(RoomCleaningTask{"id2", TwoApartment{237}});
+    t_system.add_task(TaxiTask{"id3", Guest{"id", "name"}, jed_utils::datetime{2024, 5, 19}});
+    t_system.add_task(BringDishTask{"id4", Dish::FrenchToasts, Table{"10"}});
+    const auto& preptask = *t_system.find_by_id("id1").value();
+    const auto& roomtask = *t_system.find_by_id("id2").value();
+    const auto& taxitask = *t_system.find_by_id("id3").value();
+    const auto& bringtask = *t_system.find_by_id("id4").value();
 
     SECTION("add task")
     {
-        std::vector<Task*> exp{&preptask, &roomtask, &taxitask, &bringtask};
+        std::vector<const Task*> exp{&preptask, &roomtask, &taxitask, &bringtask};
         REQUIRE( std::ranges::equal(t_system.get_tasks(), exp, [](auto p1, auto p2){ return *p1 == *p2; }) );
     }
 
     SECTION("remove task")
     {
         t_system.remove_task(taxitask);
-        std::vector<Task*> exp{&preptask, &roomtask, &bringtask};
+        std::vector<const Task*> exp{&preptask, &roomtask, &bringtask};
         REQUIRE( std::ranges::equal(t_system.get_tasks(), exp, [](auto p1, auto p2){ return *p1 == *p2; }) );
     }
 

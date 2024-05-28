@@ -26,11 +26,8 @@ TEST_CASE("Test WorkerSystem")
 
     SECTION("simple use")
     {
-        REQUIRE( cook == *workers.at(0) );
-        REQUIRE( maid == *workers.at(1) );
-        REQUIRE( receptionist == *workers.at(2) );
-        REQUIRE( waiter == *workers.at(3) );
-
+        std::vector<const Worker*> exp{&cook, &maid, &receptionist, &waiter};
+        REQUIRE( std::ranges::equal(workers, exp, [](auto p1, auto p2){ return *p1 == *p2; }) );
     }
 
     SECTION("duplicate id")

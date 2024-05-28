@@ -1,14 +1,23 @@
 #include "catch_amalgamated.hpp"
 #include "../src/tasks/wake_task.hpp"
+#include "../src/rooms/hpp/rooms_list.hpp"
+#include "../src/systems/stay_system.hpp"
+#include "../src/systems/guest_system.hpp"
 #include "../src/utilities/errors.hpp"
 
 TEST_CASE("test WakeTask")
 {
-    Room room{237, 2};
+    auto rooms_list = RoomsList{};
+    rooms_list.add_one_room(237);
+    const auto& room1 = *rooms_list.find_by_number(237).value();
+    auto w_system = WorkerSystem{};
+    auto pay = Pay{PaycheckMethod::Salary, Amount{3200, 0}};
+    w_system.add_worker(Maid{"name1", "id1", pay});
+    w_system.add_worker(Maid{"name2", "id2", pay});
+    const auto& maid1 = *w_system.find_by_id("id1").value();
+    const auto& maid2 = *w_system.find_by_id("id2").value();
     jed_utils::datetime time{2024, 5, 18};
-    Maid maid1{"name1", "id1", Pay{PaycheckMethod::Salary, Amount{3200, 0}}};
-    Maid maid2{"name2", "id2", Pay{PaycheckMethod::Salary, Amount{3200, 0}}};
-    WakeTask waketask{"id1", room, time};
+    WakeTask waketask{"id1", room1, time};
     Task& task = waketask;
 
     SECTION("assignee of a unassigned task")

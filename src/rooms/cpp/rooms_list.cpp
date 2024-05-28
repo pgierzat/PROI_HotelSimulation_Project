@@ -6,7 +6,7 @@
 #include "../hpp/four_room.hpp"
 #include "../hpp/two_apartment.hpp"
 #include "../hpp/four_apartment.hpp"
-#include "../exceptions/room_not_found_exception.hpp"
+#include "../../utilities/errors.hpp"
 #include <vector>
 #include <numeric>
 #include <algorithm>
@@ -83,21 +83,28 @@ void RoomsList::add_four_apartment(unsigned number)
 }
 
 
-unsigned RoomsList::calculate_total_price() const noexcept
+Amount RoomsList::calculate_total_price() const noexcept
 {
-    return std::accumulate(rooms.begin(), rooms.end(), 0, [](unsigned sum, const std::unique_ptr<Room>& room) { return sum + room->calculatePrice(); });
+    return std::accumulate(rooms.begin(), rooms.end(), Amount{0, 0}, [](Amount sum, const std::unique_ptr<Room>& room) { return sum + room->calculatePrice(); });
 }
 
-Room RoomsList::find_by_number(unsigned number) const
+std::optional<const Room*> RoomsList::find_by_number(unsigned number) const noexcept
 {
-    auto found_room = std::find_if(rooms.begin(), rooms.end(), [number](const std::unique_ptr<Room>& room) { return room->getNumber() == number; });
+    auto found_room = std::find_if(rooms.begin(), rooms.end(),
+        [=](const std::unique_ptr<Room>& room) { return room->getNumber() == number; });
     if (found_room == rooms.end())
-    {
-        throw RoomNotFoundException();
-    }
+        return std::nullopt;
+    return &**found_room;
+}
+
+const Room& RoomsList::get_by_number(unsigned number) const
+{
+    auto found_room = std::find_if(rooms.begin(), rooms.end(),
+        [=](const std::unique_ptr<Room>& room) { return room->getNumber() == number; });
+    if (found_room == rooms.end())
+        throw RoomNotInSystemError("get_by_number failed.", number);
     return **found_room;
 }
-
 
 std::list<std::unique_ptr<Room>>& RoomsList::getRooms() noexcept
 {

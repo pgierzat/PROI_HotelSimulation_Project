@@ -3,21 +3,19 @@
 #include "../exceptions/negative_capacity_exception.hpp"
 #include <iostream>
 
+
+const Amount Room::base_price{100, 0};
+
 Room::Room(unsigned number, unsigned capacity) :
-number(number), capacity(capacity), base_price(100)
+number(number), capacity(capacity)
 {
     if(number <=0)
-    {
         throw NegativeNumberException(number);
-    }
-
     if(capacity <=0)
-    {
         throw NegativeCapacityException(capacity);
-    }
 }
 
-unsigned Room::calculatePrice() const
+Amount Room::calculatePrice() const
 {
     return base_price;
 }

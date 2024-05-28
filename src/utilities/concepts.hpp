@@ -31,4 +31,21 @@ concept SupportedTask =
     std::same_as<T, TaxiTask> ||
     std::same_as<T, WakeTask>;
 
+class StayService;
+class TaxiService;
+class RoomService;
+class ExtraRoomCleaningService;
+class WakeService;
+class RestaurantOrderService;
+
+template<typename T>
+concept SupportedService = 
+    std::same_as<T, StayService> ||
+    std::same_as<T, TaxiService> ||
+    std::same_as<T, RoomService> ||
+    std::same_as<T, ExtraRoomCleaningService> ||
+    std::same_as<T, WakeService> ||
+    std::same_as<T, RestaurantOrderService>;
+
+
 #endif
