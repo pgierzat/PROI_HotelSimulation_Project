@@ -24,7 +24,7 @@ class RoomsList
         unsigned calculate_total_rooms() const noexcept;
         std::optional<const Room*> find_by_number(unsigned number) const noexcept;
         const Room& get_by_number(unsigned number) const;
-        std::list<std::unique_ptr<Room>>& getRooms() noexcept;
+        const std::list<std::unique_ptr<Room>>& getRooms() const noexcept;
         void display() const;
         bool room_exists(unsigned number) const;
 

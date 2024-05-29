@@ -15,6 +15,8 @@ const std::string& Task::get_description() const noexcept { return description; 
 
 TaskStatus Task::get_status() const noexcept { return status; }
 
+void Task::set_id(const std::string& id) noexcept { this -> id = id; }
+
 void Task::mark_completed()
 {
     if (status != TaskStatus::assigned)

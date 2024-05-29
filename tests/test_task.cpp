@@ -27,6 +27,12 @@ TEST_CASE("Test Task")
         REQUIRE(task1.get_status() == TaskStatus::unassigned);
     }
 
+    SECTION("setters")
+    {
+        task1.set_id("1112");
+        REQUIRE(task1.get_id() == "1112");
+    }
+
     SECTION("completion before assignment")
     {
         REQUIRE_THROWS_AS(task1.mark_completed(), TaskStatusError);
