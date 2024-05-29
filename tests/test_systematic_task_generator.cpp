@@ -16,11 +16,16 @@ TEST_CASE("Test SystematicTaskGenerator")
     const auto& room1 = rooms_list.get_by_number(237);
     const auto& room2 = rooms_list.get_by_number(238);
     auto t_system = TaskSystem{w_system, rooms_list, g_system};
-    auto syst_gen = SystematicTaskGenerator{t_system, rooms_list};
-    syst_gen.generate_room_cleaning_tasks();
+    jed_utils::datetime time0{2024, 5, 19};
+    auto syst_gen = SystematicTaskGenerator{t_system, rooms_list, time0};
 
-    SECTION("room cleaning tasks")
+    SECTION("time test")
     {
+        jed_utils::datetime time1{2024, 5, 19, 7};
+        syst_gen.set_time(time1);
+        REQUIRE(t_system.get_tasks().empty());
+        jed_utils::datetime time2{2024, 5, 19, 8};
+        syst_gen.set_time(time2);
         auto task1 = RoomCleaningTask{"1", room1};
         auto task2 = RoomCleaningTask{"2", room2};
         auto expected = std::vector{task1, task2};
