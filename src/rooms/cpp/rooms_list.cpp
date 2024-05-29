@@ -106,7 +106,7 @@ const Room& RoomsList::get_by_number(unsigned number) const
     return **found_room;
 }
 
-std::list<std::unique_ptr<Room>>& RoomsList::getRooms() noexcept
+const std::list<std::unique_ptr<Room>>& RoomsList::getRooms() const noexcept
 {
     return rooms;
 }

@@ -57,3 +57,9 @@ Task& TaskSystem::validate_task(const Task& task) const
         throw TaskNotInSystemError("Unsuccesfull task validation", task);
     return **p;
 }
+
+void TaskSystem::check_task_status(const Task& task)
+{
+    if (task.get_status() != TaskStatus::unassigned)
+        throw TaskStatusError("Can only add unassigned tasks to TaskSystem.", task);
+}
