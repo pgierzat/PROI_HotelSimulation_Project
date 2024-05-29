@@ -70,7 +70,7 @@ namespace jed_utils
 		void add_hours(int nb_hours);
 		void add_minutes(int nb_minutes);
 		void add_seconds(int nb_seconds);
-		void trunkate();
+		datetime& trunkate();
 		bool is_leapyear();
 		static datetime parse(const std::string& format, const std::string& value);
 		static bool is_leapyear(int year);

@@ -393,11 +393,12 @@ namespace jed_utils
 		_copy_from(tm_new_time);
 	}
 	
-	void datetime::trunkate()
+	datetime& datetime::trunkate()
 	{
 		add_hours(-get_hour());
 		add_minutes(-get_minute());
 		add_seconds(-get_second());
+		return *this;
 	}
 
 	bool datetime::is_leapyear()
