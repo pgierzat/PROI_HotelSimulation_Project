@@ -34,6 +34,13 @@ Amount Pay::get_wage() const
     return amount.wage;
 }
 
+Amount Pay::get_amount() const noexcept
+{
+    if (method == PaycheckMethod::Salary)
+        return amount.salary;
+    return amount.wage;
+}
+
 PaycheckMethod Pay::get_method() const noexcept { return method; }
 
 void Pay::set_salary(const Amount& amount)

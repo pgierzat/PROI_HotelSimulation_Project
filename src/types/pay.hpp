@@ -22,6 +22,7 @@ class Pay
         Pay() = default;
         Amount get_salary() const;
         Amount get_wage() const;
+        Amount get_amount() const noexcept;
         PaycheckMethod get_method() const noexcept;
         void set_salary(const Amount&);
         void set_wage(const Amount&);
