@@ -1,8 +1,9 @@
 #ifndef PAY_HPP
 #define PAY_HPP
 
-#include <map>
 #include "amount.hpp"
+#include <map>
+#include <string>
 
 enum class PaycheckMethod : unsigned char {
     Salary,
@@ -30,8 +31,8 @@ class Pay
         static PaycheckMethod method_from_str(const std::string&);
         static const std::string& method_to_str(PaycheckMethod);
     private:
-        static const std::map<std::string, PaycheckMethod> str_to_method;
-        static const std::map<PaycheckMethod, std::string> method_to_str;
+        static const std::map<std::string, PaycheckMethod> str_to_method_map;
+        static const std::map<PaycheckMethod, std::string> method_to_str_map;
         PaycheckMethod method;
         PayUnion amount;
 };

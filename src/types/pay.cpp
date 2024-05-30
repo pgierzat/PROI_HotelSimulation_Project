@@ -1,11 +1,11 @@
 #include "pay.hpp"
 
-const std::map<std::string, PaycheckMethod> Pay::str_to_method = {
+const std::map<std::string, PaycheckMethod> Pay::str_to_method_map = {
     {"Salary", PaycheckMethod::Salary},
     {"Wage", PaycheckMethod::Wage}
 };
 
-const std::map<PaycheckMethod, std::string> Pay::method_to_str = {
+const std::map<PaycheckMethod, std::string> Pay::method_to_str_map = {
     {PaycheckMethod::Salary, "Salary"},
     {PaycheckMethod::Wage, "Wage"}
 };
@@ -67,9 +67,9 @@ bool Pay::operator==(const Pay& other) const
 }
 
 PaycheckMethod Pay::method_from_str(const std::string& str) {
-    return str_to_method.at(str);
+    return str_to_method_map.at(str);
 }
 
 const std::string& Pay::method_to_str(PaycheckMethod method) {
-    return method_to_str.at(method);
+    return method_to_str_map.at(method);
 }
