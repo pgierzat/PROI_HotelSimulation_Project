@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <string>
+#include "json.hpp"
 
 
 class Worker;
@@ -18,9 +19,6 @@ class TimetableEntry;
 namespace jed_utils {
     class datetime;
     class timespan;
-}
-namespace nlohmann {
-    class json;
 }
 
 
