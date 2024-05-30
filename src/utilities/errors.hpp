@@ -19,6 +19,9 @@ namespace jed_utils {
     class datetime;
     class timespan;
 }
+namespace nlohmann {
+    class json;
+}
 
 
 class UnsupportedWorkerTypeError : public std::invalid_argument
@@ -224,6 +227,20 @@ class ServiceNotInSystemError : public std::invalid_argument
         ServiceNotInSystemError(const std::string& what, const std::string service_id);
         const Service* service = nullptr;
         std::string service_id = "";
+};
+
+class JSONException : public std::runtime_error
+{
+public:
+    JSONException(const std::string&, const nlohmann::json& j);
+    const nlohmann::json& j;
+};
+
+class JSONInvalidData : public std::runtime_error
+{
+public:
+    JSONInvalidData(const std::string&, const nlohmann::json& j);
+    const nlohmann::json& j;
 };
 
 #endif

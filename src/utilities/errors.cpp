@@ -108,3 +108,9 @@ ServiceNotInSystemError::ServiceNotInSystemError(const std::string& what, const 
 ServiceNotInSystemError::ServiceNotInSystemError(const std::string& what, const std::string service_id) :
     std::invalid_argument(what), service_id{service_id} {}
 
+JSONException::JSONException(const std::string& what, const nlohmann::json& j) :
+    std::runtime_error(what), j{j} {}
+
+JSONInvalidData::JSONInvalidData(const std::string& what, const nlohmann::json& j) :
+    std::runtime_error(what), j{j} {}
+
