@@ -1,5 +1,15 @@
 #include "pay.hpp"
 
+const std::map<std::string, PaycheckMethod> Pay::str_to_method = {
+    {"Salary", PaycheckMethod::Salary},
+    {"Wage", PaycheckMethod::Wage}
+};
+
+const std::map<PaycheckMethod, std::string> Pay::method_to_str = {
+    {PaycheckMethod::Salary, "Salary"},
+    {PaycheckMethod::Wage, "Wage"}
+};
+
 Pay::Pay(PaycheckMethod method, Amount amount) : method{method}
 {
     if (method == PaycheckMethod::Salary)
@@ -47,4 +57,12 @@ bool Pay::operator==(const Pay& other) const
         return amount.salary == other.amount.salary;
     
     return amount.wage == other.amount.wage;
+}
+
+PaycheckMethod Pay::method_from_str(const std::string& str) {
+    return str_to_method.at(str);
+}
+
+const std::string& Pay::method_to_str(PaycheckMethod method) {
+    return method_to_str.at(method);
 }
