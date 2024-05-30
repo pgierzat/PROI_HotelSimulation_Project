@@ -8,7 +8,7 @@
 class Receptionist : public Worker
 {
     public:
-        Receptionist(std::string name, std::string id, const Pay&);
+        Receptionist(std::string id, std::string name, const Pay&);
         Receptionist() = default;
         Amount calculate_paycheck(unsigned hours_worked) const noexcept override;
         WorkerType get_type() const noexcept override;

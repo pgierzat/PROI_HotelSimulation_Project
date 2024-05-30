@@ -8,7 +8,7 @@
 class Waiter : public Worker
 {
     public:
-        Waiter(std::string name, std::string id, const Pay&);
+        Waiter(std::string id, std::string name, const Pay&);
         Waiter() = default;
         Amount calculate_paycheck(unsigned hours_worked) const noexcept override;
         WorkerType get_type() const noexcept override;

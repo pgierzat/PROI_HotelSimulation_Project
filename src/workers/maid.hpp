@@ -8,7 +8,7 @@
 class Maid : public Worker
 {
     public:
-        Maid(std::string name, std::string id, const Pay&);
+        Maid(std::string id, std::string name, const Pay&);
         Maid() = default;
         Amount calculate_paycheck(unsigned hours_worked) const noexcept override;
         WorkerType get_type() const noexcept override;

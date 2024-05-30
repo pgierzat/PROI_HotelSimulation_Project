@@ -8,7 +8,7 @@
 class Cook : public Worker
 {
     public:
-        Cook(std::string name, std::string id, const Pay&);
+        Cook(std::string id, std::string name, const Pay&);
         Cook() = default;
         Amount calculate_paycheck(unsigned hours_worked) const noexcept override;
         WorkerType get_type() const noexcept override;

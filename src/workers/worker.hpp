@@ -17,7 +17,7 @@
 class Worker
 {
     protected:
-        Worker(std::string name, std::string id, const Pay&);
+        Worker(std::string id, std::string name, const Pay&);
         Worker() = default;
         Worker(const Worker&);
         Worker(Worker&&);
@@ -42,8 +42,8 @@ class Worker
 
         bool operator==(const Worker&) const;
     private:
-        std::string name;
         std::string id;
+        std::string name;
         Pay pay;
     protected:
         std::unique_ptr<PaycheckCalculator> calculator = nullptr;

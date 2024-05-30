@@ -5,8 +5,8 @@
 #include "../paycheck_calculators/wage_calculator.hpp"
 
 
-Worker::Worker(std::string name, std::string id, const Pay& pay) :
-    name{name}, id{id}, pay{pay}
+Worker::Worker(std::string id, std::string name, const Pay& pay) :
+    id{id}, name{name}, pay{pay}
 {
     calculator = create_calculator(this, pay.get_method());
 }

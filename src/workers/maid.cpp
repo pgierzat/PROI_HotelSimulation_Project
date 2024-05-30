@@ -14,7 +14,7 @@ const std::map<Shift, jed_utils::timespan> Maid::shifts_to_hours = {
     {Shift::II, jed_utils::timespan(0, 14)}
 };
 
-Maid::Maid(std::string name, std::string id, const Pay& pay) : Worker{name, id, pay} {}
+Maid::Maid(std::string id, std::string name, const Pay& pay) : Worker{name, id, pay} {}
 
 Amount Maid::calculate_paycheck(unsigned hours_worked) const noexcept
 {
