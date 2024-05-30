@@ -114,3 +114,5 @@ JSONException::JSONException(const std::string& what, const nlohmann::json& j) :
 JSONInvalidData::JSONInvalidData(const std::string& what, const nlohmann::json& j) :
     std::runtime_error(what), j{j} {}
 
+FileError::FileError(const std::string& what, const std::string& filename) :
+    std::runtime_error(what), filename{filename} {}

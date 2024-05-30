@@ -243,4 +243,11 @@ public:
     const nlohmann::json& j;
 };
 
+class FileError : public std::runtime_error
+{
+public:
+    FileError(const std::string&, const std::string& filename);
+    const std::string& filename;
+};
+
 #endif
