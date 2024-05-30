@@ -11,7 +11,7 @@ TEST_CASE("Test TimetableEntry")
 {
     WorkerSystem w_system{};
     Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
-    Receptionist receptionist{"name", "id", pay};
+    Receptionist receptionist{"id1", "name1", pay};
     w_system.add_worker(receptionist);
     TimetableSystem tt_system{w_system};
     jed_utils::datetime date{ 2024, 4, 11 };
@@ -32,7 +32,7 @@ TEST_CASE("Test TimetableEntry")
 
     SECTION("init, invalid, wrong shift")
     {
-        Maid maid{"name", "idd", pay};
+        Maid maid{"id2", "name2", pay};
         w_system.add_worker(maid);
         // maids work 2 shifts
         REQUIRE_THROWS( TimetableEntry{maid, date, Shift::III} );
@@ -43,10 +43,10 @@ TEST_CASE("Test TimetableEntry")
         jed_utils::datetime date1{ 2024, 4, 11 };
         jed_utils::datetime date2{ 2024, 4, 11 };
         Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
-        Receptionist receptionist1{"name1", "id1", pay};
-        w_system.add_worker(receptionist1);
-        TimetableEntry entry1{receptionist1, date1, Shift::II};
-        TimetableEntry entry2{receptionist1, date2, Shift::II};
+        Receptionist receptionist2{"id2", "name2", pay};
+        w_system.add_worker(receptionist2);
+        TimetableEntry entry1{receptionist2, date1, Shift::II};
+        TimetableEntry entry2{receptionist2, date2, Shift::II};
         REQUIRE( entry1 == entry2 );
         TimetableEntry entry3 = entry1;
         REQUIRE( entry1 == entry3 );

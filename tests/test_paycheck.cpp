@@ -11,7 +11,7 @@ TEST_CASE("Test Paycheck")
     Amount salary_amount{3200, 0};
     Pay salary{PaycheckMethod::Salary, salary_amount};
     auto w_system = WorkerSystem{};
-    Waiter waiter{"name1", "1111", salary};
+    Waiter waiter{"id1", "name1", salary};
     w_system.add_worker(waiter);
     auto tt_system = TimetableSystem{w_system};
     auto pc_system = PaycheckSystem{w_system, tt_system};

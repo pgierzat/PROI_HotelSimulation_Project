@@ -14,7 +14,7 @@ TEST_CASE("Test Maid")
 
     SECTION("Regular interface")
     {
-        Maid maid_obj{"name1", "1111", salary};
+        Maid maid_obj{"1111", "name1", salary};
         w_system.add_worker(maid_obj);
         Maid* maid = &maid_obj;
 
@@ -28,7 +28,7 @@ TEST_CASE("Test Maid")
     {
         SECTION("regular")
         {
-            Maid maid_obj{"name1", "1111", salary};
+            Maid maid_obj{"1111", "name1", salary};
             w_system.add_worker(maid_obj);
             Maid* maid = &maid_obj;
 
@@ -46,7 +46,7 @@ TEST_CASE("Test Maid")
 
         SECTION("bonus")
         {
-            Maid maid_obj{"name1", "1111", salary};
+            Maid maid_obj{"1111", "name1", salary};
             w_system.add_worker(maid_obj);
             Maid* maid = &maid_obj;
 
@@ -57,7 +57,7 @@ TEST_CASE("Test Maid")
 
         SECTION("hours + bonus")
         {
-            Maid maid_obj{"name1", "1111", wage};
+            Maid maid_obj{"1111", "name1", wage};
             w_system.add_worker(maid_obj);
             Maid* maid = &maid_obj;
 
@@ -68,7 +68,7 @@ TEST_CASE("Test Maid")
 
     SECTION("TimeTable interface")
     {
-        Maid maid_obj{"name1", "1111", salary};
+        Maid maid_obj{"1111", "name1", salary};
         w_system.add_worker(maid_obj);
         Worker* maid = &maid_obj;
 

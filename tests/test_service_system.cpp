@@ -20,7 +20,7 @@ TEST_CASE("Test Service")
     g_system.add_guest(guest2);
     WorkerSystem w_system{};
     auto pay = Pay{PaycheckMethod::Salary, Amount{3200, 0}};
-    auto worker1 = Receptionist{"name1", "id1", pay};
+    auto worker1 = Receptionist{"id1", "name1", pay};
     w_system.add_worker(worker1);
     StaySystem s_system{g_system, rooms_list};
     jed_utils::datetime start1{2024, 5, 21};

@@ -16,7 +16,7 @@ TEST_CASE("Test Worker")
     {
         SECTION("Regular interface")
         {
-            Cook cook_obj{"name1", "1111", salary};
+            Cook cook_obj{"1111", "name1", salary};
             Worker* worker = &cook_obj;
 
             SECTION("init")
@@ -38,7 +38,7 @@ TEST_CASE("Test Worker")
         {
             SECTION("Salary worker")
             {
-                Cook cook_obj{"name1", "1111", salary};
+                Cook cook_obj{"1111", "name1", salary};
                 Worker* worker = &cook_obj;
 
                 SECTION("init")
@@ -62,7 +62,7 @@ TEST_CASE("Test Worker")
 
             SECTION("Wage worker")
             {
-                Cook cook_obj{"name1", "1111", wage};
+                Cook cook_obj{"1111", "name1", wage};
                 Worker* worker = &cook_obj;
 
                 SECTION("init")

@@ -14,7 +14,7 @@ TEST_CASE("Test Receptionist")
 
     SECTION("Regular interface")
     {
-        Receptionist receptionist_obj{"name1", "1111", salary};
+        Receptionist receptionist_obj{"id1", "name1", salary};
         w_system.add_worker(receptionist_obj);
         Receptionist* receptionist = &receptionist_obj;
 
@@ -28,7 +28,7 @@ TEST_CASE("Test Receptionist")
     {
         SECTION("regular")
         {
-            Receptionist receptionist_obj{"name1", "1111", salary};
+            Receptionist receptionist_obj{"id1", "name1", salary};
             w_system.add_worker(receptionist_obj);
             Receptionist* receptionist = &receptionist_obj;
 
@@ -46,7 +46,7 @@ TEST_CASE("Test Receptionist")
 
         SECTION("bonus")
         {
-            Receptionist receptionist_obj{"name1", "1111", salary};
+            Receptionist receptionist_obj{"id1", "name1", salary};
             w_system.add_worker(receptionist_obj);
             Receptionist* receptionist = &receptionist_obj;
 
@@ -57,7 +57,7 @@ TEST_CASE("Test Receptionist")
 
         SECTION("hours + bonus")
         {
-            Receptionist receptionist_obj{"name1", "1111", wage};
+            Receptionist receptionist_obj{"id1", "name1", wage};
             w_system.add_worker(receptionist_obj);
             Receptionist* receptionist = &receptionist_obj;
 
@@ -69,7 +69,7 @@ TEST_CASE("Test Receptionist")
 
     SECTION("TimeTable interface")
     {
-        Receptionist receptionist_obj{"name1", "1111", salary};
+        Receptionist receptionist_obj{"id1", "name1", salary};
         w_system.add_worker(receptionist_obj);
         Worker* receptionist = &receptionist_obj;
 

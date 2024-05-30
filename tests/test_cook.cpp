@@ -14,7 +14,7 @@ TEST_CASE("Test Cook")
 
     SECTION("Regular interface")
     {
-        Cook cook_obj{"name1", "1111", salary};
+        Cook cook_obj{"1111", "name1", salary};
         w_system.add_worker(cook_obj);
         Cook* cook = &cook_obj;
 
@@ -28,7 +28,7 @@ TEST_CASE("Test Cook")
     {
         SECTION("regular")
         {
-            Cook cook_obj{"name1", "1111", salary};
+            Cook cook_obj{"1111", "name1", salary};
             w_system.add_worker(cook_obj);
             Cook* cook = &cook_obj;
 
@@ -46,7 +46,7 @@ TEST_CASE("Test Cook")
 
         SECTION("bonus")
         {
-            Cook cook_obj{"name1", "1111", salary};
+            Cook cook_obj{"1111", "name1", salary};
             w_system.add_worker(cook_obj);
             Cook* cook = &cook_obj;
 
@@ -56,7 +56,7 @@ TEST_CASE("Test Cook")
 
         SECTION("hours + bonus")
         {
-            Cook cook_obj{"name1", "1111", wage};
+            Cook cook_obj{"1111", "name1", wage};
             w_system.add_worker(cook_obj);
             Cook* cook = &cook_obj;
 
@@ -67,7 +67,7 @@ TEST_CASE("Test Cook")
 
     SECTION("TimeTable interface")
     {
-        Cook cook_obj{"name1", "1111", salary};
+        Cook cook_obj{"1111", "name1", salary};
         w_system.add_worker(cook_obj);
         Worker* cook = &cook_obj;
 

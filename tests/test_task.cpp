@@ -13,8 +13,8 @@ TEST_CASE("Test Task")
     auto g_system = GuestSystem{};
     auto w_system = WorkerSystem{};
     Pay pay{PaycheckMethod::Salary, Amount{3200, 0}};
-    Cook cook{"name1", "id1", pay};
-    Receptionist receptionist{"name2", "id2", pay};
+    Cook cook{"id1", "name1", pay};
+    Receptionist receptionist{"id2", "name2", pay};
     auto t_system = TaskSystem{w_system, rooms_list, g_system};
     PrepareDishTask preptask{"1111", Dish::Omelette};
     t_system.add_task(preptask);

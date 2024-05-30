@@ -40,7 +40,7 @@ template<SupportedWorker T>
 void WorkerSystem::add_worker(const T& worker)
 {
     if ( find_by_id(worker.get_id()) )
-        throw DuplicateWorkerIDError("Cannot add worker", worker);
+        throw DuplicateWorkerIDError("Cannot add worker.", worker);
     auto p = std::make_unique<T>(worker);
     workers.push_back(std::move(p));
 }

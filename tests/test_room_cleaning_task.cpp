@@ -11,10 +11,10 @@ TEST_CASE("Test RoomCleaningTask")
     const auto& room1 = *rooms_list.find_by_number(237).value();
     auto w_system = WorkerSystem{};
     auto pay = Pay{PaycheckMethod::Salary, Amount{3200, 0}};
-    Maid maid1{"name1", "1111", pay};
-    Maid maid2{"name2", "2222", pay};
-    Maid maid3{"name3", "3333", pay};
-    Maid maid4{"name4", "4444", pay};
+    Maid maid1{"id1", "name1", pay};
+    Maid maid2{"id2", "name2", pay};
+    Maid maid3{"id3", "name3", pay};
+    Maid maid4{"id4", "name4", pay};
     w_system.add_worker(maid1);
     w_system.add_worker(maid2);
     w_system.add_worker(maid3);

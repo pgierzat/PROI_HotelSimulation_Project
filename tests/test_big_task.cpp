@@ -12,9 +12,9 @@ TEST_CASE("test BigTask")
     jed_utils::datetime time{2024, 5, 18};
     Pay pay{PaycheckMethod::Salary, Amount{3200, 0}};
     auto w_system = WorkerSystem{};
-    w_system.add_worker(Maid{"name1", "id1", pay});
-    w_system.add_worker(Maid{"name2", "id2", pay});
-    w_system.add_worker(Maid{"name3", "id3", pay});
+    w_system.add_worker(Maid{"id1", "name1", pay});
+    w_system.add_worker(Maid{"id2", "name2", pay});
+    w_system.add_worker(Maid{"id3", "name3", pay});
     const auto& maid1 = static_cast<const Maid&>( w_system.get_by_id("id1") );
     const auto& maid2 = static_cast<const Maid&>( w_system.get_by_id("id2") );
     const auto& maid3 = static_cast<const Maid&>( w_system.get_by_id("id3") );

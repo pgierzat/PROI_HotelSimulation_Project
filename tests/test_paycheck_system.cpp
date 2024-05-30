@@ -12,11 +12,11 @@ TEST_CASE("Test PaycheckSystem")
 
     Amount amount1{3200, 0};
     Pay salary1{PaycheckMethod::Salary, amount1};
-    Waiter waiter{"name1", "1111", salary1};
+    Waiter waiter{"id1", "name1", salary1};
     w_system.add_worker(waiter);
     Amount amount2{20, 0};
     Pay wage1{PaycheckMethod::Wage, amount2};
-    Maid maid{"name2", "2222", wage1};
+    Maid maid{"id2", "name2", wage1};
     w_system.add_worker(maid);
 
     jed_utils::datetime date1{2024y/May/12d};

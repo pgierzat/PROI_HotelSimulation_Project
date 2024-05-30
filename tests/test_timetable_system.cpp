@@ -12,8 +12,8 @@ TEST_CASE("Test TimetableSystem")
 
     WorkerSystem w_system{};
     Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
-    Receptionist receptionist{"name1", "id1", pay};
-    Waiter waiter{"name2", "id2", pay};
+    Receptionist receptionist{"id1", "name1", pay};
+    Waiter waiter{"id2", "name2", pay};
     w_system.add_worker(receptionist);
     w_system.add_worker(waiter);
     TimetableSystem tt_system{w_system};
@@ -42,7 +42,7 @@ TEST_CASE("Test TimetableSystem")
 
     SECTION("add entry of an unknown worker")
     {
-        Cook cook{"name3", "id3", pay};
+        Cook cook{"id3", "name3", pay};
         TimetableEntry entry4{cook, date1, Shift::I};
         REQUIRE_THROWS_AS(tt_system.add_entry(entry4), WorkerNotInSystemError);
     }

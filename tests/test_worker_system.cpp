@@ -4,7 +4,6 @@
 #include "../src/workers/maid.hpp"
 #include "../src/workers/receptionist.hpp"
 #include "../src/workers/waiter.hpp"
-#include "../src/types/pay.hpp"
 #include <memory>
 #include <iostream>
 
@@ -13,10 +12,10 @@ TEST_CASE("Test WorkerSystem")
 {
     WorkerSystem system{};
     Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
-    Cook cook{"name1", "1111", pay};
-    Maid maid{"name2", "2222", pay};
-    Receptionist receptionist{"name3", "3333", pay};
-    Waiter waiter{"name4", "4444", pay};
+    Cook cook{"1111", "name1", pay};
+    Maid maid{"2222", "name2", pay};
+    Receptionist receptionist{"3333", "name3", pay};
+    Waiter waiter{"4444", "name4", pay};
 
     system.add_worker(cook);
     system.add_worker(maid);
@@ -32,8 +31,8 @@ TEST_CASE("Test WorkerSystem")
 
     SECTION("duplicate id")
     {
-        Waiter waiter{"name3", "2222", pay};
-        REQUIRE_THROWS( system.add_worker(waiter) );
+        Waiter waiter2{"2222", "name5", pay};
+        REQUIRE_THROWS_AS( system.add_worker(waiter2), DuplicateWorkerIDError );
     }
 
     SECTION("find by id hit")
@@ -44,7 +43,7 @@ TEST_CASE("Test WorkerSystem")
 
     SECTION("find by id miss")
     {
-        REQUIRE( system.find_by_id("5555") == std::nullopt );
+        REQUIRE( !system.find_by_id("5555") );
     }
 
     SECTION("set dishes prepared")

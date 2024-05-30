@@ -8,7 +8,7 @@
 TEST_CASE("Test WakeTask")
 {
     WorkerSystem w_system{};
-    Maid maid{"name1", "id1", Pay{PaycheckMethod::Salary, Amount{3100, 0}}};
+    Maid maid{"id1", "name1", Pay{PaycheckMethod::Salary, Amount{3100, 0}}};
     w_system.add_worker(maid);
     RoomsList rooms_list{};
     rooms_list.add_one_room(237);

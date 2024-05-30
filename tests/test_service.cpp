@@ -22,9 +22,9 @@ TEST_CASE("Test Service")
     const auto& guest2 = *g_system.find_by_id("id2").value();
     WorkerSystem w_system{};
     auto pay = Pay{PaycheckMethod::Wage, Amount{25, 0}};
-    w_system.add_worker(Cook{"name1", "id1", pay});
-    w_system.add_worker(Maid{"name2", "id2", pay});
-    w_system.add_worker(Maid{"name3", "id3", pay});
+    w_system.add_worker(Cook{"id1", "name1", pay});
+    w_system.add_worker(Maid{"id2", "name2", pay});
+    w_system.add_worker(Maid{"id3", "name3", pay});
     StaySystem s_system{g_system, rooms_list};
     jed_utils::datetime start1{2024, 5, 21};
     jed_utils::datetime end1{2024, 5, 24};

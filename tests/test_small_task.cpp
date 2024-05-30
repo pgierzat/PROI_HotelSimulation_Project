@@ -12,8 +12,8 @@ TEST_CASE("test WakeTask")
     const auto& room1 = *rooms_list.find_by_number(237).value();
     auto w_system = WorkerSystem{};
     auto pay = Pay{PaycheckMethod::Salary, Amount{3200, 0}};
-    w_system.add_worker(Maid{"name1", "id1", pay});
-    w_system.add_worker(Maid{"name2", "id2", pay});
+    w_system.add_worker(Maid{"id1", "name1", pay});
+    w_system.add_worker(Maid{"id2", "name2", pay});
     const auto& maid1 = *w_system.find_by_id("id1").value();
     const auto& maid2 = *w_system.find_by_id("id2").value();
     jed_utils::datetime time{2024, 5, 18};
