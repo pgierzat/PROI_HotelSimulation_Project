@@ -12,12 +12,12 @@ Worker::Worker(std::string id, std::string name, const Pay& pay) :
 }
 
 Worker::Worker(const Worker& copied) :
-    name{copied.name}, id{copied.id}, pay{copied.pay}
+    id{copied.id},name{copied.name}, pay{copied.pay}
 {
     calculator = create_calculator(this, pay.get_method());
 }
 
-Worker::Worker(Worker&& moved) : name{moved.name}, id{moved.id}, pay{moved.pay},
+Worker::Worker(Worker&& moved) : id{moved.id}, name{moved.name}, pay{moved.pay},
     calculator{std::move(moved.calculator)} {}
 
 Worker& Worker::operator=(const Worker& copied)
