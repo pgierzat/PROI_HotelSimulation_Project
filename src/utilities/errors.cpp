@@ -21,8 +21,17 @@ IDNotFoundError::IDNotFoundError(const std::string& what, const std::string& id)
 IncorrectWorkerType::IncorrectWorkerType(const std::string& what, WorkerType expected, WorkerType actual) :
     std::invalid_argument(what), expected{expected}, actual{actual} {}
 
+InvalidWorkerTypeString::InvalidWorkerTypeString(const std::string& what, const std::string& wtype_str) :
+    std::invalid_argument(what), wtype_str{wtype_str} {}
+
+InvalidShiftString::InvalidShiftString(const std::string& what, const std::string& shift_str) :
+    std::invalid_argument(what), shift_str{shift_str} {}
+
 IncorrectRoomType::IncorrectRoomType(const std::string& what, RoomType expected, RoomType actual) :
     std::invalid_argument(what), expected{expected}, actual{actual} {}
+
+InvalidRoomTypeString::InvalidRoomTypeString(const std::string& what, const std::string& rtype_str) :
+    std::invalid_argument(what), rtype_str{rtype_str} {}
 
 RoomCapacityExceededError::RoomCapacityExceededError(const std::string& what, const Stay& stay) : 
     std::invalid_argument(what), stay{stay} {}
@@ -51,7 +60,6 @@ WorkerNotInSystemError::WorkerNotInSystemError(const std::string& what, const Wo
 
 WorkerNotInSystemError::WorkerNotInSystemError(const std::string& what, const std::string& worker_id) :
     std::invalid_argument(what), worker_id{worker_id} {}
-
 
 TaskNotInSystemError::TaskNotInSystemError(const std::string& what, const Task& task) :
     std::invalid_argument(what), task{&task} {}

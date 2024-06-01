@@ -1,5 +1,5 @@
 #include "catch_amalgamated.hpp"
-#include "../src/json_converters/JSON_amount.hpp"
+#include "../src/JSON_converters/JSON_amount.hpp"
 
 TEST_CASE("Test JSONAmount")
 {

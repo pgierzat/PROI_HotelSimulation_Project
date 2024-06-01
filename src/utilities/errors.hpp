@@ -73,12 +73,33 @@ class IncorrectWorkerType : public std::invalid_argument
         WorkerType actual;
 };
 
+class InvalidWorkerTypeString : public std::invalid_argument
+{
+    public:
+        InvalidWorkerTypeString(const std::string& what, const std::string& wtype_str);
+        const std::string& wtype_str;
+};
+
+class InvalidShiftString : public std::invalid_argument
+{
+    public:
+        InvalidShiftString(const std::string& what, const std::string& shift_str);
+        const std::string& shift_str;
+};
+
 class IncorrectRoomType : public std::invalid_argument
 {
     public:
         IncorrectRoomType(const std::string& what, RoomType expected, RoomType actual);
         RoomType expected;
         RoomType actual;
+};
+
+class InvalidRoomTypeString : public std::invalid_argument
+{
+    public:
+        InvalidRoomTypeString(const std::string& what, const std::string& rtype_str);
+        const std::string& rtype_str;
 };
 
 class RoomCapacityExceededError : public std::invalid_argument
