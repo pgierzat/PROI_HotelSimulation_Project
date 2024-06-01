@@ -17,8 +17,8 @@ class RoomsList
         void add_two_room(unsigned number);
         void add_three_room(unsigned number);
         void add_four_room(unsigned number);
-        void add_two_apartment(unsigned number);
-        void add_four_apartment(unsigned number);
+        void add_two_appartment(unsigned number);
+        void add_four_appartment(unsigned number);
 
         Amount calculate_total_price() const noexcept;
         unsigned calculate_total_rooms() const noexcept;

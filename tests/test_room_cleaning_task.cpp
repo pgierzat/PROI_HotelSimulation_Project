@@ -1,13 +1,13 @@
 #include "catch_amalgamated.hpp"
 #include "../src/tasks/room_cleaning_task.hpp"
-#include "../src/rooms/hpp/four_apartment.hpp"
+#include "../src/rooms/hpp/four_appartment.hpp"
 #include "../src/utilities/errors.hpp"
 
 
 TEST_CASE("Test RoomCleaningTask")
 {
     auto rooms_list = RoomsList{};
-    rooms_list.add_four_apartment(237);
+    rooms_list.add_four_appartment(237);
     const auto& room1 = *rooms_list.find_by_number(237).value();
     auto w_system = WorkerSystem{};
     auto pay = Pay{PaycheckMethod::Salary, Amount{3200, 0}};

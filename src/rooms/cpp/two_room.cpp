@@ -10,3 +10,5 @@ Amount TwoRoom::calculatePrice() const
 {
     return base_price * 1.8;
 }
+
+RoomType TwoRoom::get_type() const noexcept { return type; }

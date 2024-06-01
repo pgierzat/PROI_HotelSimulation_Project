@@ -11,7 +11,7 @@ TEST_CASE("Test SystematicTaskGenerator")
     auto g_system = GuestSystem{};
     auto w_system = WorkerSystem{};
     auto rooms_list = RoomsList{};
-    rooms_list.add_two_apartment(237);
+    rooms_list.add_two_appartment(237);
     rooms_list.add_one_room(238);
     const auto& room1 = rooms_list.get_by_number(237);
     const auto& room2 = rooms_list.get_by_number(238);

@@ -10,3 +10,5 @@ Amount ThreeRoom::calculatePrice() const
 {
     return base_price * 2.5;
 }
+
+RoomType ThreeRoom::get_type() const noexcept { return type; }

@@ -5,7 +5,7 @@
 #include "../src/tasks/room_cleaning_task.hpp"
 #include "../src/tasks/taxi_task.hpp"
 #include "../src/tasks/bring_dish_task.hpp"
-#include "../src/rooms/hpp/two_apartment.hpp"
+#include "../src/rooms/hpp/two_appartment.hpp"
 
 
 TEST_CASE("Test TaskSystem")
@@ -29,7 +29,7 @@ TEST_CASE("Test TaskSystem")
     SECTION("init") { REQUIRE(t_system.get_tasks().empty()); }
 
     t_system.add_task(PrepareDishTask{"1", Dish::FrenchToasts});
-    t_system.add_task(RoomCleaningTask{"2", TwoApartment{237}});
+    t_system.add_task(RoomCleaningTask{"2", TwoAppartment{237}});
     t_system.add_task(TaxiTask{"3", Guest{"id", "name"}, jed_utils::datetime{2024, 5, 19}});
     t_system.add_task(BringDishTask{"5", Dish::FrenchToasts, Table{"10"}});
     const auto& preptask = *t_system.find_by_id("1").value();

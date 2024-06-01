@@ -8,6 +8,7 @@
 
 class Worker;
 enum class WorkerType : unsigned;
+enum class RoomType;
 class Room;
 class Guest;
 class Table;
@@ -25,8 +26,15 @@ namespace jed_utils {
 class UnsupportedWorkerTypeError : public std::invalid_argument
 {
     public:
-        UnsupportedWorkerTypeError(const std::string& what, const Worker&);
-        const Worker& worker;
+        UnsupportedWorkerTypeError(const std::string& what, WorkerType);
+        WorkerType type;
+};
+
+class UnsupportedRoomTypeError : public std::invalid_argument
+{
+    public:
+        UnsupportedRoomTypeError(const std::string& what, RoomType);
+        RoomType type;
 };
 
 class DuplicateWorkerIDError : public std::invalid_argument
@@ -60,9 +68,17 @@ class IDNotFoundError : public std::invalid_argument
 class IncorrectWorkerType : public std::invalid_argument
 {
     public:
-        IncorrectWorkerType(const std::string& what, const Worker&, WorkerType);
-        const Worker& worker;
-        WorkerType type;
+        IncorrectWorkerType(const std::string& what, WorkerType expected, WorkerType actual);
+        WorkerType expected;
+        WorkerType actual;
+};
+
+class IncorrectRoomType : public std::invalid_argument
+{
+    public:
+        IncorrectRoomType(const std::string& what, RoomType expected, RoomType actual);
+        RoomType expected;
+        RoomType actual;
 };
 
 class RoomCapacityExceededError : public std::invalid_argument

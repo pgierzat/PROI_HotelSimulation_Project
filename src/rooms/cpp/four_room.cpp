@@ -10,3 +10,5 @@ Amount FourRoom::calculatePrice() const
 {
     return base_price * 3.5;
 }
+
+RoomType FourRoom::get_type() const noexcept { return type; }

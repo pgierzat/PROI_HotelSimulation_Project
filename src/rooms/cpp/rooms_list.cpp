@@ -4,8 +4,8 @@
 #include "../hpp/two_room.hpp"
 #include "../hpp/three_room.hpp"
 #include "../hpp/four_room.hpp"
-#include "../hpp/two_apartment.hpp"
-#include "../hpp/four_apartment.hpp"
+#include "../hpp/two_appartment.hpp"
+#include "../hpp/four_appartment.hpp"
 #include "../../utilities/errors.hpp"
 #include <vector>
 #include <numeric>
@@ -62,23 +62,23 @@ void RoomsList::add_four_room(unsigned number)
     rooms.push_back(std::move(added_four_room));
 }
 
-void RoomsList::add_two_apartment(unsigned number)
+void RoomsList::add_two_appartment(unsigned number)
 {
     if (room_exists(number)) {
         std::cout << "Room with number " << number << " already exists.\n";
         return;
     }
-    std::unique_ptr<TwoApartment> added_two_apartment = std::make_unique<TwoApartment>(number);
+    std::unique_ptr<TwoAppartment> added_two_apartment = std::make_unique<TwoAppartment>(number);
     rooms.push_back(std::move(added_two_apartment));
 }
 
-void RoomsList::add_four_apartment(unsigned number)
+void RoomsList::add_four_appartment(unsigned number)
 {
     if (room_exists(number)) {
         std::cout << "Room with number " << number << " already exists.\n";
         return;
     }
-    std::unique_ptr<FourApartment> added_four_apartment = std::make_unique<FourApartment>(number);
+    std::unique_ptr<FourAppartment> added_four_apartment = std::make_unique<FourAppartment>(number);
     rooms.push_back(std::move(added_four_apartment));
 }
 
