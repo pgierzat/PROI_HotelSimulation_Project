@@ -32,14 +32,19 @@ std::unique_ptr<Room> JSONRoom::read(const json& j)
                 throw UnsupportedRoomTypeError{"Tried to parse a room of unknown type from json.", type};
         }
     } catch(const json::exception& e) {
-        throw JSONException("Error parsing Worker", j);
+        throw JSONException("Error parsing Room", j);
     } catch(const std::invalid_argument& e) {
-        throw JSONInvalidData("Error parsing Worker", j);
+        throw JSONInvalidData("Error parsing Room", j);
     }
 }
 
 RoomType JSONRoom::get_type(const json& j)
 {
-    std::string type_str = j.at("type");
+    auto type_str = std::string{};
+    try {
+        type_str = j.at("type");
+    } catch(const json::exception& e) {
+        throw JSONException("Error parsing Room's type", j);
+    }
     return Room::str_to_rtype(type_str);
 }

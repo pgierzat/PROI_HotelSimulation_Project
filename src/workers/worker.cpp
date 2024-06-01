@@ -2,6 +2,7 @@
 #include <memory>
 #include "worker.hpp"
 #include "worker_maps.hpp"
+#include "../utilities/errors.hpp"
 #include "../paycheck_calculators/salary_calculator.hpp"
 #include "../paycheck_calculators/wage_calculator.hpp"
 
@@ -86,7 +87,24 @@ std::ostream& operator<<(std::ostream& os, const Worker& worker)
     return os << worker.get_id() << ' ' << worker.get_name() << ' ' << Worker::wtype_to_str(worker.get_type());
 }
 
-const Shift Worker::str_to_shift(const std::string& str) { return str_to_shift_map.at(str); }
+const Shift Worker::str_to_shift(const std::string& str)
+{
+    try {
+        return str_to_shift_map.at(str);
+    } catch (const std::out_of_range& e) {
+        throw InvalidShiftString{"Cannot convert that string to Shift.", str};
+    }
+}
+
 const std::string& Worker::shift_to_str(Shift shift) { return shift_to_str_map.at(shift); }
-const WorkerType Worker::str_to_wtype(const std::string& str) { return str_to_wtype_map.at(str); }
+
+const WorkerType Worker::str_to_wtype(const std::string& str)
+{
+    try {
+        return str_to_wtype_map.at(str);
+    } catch (const std::out_of_range& e) {
+        throw InvalidWorkerTypeString{"Cannot convert that string to WorkerType.", str};
+    }
+}
+
 const std::string& Worker::wtype_to_str(WorkerType wtype) { return wtype_to_str_map.at(wtype); }

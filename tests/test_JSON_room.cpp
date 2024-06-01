@@ -1,5 +1,5 @@
 #include "catch_amalgamated.hpp"
-#include "../src/json_converters/JSON_room.hpp"
+#include "../src/JSON_converters/JSON_room.hpp"
 #include "../src/rooms/hpp/three_room.hpp"
 #include "../src/rooms/hpp/two_room.hpp"
 

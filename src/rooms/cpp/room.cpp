@@ -1,6 +1,7 @@
 #include "../hpp/room.hpp"
 #include "../exceptions/negative_number_exception.hpp"
 #include "../exceptions/negative_capacity_exception.hpp"
+#include "../../utilities/errors.hpp"
 #include <iostream>
 
 
@@ -75,5 +76,9 @@ const std::string& Room::rtype_to_str(RoomType type) {
 }
 
 RoomType Room::str_to_rtype(const std::string& type_str) {
-    return str_to_rtype_map.at(type_str);
+    try {
+        return str_to_rtype_map.at(type_str);
+    } catch (const std::out_of_range& e) {
+        throw InvalidRoomTypeString("Cannot convert that string to RoomType", type_str);
+    }
 }

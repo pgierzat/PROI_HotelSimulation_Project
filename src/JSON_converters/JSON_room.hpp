@@ -33,7 +33,10 @@ T JSONRoom::read_specific(const json& j)
 {
     RoomType type = get_type(j);
     if (T::type != type)
-        throw IncorrectRoomType("Worker parsed from JSON has another type than expected", T::type, type);
+        throw IncorrectRoomType(
+            "Room parsed from JSON has another type than expected",
+            T::type, type
+        );
     return unchecked_read_specific<T>(j);
 }
 

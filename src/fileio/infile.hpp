@@ -1,17 +1,16 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "file.hpp"
 
 #ifndef INFILE_HPP
 #define INFILE_HPP
 
-class InFile
+class InFile : virtual public File
 {
 public:
-    InFile(std::string filename);
+    InFile(std::filesystem::path path);
     std::string read();
-private:
-    std::string filename;
 };
 
 #endif
