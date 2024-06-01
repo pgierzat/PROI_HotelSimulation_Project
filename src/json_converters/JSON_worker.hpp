@@ -4,8 +4,12 @@
 #include "../utilities/json.hpp"
 #include "../utilities/errors.hpp"
 #include "../utilities/concepts.hpp"
-#include "../workers/worker.hpp"
+#include "../workers/cook.hpp"
+#include "../workers/maid.hpp"
+#include "../workers/receptionist.hpp"
+#include "../workers/waiter.hpp"
 #include "JSON_pay.hpp"
+#include <memory>
 
 namespace JSONWorker
 {
@@ -13,6 +17,7 @@ namespace JSONWorker
     json write(const Worker&);
     template<SupportedWorker T>
         T read(const json&);
+    std::unique_ptr<Worker> read_unspecific(const json&);
 }
 
 namespace JSONWorker

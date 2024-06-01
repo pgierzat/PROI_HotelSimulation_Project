@@ -24,4 +24,14 @@ TEST_CASE("Test JSONWorker")
         REQUIRE_NOTHROW( read_cook = JSONWorker::read<Cook>(j) );
         REQUIRE( receptionist == read_cook );
     }
+
+    SECTION("read_unspecific")
+    {
+        auto pay = Pay{PaycheckMethod::Wage, Amount{24, 3}};
+        auto receptionist = Receptionist{"id", "name", pay};
+        auto j = JSONWorker::write(receptionist);
+        auto ptr = JSONWorker::read_unspecific(j);
+        auto read_receptionist = dynamic_cast<Receptionist&>(*ptr);
+        REQUIRE( receptionist == read_receptionist );
+    }
 }

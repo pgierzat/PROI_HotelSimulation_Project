@@ -10,3 +10,5 @@ Amount OneRoom::calculatePrice() const
 {
     return base_price;
 }
+
+RoomType OneRoom::get_type() const noexcept { return type; }

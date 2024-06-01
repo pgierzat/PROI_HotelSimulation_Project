@@ -75,6 +75,7 @@ void TimetableEntry::set_w_system(const WorkerSystem& w_system) noexcept
 
 std::ostream& operator<<(std::ostream& os, const TimetableEntry& entry)
 {
-    return os << entry.get_date().to_string("yyyy-MM-dd") << ' ' << entry.get_shift() << ' '
-        << entry.get_worker().get_id();
+    return os << entry.get_date().to_string("yyyy-MM-dd") << ' ' <<
+        Worker::shift_to_str(entry.get_shift()) << ' ' <<
+        entry.get_worker().get_id();
 }

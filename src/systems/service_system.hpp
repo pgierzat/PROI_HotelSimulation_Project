@@ -32,7 +32,7 @@ class ServiceSystem
 
 
 template <SupportedService T>
-void add_service(const T& service)
+void ServiceSystem::add_service(const T& service)
 {
 
 }

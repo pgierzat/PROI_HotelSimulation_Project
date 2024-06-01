@@ -47,5 +47,20 @@ concept SupportedService =
     std::same_as<T, WakeService> ||
     std::same_as<T, RestaurantOrderService>;
 
+class OneRoom;
+class TwoRoom;
+class ThreeRoom;
+class FourRoom;
+class TwoAppartment;
+class FourAppartment;
+
+template<typename T>
+concept SupportedRoom =
+    std::same_as<T, OneRoom> ||
+    std::same_as<T, TwoRoom> ||
+    std::same_as<T, ThreeRoom> ||
+    std::same_as<T, FourRoom> ||
+    std::same_as<T, TwoAppartment> ||
+    std::same_as<T, FourAppartment>;
 
 #endif

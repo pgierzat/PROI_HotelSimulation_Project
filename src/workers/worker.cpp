@@ -1,6 +1,7 @@
 #include <string>
 #include <memory>
 #include "worker.hpp"
+#include "worker_maps.hpp"
 #include "../paycheck_calculators/salary_calculator.hpp"
 #include "../paycheck_calculators/wage_calculator.hpp"
 
@@ -82,57 +83,10 @@ std::unique_ptr<PaycheckCalculator> Worker::create_calculator(Worker* that, Payc
 
 std::ostream& operator<<(std::ostream& os, const Worker& worker)
 {
-    return os << worker.get_id() << ' ' << worker.get_name() << ' ' << worker.get_type();
+    return os << worker.get_id() << ' ' << worker.get_name() << ' ' << Worker::wtype_to_str(worker.get_type());
 }
 
-std::ostream& operator<<(std::ostream& os, Shift shift)
-{
-    return os << shift_to_str.at(shift);
-}
-
-std::istream& operator>>(std::istream& is, Shift& shift)
-{
-    std::string shift_str;
-    std::cin >> shift_str;
-    shift = str_to_shift.at(shift_str);
-    return is;
-}
-
-const std::map<Shift, std::string> shift_to_str {
-    {Shift::I, "I"},
-    {Shift::II, "II"},
-    {Shift::III, "III"}
-};
-
-const std::map<std::string, Shift> str_to_shift {
-    {"I", Shift::I},
-    {"II", Shift::II},
-    {"III", Shift::III}
-};
-
-std::ostream& operator<<(std::ostream& os, WorkerType type)
-{
-    return os << wtype_to_str.at(type);
-}
-
-std::istream& operator>>(std::istream& is, WorkerType& type)
-{
-    std::string type_str;
-    std::cin >> type_str;
-    type = str_to_wtype.at(type_str);
-    return is;
-}
-
-const std::map<WorkerType, std::string> wtype_to_str {
-    {WorkerType::Cook, "Cook"},
-    {WorkerType::Maid, "Maid"},
-    {WorkerType::Receptionist, "Receptionist"},
-    {WorkerType::Waiter, "Waiter"}
-};
-
-const std::map<std::string, WorkerType> str_to_wtype {
-    {"Cook", WorkerType::Cook},
-    {"Maid", WorkerType::Maid},
-    {"Receptionist", WorkerType::Receptionist},
-    {"Waiter", WorkerType::Waiter}
-};
+const Shift Worker::str_to_shift(const std::string& str) { return str_to_shift_map.at(str); }
+const std::string& Worker::shift_to_str(Shift shift) { return shift_to_str_map.at(shift); }
+const WorkerType Worker::str_to_wtype(const std::string& str) { return str_to_wtype_map.at(str); }
+const std::string& Worker::wtype_to_str(WorkerType wtype) { return wtype_to_str_map.at(wtype); }

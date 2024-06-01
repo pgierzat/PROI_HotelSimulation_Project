@@ -8,7 +8,7 @@
 #include "../src/systems/task_system.hpp"
 #include "../src/systems/service_system.hpp"
 
-TEST_CASE("Test Service")
+TEST_CASE("Test ServiceSystem")
 {
     RoomsList rooms_list{};
     rooms_list.add_two_room(237);

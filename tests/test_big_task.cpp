@@ -1,13 +1,13 @@
 #include "catch_amalgamated.hpp"
 #include "../src/tasks/room_cleaning_task.hpp"
-#include "../src/rooms/hpp/two_apartment.hpp"
+#include "../src/rooms/hpp/two_appartment.hpp"
 #include "../src/utilities/errors.hpp"
 #include "../src/types/datetime.h"
 
 TEST_CASE("test BigTask")
 {
     auto rooms_list = RoomsList{};
-    rooms_list.add_two_apartment(237);
+    rooms_list.add_two_appartment(237);
     const auto& room1 = rooms_list.get_by_number(237);
     jed_utils::datetime time{2024, 5, 18};
     Pay pay{PaycheckMethod::Salary, Amount{3200, 0}};

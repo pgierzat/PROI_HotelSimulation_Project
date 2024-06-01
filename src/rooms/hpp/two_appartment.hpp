@@ -3,12 +3,14 @@
 
 #include "room.hpp"
 
-class TwoApartment : public Room
+class TwoAppartment : public Room
 {
     public:
-        TwoApartment(unsigned number);
+        TwoAppartment(unsigned number);
         Amount calculatePrice() const override;
         unsigned calculatePersonel() const override;
+        virtual RoomType get_type() const noexcept override;
+        static const RoomType type = RoomType::TwoAppartment;
 };
 
 

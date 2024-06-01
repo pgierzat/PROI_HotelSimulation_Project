@@ -34,13 +34,15 @@ class Worker
         virtual jed_utils::timespan get_shift_duration() const noexcept = 0;
         Amount calculate_base_paycheck(unsigned hours_worked) const noexcept;
         virtual Amount calculate_paycheck(unsigned hours_worked) const noexcept = 0;
-
         void set_name(const std::string&);
         void set_id(const std::string&);
         void set_pay(const Pay&);
         virtual void reset_stats() = 0;
-
         bool operator==(const Worker&) const;
+        static const Shift str_to_shift(const std::string&);
+        static const std::string& shift_to_str(Shift);
+        static const WorkerType str_to_wtype(const std::string&);
+        static const std::string& wtype_to_str(WorkerType);
     private:
         std::string id;
         std::string name;
