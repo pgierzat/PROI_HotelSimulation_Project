@@ -11,6 +11,12 @@ TimetableEntry::TimetableEntry(const Worker& worker, const jed_utils::datetime& 
     check_worker_shift(worker, shift);
 }
 
+TimetableEntry::TimetableEntry(const jed_utils::datetime& date, Shift shift) :
+    worker_id{}, date{date}, shift{shift}
+{
+    (this -> date).trunkate();
+}
+
 const Worker& TimetableEntry::get_worker() const
 {
     return w_system -> get_by_id(worker_id);

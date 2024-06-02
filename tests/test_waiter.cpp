@@ -52,7 +52,7 @@ TEST_CASE("Test Waiter")
 
             waiter -> set_orders_taken(10);
             REQUIRE( waiter -> calculate_paycheck(0) ==
-                waiter -> calculate_base_paycheck(0) + Waiter::bonus * 10 );
+                waiter -> calculate_base_paycheck(0) +  Waiter::get_bonus() * 10 );
         }
 
         SECTION("hours + bonus")
@@ -63,7 +63,7 @@ TEST_CASE("Test Waiter")
 
             waiter -> set_orders_taken(10);
             REQUIRE( waiter -> calculate_paycheck(15) ==
-                wage.get_wage() * 15 + Waiter::bonus * 10 );
+                wage.get_wage() * 15 + Waiter::get_bonus() * 10 );
         }
     }
 

@@ -130,3 +130,9 @@ JSONInvalidData::JSONInvalidData(const std::string& what, const nlohmann::json& 
 
 FileError::FileError(const std::string& what, const std::string& filename) :
     std::runtime_error(what), filename{filename} {}
+
+MinimalBreakError::MinimalBreakError(const std::string& what, const TimetableEntry& entry) :
+    std::invalid_argument{what}, entry{entry} {}
+
+EntryAssignmentError::EntryAssignmentError(const std::string& what, const TimetableEntry& entry) :
+    std::runtime_error{what}, entry{entry} {}

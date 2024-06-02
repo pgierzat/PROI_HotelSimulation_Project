@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 
-const unsigned Maid::shifts = 2;
+unsigned Maid::workers_per_shift = 3;
 
 const Amount Maid::bonus{1, 50};
 
@@ -26,6 +26,8 @@ WorkerType Maid::get_type() const noexcept { return type; }
 
 unsigned Maid::get_shifts() const noexcept { return shifts; }
 
+unsigned Maid::get_workers_per_shift() const noexcept { return workers_per_shift; }
+
 jed_utils::timespan Maid::get_shift_start(Shift shift) const
 {
     if ( (unsigned char)(shift) > shifts )
@@ -40,3 +42,9 @@ unsigned Maid::get_rooms_serviced() const noexcept { return rooms_serviced; }
 void Maid::set_rooms_serviced(unsigned rooms_serviced) noexcept { this -> rooms_serviced = rooms_serviced; }
 
 void Maid::reset_stats() { rooms_serviced = 0; }
+
+const Amount& Maid::get_bonus() { return bonus; }
+
+void Maid::set_workers_per_shift(unsigned workers_per_shift) {
+    Maid::workers_per_shift = workers_per_shift;
+}

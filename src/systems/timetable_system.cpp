@@ -27,13 +27,8 @@ void TimetableSystem::add_entry(const TimetableEntry& entry)
 {
     if (entry.get_start() < time)
         throw EntryScheduleError("Tried to add a TimetableEntry that has already started.", entry);
-    const auto& worker = entry.get_worker();
-    auto worker_entries = std::ranges::filter_view(entries, SameWorker(worker));
-    const auto& interval = entry.get_interval();
-    auto p = std::ranges::find_if(worker_entries,
-        [&](const auto& otr_entry){ return distance( interval, otr_entry.get_interval() ) < minimal_break; });
-    if ( p != worker_entries.end() )
-        throw std::invalid_argument("This worker must have an 11-hour's break between shifts.");
+    if (not check_minimal_break(entry))
+        throw MinimalBreakError("This worker must have an 11-hour's break between shifts.", entry);
     entries.push_back(entry);
 }
 
@@ -57,4 +52,11 @@ std::vector<const Worker*> TimetableSystem::workers_available() const noexcept
     for (const TimetableEntry& entry : entries | std::views::filter(active_entries_lambda))
         w_available.push_back(&entry.get_worker());
     return w_available;
+}
+
+bool TimetableSystem::check_minimal_break(const TimetableEntry& entry)
+{
+    auto worker_entries = std::ranges::filter_view(entries, SameWorker(entry.get_worker()));
+    auto p = std::ranges::find_if(worker_entries, TooShortBreak{entry.get_interval(), minimal_break});
+    return p == worker_entries.end();
 }

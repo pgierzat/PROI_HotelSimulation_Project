@@ -2,7 +2,7 @@
 #include <map>
 #include <stdexcept>
 
-unsigned Receptionist::shifts = 3;
+unsigned Receptionist::workers_per_shift = 1;
 
 const Amount Receptionist::penalty{10, 0};
 
@@ -26,6 +26,8 @@ WorkerType Receptionist::get_type() const noexcept { return type; }
 
 unsigned Receptionist::get_shifts() const noexcept { return shifts; }
 
+unsigned Receptionist::get_workers_per_shift() const noexcept { return workers_per_shift; }
+
 jed_utils::timespan Receptionist::get_shift_start(Shift shift) const
 {
     if ( (unsigned char)(shift) > shifts )
@@ -40,3 +42,9 @@ unsigned Receptionist::get_complaints() const noexcept { return complaints; }
 void Receptionist::set_complaints(unsigned complaints) noexcept { this -> complaints = complaints; }
 
 void Receptionist::reset_stats() { complaints = 0; }
+
+const Amount& Receptionist::get_penalty() { return penalty; }
+
+void Receptionist::set_workers_per_shift(unsigned workers_per_shift) {
+    Receptionist::workers_per_shift = workers_per_shift;
+}

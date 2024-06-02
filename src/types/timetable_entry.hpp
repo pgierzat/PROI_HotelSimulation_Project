@@ -12,6 +12,7 @@ class TimetableEntry
 {
     public:
         TimetableEntry(const Worker&, const jed_utils::datetime&, Shift);
+        TimetableEntry(const jed_utils::datetime&, Shift);
         const Worker& get_worker() const;
         jed_utils::datetime get_date() const noexcept;
         jed_utils::datetime get_start() const;

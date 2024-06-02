@@ -12,8 +12,8 @@ TEST_CASE("test StaySystem")
     RoomsList rooms_list{};
     rooms_list.add_two_room(237);
     rooms_list.add_one_room(217);
-    const auto& room1 = *rooms_list.find_by_number(237).value();
-    const auto& room2 = *rooms_list.find_by_number(217).value();
+    const auto& room1 = rooms_list.get_by_number(237);
+    const auto& room2 = rooms_list.get_by_number(217);
     StaySystem s_system{g_system, rooms_list};
     jed_utils::datetime start1{2024, 5, 10};
     jed_utils::datetime end1{2024, 5, 14};
