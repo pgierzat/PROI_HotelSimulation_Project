@@ -52,7 +52,7 @@ TEST_CASE("Test Receptionist")
 
             receptionist -> set_complaints(10);
             REQUIRE( receptionist -> calculate_paycheck(0) ==
-                receptionist -> calculate_base_paycheck(0) - Receptionist::penalty * 10 );
+                receptionist -> calculate_base_paycheck(0) - Receptionist::get_penalty() * 10 );
         }
 
         SECTION("hours + bonus")
@@ -63,7 +63,7 @@ TEST_CASE("Test Receptionist")
 
             receptionist -> set_complaints(10);
             REQUIRE( receptionist -> calculate_paycheck(15) ==
-                wage.get_wage() * 15 - Receptionist::penalty * 10 );
+                wage.get_wage() * 15 - Receptionist::get_penalty() * 10 );
         }
     }
 

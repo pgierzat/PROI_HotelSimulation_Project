@@ -34,13 +34,11 @@ void PaycheckSystem::calculate_paychecks()
 {
     paychecks.clear();
     auto all_entries = vec_to_pvec(tt_system -> get_entries());
-    for (const Worker* worker :w_system -> get_workers())
+    for (const Worker* worker : w_system -> get_workers())
     {
-        auto w_entries = worker_entries(all_entries, *worker);
         auto prev_month = time.get_year_month() - std::chrono::months{1};
-        auto entries = month_entries(w_entries, prev_month);
-        unsigned hours_worked = (worker -> get_shift_duration() * entries.size()).get_hours();
-        auto paycheck = worker -> calculate_paycheck(hours_worked); 
+        unsigned hours = hours_worked(all_entries, *worker, prev_month);
+        auto paycheck = worker -> calculate_paycheck(hours); 
         if (paycheck != Amount{0, 0})
             paychecks.emplace_back(*worker, paycheck);
     }

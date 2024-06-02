@@ -27,6 +27,7 @@ class TimetableSystem
         const std::vector<TimetableEntry>& get_entries() const noexcept;
         EntryStatus get_entry_status(const TimetableEntry&) const noexcept;
         std::vector<const Worker*> workers_available() const noexcept;
+        bool check_minimal_break(const TimetableEntry&);
         static const jed_utils::timespan minimal_break;
     private:
         std::vector<TimetableEntry> entries;

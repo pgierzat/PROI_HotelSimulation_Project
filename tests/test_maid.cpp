@@ -52,7 +52,7 @@ TEST_CASE("Test Maid")
 
             maid -> set_rooms_serviced(10);
             REQUIRE( maid -> calculate_paycheck(0) ==
-                maid -> calculate_base_paycheck(0) + Maid::bonus * 10 );
+                maid -> calculate_base_paycheck(0) + Maid::get_bonus() * 10 );
         }
 
         SECTION("hours + bonus")
@@ -62,7 +62,8 @@ TEST_CASE("Test Maid")
             Maid* maid = &maid_obj;
 
             maid -> set_rooms_serviced(10);
-            REQUIRE( maid -> calculate_paycheck(15) == wage.get_wage() * 15 + Maid::bonus * 10 );
+            REQUIRE( maid -> calculate_paycheck(15) ==
+                wage.get_wage() * 15 + Maid::get_bonus() * 10 );
         }
     }
 

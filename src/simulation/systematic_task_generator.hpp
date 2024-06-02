@@ -1,25 +1,18 @@
 #ifndef SYSTEMATIC_TASK_GENERATOR_HPP
 #define SYSTEMATIC_TASK_GENERATOR_HPP
 
+#include "generator.hpp"
 #include "../systems/task_system.hpp"
 #include "../types/datetime.h"
 #include "../types/timespan.h"
-#include "../workers/maid.hpp"
 
 
-class SystematicTaskGenerator
+class SystematicTaskGenerator : public Generator
 {
     public:
-        SystematicTaskGenerator(TaskSystem&, const RoomsList&, const jed_utils::datetime&);
-        void set_time(const jed_utils::datetime&);
-    private:
-        void generate_room_cleaning_tasks();
-        void set_time_next() noexcept;
+        SystematicTaskGenerator(const jed_utils::datetime&, TaskSystem&);
+    protected:
         TaskSystem* t_system;
-        const RoomsList* rooms_list;
-        jed_utils::datetime time;
-        jed_utils::datetime time_next;
-        jed_utils::timespan time_of_gen{0};
 };
 
 #endif

@@ -285,4 +285,18 @@ public:
     const std::string& filename;
 };
 
+class MinimalBreakError : public std::invalid_argument
+{
+public:
+    MinimalBreakError(const std::string&, const TimetableEntry&);
+    const TimetableEntry& entry;
+};
+
+class EntryAssignmentError : public std::runtime_error
+{
+public:
+    EntryAssignmentError(const std::string&, const TimetableEntry&);
+    const TimetableEntry& entry;
+};
+
 #endif

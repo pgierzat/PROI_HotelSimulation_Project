@@ -1,6 +1,7 @@
 #include <memory>
 #include <vector>
 #include <optional>
+#include <ranges>
 #include "../workers/worker.hpp"
 #include "../workers/cook.hpp"
 #include "../workers/maid.hpp"
@@ -23,6 +24,8 @@ class WorkerSystem
         std::optional<const Worker*> find_by_id(std::string id) const noexcept;
         const Worker& get_by_id(std::string id) const;
         std::vector<const Worker*> get_workers() const;
+        template<SupportedWorker T>
+            std::vector<const T*> get_specific_workers() const;
         void set_dishes_prepared(const Cook&, unsigned dishes_prepared);
         void set_rooms_serviced(const Maid&, unsigned rooms_serviced);
         void set_complaints(const Receptionist&, unsigned complaints);
@@ -43,6 +46,20 @@ void WorkerSystem::add_worker(const T& worker)
         throw DuplicateWorkerIDError("Cannot add worker.", worker);
     auto p = std::make_unique<T>(worker);
     workers.push_back(std::move(p));
+}
+
+template<SupportedWorker T>
+std::vector<const T*> WorkerSystem::get_specific_workers() const
+{
+    auto type = T::type;
+    auto specific_workers = std::vector<const T*>{};
+    auto pred = [=](const auto& worker){ return worker -> get_type() == type; };
+    for (const auto& worker : workers | std::views::filter(pred))
+    {
+        auto specific_worker = dynamic_cast<T*>(worker.get());
+        specific_workers.push_back(specific_worker);
+    }
+    return specific_workers;
 }
 
 template <SupportedWorker T>

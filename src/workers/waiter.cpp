@@ -3,9 +3,9 @@
 #include <stdexcept>
 
 
-unsigned Waiter::shifts = 1;
+unsigned Waiter::workers_per_shift = 2;
 
-const Amount Waiter::bonus;
+const Amount Waiter::bonus{2, 0};
 
 const jed_utils::timespan Waiter::shift_duration = jed_utils::timespan(0, 12);
 
@@ -25,6 +25,8 @@ WorkerType Waiter::get_type() const noexcept { return type; }
 
 unsigned Waiter::get_shifts() const noexcept { return shifts; }
 
+unsigned Waiter::get_workers_per_shift() const noexcept { return workers_per_shift; }
+
 jed_utils::timespan Waiter::get_shift_start(Shift shift) const
 {
     if ( (unsigned char)(shift) > shifts )
@@ -39,3 +41,9 @@ unsigned Waiter::get_orders_taken() const noexcept { return orders_taken; }
 void Waiter::set_orders_taken(unsigned orders_taken) noexcept { this -> orders_taken = orders_taken; }
 
 void Waiter::reset_stats() { orders_taken = 0; }
+
+const Amount& Waiter::get_bonus() { return bonus; }
+
+void Waiter::set_workers_per_shift(unsigned workers_per_shift) {
+    Waiter::workers_per_shift = workers_per_shift;
+}

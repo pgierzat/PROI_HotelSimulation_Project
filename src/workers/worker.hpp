@@ -30,6 +30,7 @@ class Worker
         Pay get_pay() const noexcept;
         virtual WorkerType get_type() const noexcept = 0;
         virtual unsigned get_shifts() const noexcept = 0;
+        virtual unsigned get_workers_per_shift() const noexcept = 0;
         virtual jed_utils::timespan get_shift_start(Shift) const = 0;
         virtual jed_utils::timespan get_shift_duration() const noexcept = 0;
         Amount calculate_base_paycheck(unsigned hours_worked) const noexcept;

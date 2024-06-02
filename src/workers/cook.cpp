@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 
-unsigned Cook::shifts = 1;
+unsigned Cook::workers_per_shift = 1;
 
 const Amount Cook::bonus{1, 0};
 
@@ -25,6 +25,8 @@ WorkerType Cook::get_type() const noexcept { return type; }
 
 unsigned Cook::get_shifts() const noexcept { return shifts; }
 
+unsigned Cook::get_workers_per_shift() const noexcept { return workers_per_shift; }
+
 jed_utils::timespan Cook::get_shift_start(Shift shift) const
 {
     if ( (unsigned char)(shift) > shifts )
@@ -39,3 +41,9 @@ unsigned Cook::get_dishes_prepared() const noexcept { return dishes_prepared; }
 void Cook::set_dishes_prepared(unsigned dishes_prepared) noexcept { this -> dishes_prepared = dishes_prepared; }
 
 void Cook::reset_stats() { dishes_prepared = 0; }
+
+const Amount& Cook::get_bonus() { return bonus; }
+
+void Cook::set_workers_per_shift(unsigned workers_per_shift) {
+    Cook::workers_per_shift = workers_per_shift;
+}

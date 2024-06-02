@@ -16,8 +16,10 @@ jed_utils::timespan TimeInterval::get_duration() const noexcept { return end - s
 
 TimeInterval TimeInterval::month_to_interval(std::chrono::year_month year_month)
 {
-    std::chrono::year_month_day first = year_month / std::chrono::day{1};
-    std::chrono::year_month_day last = year_month / std::chrono::last;
+    using namespace std::chrono;
+    year_month_day first = year_month / day{1};
+    year_month += months{1};
+    year_month_day last = year_month / day{1};
     jed_utils::datetime start{first};
     jed_utils::datetime stop{last};
     return TimeInterval{start, stop};
