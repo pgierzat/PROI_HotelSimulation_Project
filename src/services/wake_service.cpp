@@ -5,14 +5,12 @@
 
 const std::string WakeService::description = "Wake guest(s) at a room. ";
 
-WakeService::WakeService(const std::string& id, const Guest& requestee, const jed_utils::datetime& time)
-    : TaskService{id, requestee}, time{time} {}
+WakeService::WakeService(const std::string& id, const Guest& requestee, const Room& room, const jed_utils::datetime& time)
+    : TaskService{id, requestee}, room{&room}, time{time} {}
 
 void WakeService::add_to_systems(ServiceSystem& sc_system)
-{
-    const auto& requestee = g_system -> get_by_id(requestee_id);
-    t_system -> add_task(WakeTask(id, requestee, time));   // change to suit to WakeTask constructor
-    waketask_id  = id;
+{    
+    waketask_id = t_system -> add_task_id(WakeTask("", *room, time));   // change to suit to WakeTask constructor
 }
 
 const std::string& WakeService::get_description() const noexcept { return description; }
