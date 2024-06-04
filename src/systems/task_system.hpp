@@ -19,9 +19,9 @@ class TaskSystem
         template<SupportedTask T>
             void add_task(const T&);
         template<SupportedTask T>
-            void add_task_id(const T&);
+            std::string add_task_id(const T&);
         template<SupportedTask T>
-            void add_task_id(T&&);
+            std::string add_task_id(T&&);
         void remove_task(const Task&) noexcept;
         std::vector<const Task*> get_tasks() const noexcept;
         bool operator==(const TaskSystem&) const = default;
@@ -48,24 +48,24 @@ void TaskSystem::add_task(const T& task)
 }
 
 template<SupportedTask T>
-void TaskSystem::add_task_id(const T& task)
+std::string TaskSystem::add_task_id(const T& task)
 {
     check_task_status(task);
     auto task_to_add = task;
     auto new_id = id_gen.generate_id();
     task_to_add.set_id(new_id);
-    id_gen.forbid_id(new_id);
     tasks.push_back(std::move(std::make_unique<T>(task_to_add)));
+    return new_id;
 }
 
 template<SupportedTask T>
-void TaskSystem::add_task_id(T&& task)
+std::string TaskSystem::add_task_id(T&& task)
 {
     check_task_status(task);
     auto new_id = id_gen.generate_id();
     task.set_id(new_id);
-    id_gen.forbid_id(new_id);
     tasks.push_back(std::move(std::make_unique<T>(task)));
+    return new_id;
 }
 
 
