@@ -21,7 +21,7 @@ class RoomsList
         void add_four_apartment(unsigned number);
 
         Amount calculate_total_price() const noexcept;
-        unsigned calculate_total_rooms() const noexcept;
+
         std::optional<const Room*> find_by_number(unsigned number) const noexcept;
         const Room& get_by_number(unsigned number) const;
         const std::list<std::unique_ptr<Room>>& getRooms() const noexcept;
