@@ -11,7 +11,7 @@ WakeService::WakeService(const std::string& id, const Guest& requestee, const je
 void WakeService::add_to_systems(ServiceSystem& sc_system)
 {
     const auto& requestee = g_system -> get_by_id(requestee_id);
-    t_system -> add_task(WakeTask(id, requestee, time));   // need id generator
+    t_system -> add_task(WakeTask(id, requestee, time));   // change to suit to WakeTask constructor
     waketask_id  = id;
 }
 
