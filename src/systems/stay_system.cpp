@@ -78,9 +78,17 @@ void StaySystem::check_out(const Stay& stay)
         throw StayStatusError("Tried to check-out a stay that wasn't checked-in.", stay);
     if (time < stay.get_start() + checkin_time)
         throw StayStatusError("Tried to check-out a stay that hasn't yet started.", stay);
-    validate_stay(stay).set_status(StayStatus::checked_out);   // here, can impose fees for late check-out 
+    validate_stay(stay).set_status(StayStatus::checked_out);   // here, can impose fees for late check-out
 }
 
+bool StaySystem::check_room(const Room& room) const noexcept
+{
+    for(auto stay : stays){
+        if (stay.get_room() == room)
+            return true;
+    }
+    return false;
+}
 std::optional<Stay*> StaySystem::get_stay(const Stay& stay) const noexcept
 {
     auto p = std::ranges::find(stays, stay);
@@ -94,7 +102,7 @@ Stay& StaySystem::validate_stay(const Stay& stay) const
     auto stay_opt = get_stay(stay);
     if (not stay_opt)
         throw StayNotInSystemError("Stay not found.", stay);
-    return *stay_opt.value(); 
+    return *stay_opt.value();
 }
 
 void StaySystem::check_overlap(const Stay& stay) const

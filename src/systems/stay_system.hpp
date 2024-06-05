@@ -20,6 +20,7 @@ class StaySystem
         const std::vector<Stay>& get_stays() const noexcept;
         void check_in(const Stay&);
         void check_out(const Stay&);
+        bool check_room(const Room&) const noexcept;
         static const jed_utils::timespan checkout_time;
         static const jed_utils::timespan checkin_time;
     private:
