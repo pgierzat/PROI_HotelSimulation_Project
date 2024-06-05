@@ -1,13 +1,14 @@
 #ifndef GUEST_SYSTEM_HPP
 #define GUEST_SYSTEM_HPP
 
+#include "../auxiliary/other_system_publisher.hpp"
 #include "../types/guest.hpp"
 #include <vector>
 #include <optional>
 
 class HotelSystem;
 
-class GuestSystem
+class GuestSystem : public OtherSystemPublisher<Guest>
 {
     public:
         GuestSystem() = default;

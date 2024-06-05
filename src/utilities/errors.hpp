@@ -21,6 +21,8 @@ namespace jed_utils {
     class datetime;
     class timespan;
 }
+template<typename T>
+class OwnSystemObserver;
 
 
 class UnsupportedWorkerTypeError : public std::invalid_argument
@@ -122,9 +124,9 @@ class RoomNotInSystemError : public std::invalid_argument
 {
     public:
         RoomNotInSystemError(const std::string& what, const Room&);
-        RoomNotInSystemError(const std::string& what, unsigned room_nr);
+        RoomNotInSystemError(const std::string& what, const std::string& number);
         const Room* room = nullptr;
-        unsigned room_nr = -1;
+        const std::string number = "";
 };
 
 class StayOverlapError : public std::invalid_argument
@@ -298,5 +300,17 @@ public:
     EntryAssignmentError(const std::string&, const TimetableEntry&);
     const TimetableEntry& entry;
 };
+
+template<typename T>
+class OwnSystemObserverError : public std::runtime_error
+{
+public:
+    OwnSystemObserverError(const std::string&, const OwnSystemObserver<T>&);
+    const OwnSystemObserver<T>& observer;
+};
+
+template<typename T>
+OwnSystemObserverError<T>::OwnSystemObserverError(const std::string& what, const OwnSystemObserver<T>& observer) :
+    std::runtime_error{what}, observer{observer} {}
 
 #endif

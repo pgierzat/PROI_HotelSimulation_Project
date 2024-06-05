@@ -46,7 +46,7 @@ T JSONRoom::unchecked_read_specific(const json& j)
 {
     try
     {
-        unsigned number = j.at("number");
+        std::string number = j.at("id");
         return T{number};
     } catch(const json::exception& e) {
         throw JSONException("Error parsing Room", j);

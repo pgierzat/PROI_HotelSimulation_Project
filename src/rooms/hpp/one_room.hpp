@@ -6,7 +6,7 @@
 class OneRoom : public Room
 {
     public:
-        OneRoom(unsigned number);
+        OneRoom(const std::string& number);
         Amount calculatePrice() const override;
         virtual RoomType get_type() const noexcept override;
         static const RoomType type = RoomType::OneRoom;

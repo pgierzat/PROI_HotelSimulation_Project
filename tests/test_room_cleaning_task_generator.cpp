@@ -3,6 +3,8 @@
 #include "../src/systems/guest_system.hpp"
 #include "../src/systems/worker_system.hpp"
 #include "../src/rooms/hpp/rooms_list.hpp"
+#include "../src/rooms/hpp/one_room.hpp"
+#include "../src/rooms/hpp/two_appartment.hpp"
 #include "../src/tasks/room_cleaning_task.hpp"
 
 
@@ -11,10 +13,10 @@ TEST_CASE("Test RoomCleaningTaskGenerator")
     auto g_system = GuestSystem{};
     auto w_system = WorkerSystem{};
     auto rooms_list = RoomsList{};
-    rooms_list.add_two_appartment(237);
-    rooms_list.add_one_room(238);
-    const auto& room1 = rooms_list.get_by_number(237);
-    const auto& room2 = rooms_list.get_by_number(238);
+    rooms_list.add_room(TwoAppartment{"237"});
+    rooms_list.add_room(OneRoom{"238"});
+    const auto& room1 = rooms_list.get_by_id("237");
+    const auto& room2 = rooms_list.get_by_id("238");
     auto t_system = TaskSystem{w_system, rooms_list, g_system};
     jed_utils::datetime time0{2024, 5, 19};
     auto gen = RoomCleaningTaskGenerator{t_system, rooms_list, time0};

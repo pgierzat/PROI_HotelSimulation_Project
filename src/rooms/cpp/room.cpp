@@ -27,11 +27,9 @@ const std::map<RoomType, std::string> Room::rtype_to_str_map = {
 
 const Amount Room::base_price{100, 0};
 
-Room::Room(unsigned number, unsigned capacity) :
-number(number), capacity(capacity)
+Room::Room(const std::string& id, unsigned capacity) :
+id(id), capacity(capacity)
 {
-    if(number <=0)
-        throw NegativeNumberException(number);
     if(capacity <=0)
         throw NegativeCapacityException(capacity);
 }
@@ -47,9 +45,9 @@ unsigned Room::calculatePersonel() const
 }
 
 
-unsigned Room::getNumber() const
+const std::string& Room::get_id() const
 {
-    return number;
+    return id;
 }
 
 unsigned Room::getCapacity() const
@@ -60,7 +58,7 @@ unsigned Room::getCapacity() const
 RoomType Room::get_type() const noexcept { return type; }
 
 void Room::display(std::ostream& os) const {
-    os << "Room number: " << getNumber() << "\n";
+    os << "Room number: " << get_id() << "\n";
     os << "Capacity: " << getCapacity() << "\n";
     os << "Base price: " << calculatePrice() << "\n";
 }

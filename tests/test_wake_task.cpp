@@ -2,6 +2,7 @@
 #include "../src/tasks/wake_task.hpp"
 #include "../src/systems/task_system.hpp"
 #include "../src/rooms/hpp/rooms_list.hpp"
+#include "../src/rooms/hpp/one_room.hpp"
 #include "../src/utilities/errors.hpp"
 
 
@@ -11,8 +12,8 @@ TEST_CASE("Test WakeTask")
     Maid maid{"id1", "name1", Pay{PaycheckMethod::Salary, Amount{3100, 0}}};
     w_system.add_worker(maid);
     RoomsList rooms_list{};
-    rooms_list.add_one_room(237);
-    const auto& room = rooms_list.get_by_number(237);
+    rooms_list.add_room(OneRoom{"237"});
+    const auto& room = rooms_list.get_by_id("237");
     GuestSystem g_system{};
     Guest guest1{"1111", "name1"};
     g_system.add_guest(guest1);

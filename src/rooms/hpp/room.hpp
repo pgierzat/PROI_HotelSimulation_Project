@@ -19,16 +19,16 @@ enum class RoomType {
 class Room {
 
     protected:
-        unsigned number;
+        std::string id;
         unsigned capacity;
         static const Amount base_price;
     public:
-        Room(unsigned number, unsigned capacity);
+        Room(const std::string& number, unsigned capacity);
         virtual ~Room() = default;
         virtual unsigned calculatePersonel() const;
         virtual Amount calculatePrice() const;
         virtual void display(std::ostream& os) const;
-        unsigned getNumber() const;
+        const std::string& get_id() const;
         unsigned getCapacity() const;
         virtual RoomType get_type() const noexcept;
         virtual bool operator==(const Room&) const = default;
