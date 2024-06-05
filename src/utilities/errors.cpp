@@ -47,8 +47,8 @@ GuestNotInSystemError::GuestNotInSystemError(const std::string& what, const std:
 RoomNotInSystemError::RoomNotInSystemError(const std::string& what, const Room& room) :
     std::invalid_argument(what), room{&room} {}
 
-RoomNotInSystemError::RoomNotInSystemError(const std::string& what, unsigned room_nr) :
-    std::invalid_argument(what), room_nr{room_nr} {}
+RoomNotInSystemError::RoomNotInSystemError(const std::string& what, const std::string& number) :
+    std::invalid_argument(what), number{number} {}
 
 
 StayOverlapError::StayOverlapError(const std::string& what, const Stay& old_stay, const Stay& new_stay) :

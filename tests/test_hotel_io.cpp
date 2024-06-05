@@ -23,8 +23,8 @@ TEST_CASE("Test HotelIO")
 
     SECTION("Test write/read workers")
     {
-        auto room1 = FourAppartment{237};
-        auto room2 = TwoRoom{238};
+        auto room1 = FourAppartment{"237"};
+        auto room2 = TwoRoom{"238"};
         auto rooms = std::vector<const Room*>{&room1, &room2};
         auto path = std::filesystem::path{"test_files/rooms.json"};
         HotelIO::write_rooms(path, rooms);

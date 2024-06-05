@@ -7,8 +7,8 @@
 TEST_CASE("Test RoomCleaningTask")
 {
     auto rooms_list = RoomsList{};
-    rooms_list.add_four_appartment(237);
-    const auto& room1 = *rooms_list.find_by_number(237).value();
+    rooms_list.add_room(FourAppartment{"237"});
+    const auto& room1 = *rooms_list.find_by_id("237").value();
     auto w_system = WorkerSystem{};
     auto pay = Pay{PaycheckMethod::Salary, Amount{3200, 0}};
     Maid maid1{"id1", "name1", pay};

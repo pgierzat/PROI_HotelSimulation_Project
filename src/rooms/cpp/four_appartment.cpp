@@ -3,7 +3,7 @@
 #include "../exceptions/negative_capacity_exception.hpp"
 
 
-FourAppartment::FourAppartment(unsigned number) :
+FourAppartment::FourAppartment(const std::string& number) :
 Room(number, capacity=4)
 {}
 

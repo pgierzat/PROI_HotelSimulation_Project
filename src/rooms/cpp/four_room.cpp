@@ -2,7 +2,7 @@
 #include "../exceptions/negative_number_exception.hpp"
 #include "../exceptions/negative_capacity_exception.hpp"
 
-FourRoom::FourRoom(unsigned number) :
+FourRoom::FourRoom(const std::string& number) :
 Room(number, capacity=4)
 {}
 

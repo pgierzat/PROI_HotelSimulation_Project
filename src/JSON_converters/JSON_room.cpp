@@ -4,7 +4,7 @@
 nlohmann::json JSONRoom::write(const Room& room)
 {
     return {
-        {"number", room.getNumber()},
+        {"id", room.get_id()},
         {"type", Room::rtype_to_str(room.get_type())}
     };
 }

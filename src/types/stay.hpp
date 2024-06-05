@@ -1,13 +1,15 @@
 #ifndef STAY_HPP
 #define STAY_HPP
 
+#include <vector>
 #include "../rooms/hpp/room.hpp"
 #include "amount.hpp"
 #include "datetime.h"
 #include "timespan.h"
 #include "guest.hpp"
 #include "time_interval.hpp"
-#include <vector>
+#include "../auxiliary/own_system_observer.hpp"
+
 
 
 class StaySystem;
@@ -15,6 +17,7 @@ class GuestSystem;
 class RoomsList;
 
 enum class StayStatus : unsigned {
+    initial,
     booked,
     checked_in,
     checked_out
@@ -24,12 +27,18 @@ enum class StayStatus : unsigned {
 class Stay
 {
     public:
-        Stay(const std::string& id, const Room&, const Guest& main_guest, const jed_utils::datetime& start,
-             const jed_utils::datetime& end);
+        Stay(const std::string& id, const Room&, const Guest& main_guest,
+            const jed_utils::datetime& start, const jed_utils::datetime& end);
         const std::string& get_id() const noexcept;
         const std::vector<const Guest*> get_guests() const;
+        std::vector<const std::string*> get_guest_ids() const noexcept;
+        std::vector<OwnSystemObserver<Guest>*> get_guest_observers() noexcept;
+        OwnSystemObserver<Guest>& get_guest_observer(const std::string& id);
+        const std::string& get_main_guest_id() const noexcept;
         const Guest& get_main_guest() const;
+        const std::string& get_room_id() const noexcept;
         const Room& get_room() const;
+        OwnSystemObserver<Room>& get_room_observer() noexcept;
         jed_utils::datetime get_start() const noexcept;
         jed_utils::datetime get_end() const noexcept;
         TimeInterval get_interval() const noexcept;
@@ -43,20 +52,16 @@ class Stay
         void set_status(StayStatus);
         bool operator==(const Stay&) const;
         static void set_s_system(const StaySystem&);
-        static void set_g_system(const GuestSystem&);
-        static void set_rooms_list(const RoomsList&);
     private:
         static const StaySystem* s_system;
-        static const GuestSystem* g_system;
-        static const RoomsList* rooms_list;
         static void validate_duration(const jed_utils::datetime& start, const jed_utils::datetime& end);
-        std::vector<std::string> guests_ids;
+        std::vector<OwnSystemObserver<Guest>> guest_observers;
+        OwnSystemObserver<Room> room_observer;
         std::string main_guest_id;    // Guest that pays for everything
         std::string id;
         jed_utils::datetime start;
         jed_utils::datetime end;
-        unsigned room_nr;
-        StayStatus status{StayStatus::booked};
+        StayStatus status{StayStatus::initial};
 };
 
 #endif

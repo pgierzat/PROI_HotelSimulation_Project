@@ -7,8 +7,8 @@
 TEST_CASE("test BigTask")
 {
     auto rooms_list = RoomsList{};
-    rooms_list.add_two_appartment(237);
-    const auto& room1 = rooms_list.get_by_number(237);
+    rooms_list.add_room(TwoAppartment{"237"});
+    const auto& room1 = rooms_list.get_by_id("237");
     jed_utils::datetime time{2024, 5, 18};
     Pay pay{PaycheckMethod::Salary, Amount{3200, 0}};
     auto w_system = WorkerSystem{};

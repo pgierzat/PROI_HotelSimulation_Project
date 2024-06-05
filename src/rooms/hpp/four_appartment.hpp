@@ -6,7 +6,7 @@
 class FourAppartment : public Room
 {
     public:
-        FourAppartment(unsigned number);
+        FourAppartment(const std::string& number);
         Amount calculatePrice() const override;
         unsigned calculatePersonel() const override;
         virtual RoomType get_type() const noexcept override;

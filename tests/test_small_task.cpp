@@ -1,6 +1,7 @@
 #include "catch_amalgamated.hpp"
 #include "../src/tasks/wake_task.hpp"
 #include "../src/rooms/hpp/rooms_list.hpp"
+#include "../src/rooms/hpp/one_room.hpp"
 #include "../src/systems/stay_system.hpp"
 #include "../src/systems/guest_system.hpp"
 #include "../src/utilities/errors.hpp"
@@ -8,8 +9,8 @@
 TEST_CASE("test WakeTask")
 {
     auto rooms_list = RoomsList{};
-    rooms_list.add_one_room(237);
-    const auto& room1 = *rooms_list.find_by_number(237).value();
+    rooms_list.add_room(OneRoom{"237"});
+    const auto& room1 = rooms_list.get_by_id("237");
     auto w_system = WorkerSystem{};
     auto pay = Pay{PaycheckMethod::Salary, Amount{3200, 0}};
     w_system.add_worker(Maid{"id1", "name1", pay});
