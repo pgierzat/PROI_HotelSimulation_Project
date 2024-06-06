@@ -5,6 +5,7 @@
 #include "../src/rooms/hpp/two_room.hpp"
 #include "../src/rooms/hpp/one_room.hpp"
 #include "../src/utilities/errors.hpp"
+#include "../src/functions/equal_operators.hpp"
 
 TEST_CASE("test StaySystem")
 {
@@ -23,7 +24,6 @@ TEST_CASE("test StaySystem")
     jed_utils::datetime end1{2024, 5, 14};
     jed_utils::datetime start2{2024, 5, 14};
     jed_utils::datetime end2{2024, 5, 16};
-    const auto& stays = s_system.get_stays();
     s_system.add_stay(Stay{"id1", room1, guest1, start1, end1});
     s_system.add_stay(Stay{"id2", room2, guest2, start2, end2});
     const auto& stay1 = s_system.get_by_id("id1");
@@ -31,6 +31,7 @@ TEST_CASE("test StaySystem")
 
     SECTION("add stay")
     {
+        auto stays = s_system.get_stays();
         std::vector expected{stay1, stay2};
         REQUIRE( stays == expected );
     }
@@ -40,34 +41,7 @@ TEST_CASE("test StaySystem")
         s_system.remove_stay(stay1);
         const auto& stay2_new = s_system.get_by_id("id2");
         std::vector expected{stay2_new};
-        REQUIRE( stays == expected );
-    }
-
-    SECTION("adding guests")
-    {
-        s_system.add_guest_to_stay(stay1, guest2);
-        std::vector exp_guests{guest1, guest2};
-        REQUIRE( std::ranges::equal(stay1.get_guests(), exp_guests,
-            [](auto p1, const auto& s){ return *p1 == s; }) );
-        std::vector exp_guests_ids{"id1", "id2"};
-        REQUIRE( std::ranges::equal(stay1.get_guest_ids(), exp_guests_ids,
-            [](auto p1, const auto& s){ return *p1 == s; }) );
-    }
-
-    SECTION("duplicate guest")
-    {
-        REQUIRE_THROWS( s_system.add_guest_to_stay(stay1, guest1) );
-    }
-
-    SECTION("unknown guest")
-    {
-        auto guest3 = Guest{"id3", "name3"};
-        REQUIRE_THROWS_AS( s_system.add_guest_to_stay(stay1, guest3), GuestNotInSystemError );
-    }
-
-    SECTION("'na waleta' guest")
-    {
-        REQUIRE_THROWS_AS( s_system.add_guest_to_stay(stay2, guest1), RoomCapacityExceededError );
+        REQUIRE( s_system.get_stays() == expected );
     }
 
     SECTION("status not 'initial'")
@@ -84,7 +58,15 @@ TEST_CASE("test StaySystem")
     SECTION("unknown guest")
     {
         Guest guest3{"id3", "name3"};
-        Stay stay3{"id3", room1, guest3, start1, end1};
+        Stay stay3{"id3", room2, guest3, start1, end1};
+        REQUIRE_THROWS_AS( s_system.add_stay(stay3), GuestNotInSystemError ); 
+    }
+
+    SECTION("unknown guest")
+    {
+        Guest guest3{"id3", "name3"};
+        Stay stay3{"id3", room1, guest1, start2, end2};
+        stay3.add_guest(guest3);
         REQUIRE_THROWS_AS( s_system.add_stay(stay3), GuestNotInSystemError ); 
     }
 
@@ -185,7 +167,7 @@ TEST_CASE("test StaySystem")
             g_system.remove_guest(guest1);
             const auto& stay2_new = s_system.get_by_id("id2");
             std::vector expected{stay2_new};
-            REQUIRE( stays == expected );
+            REQUIRE( s_system.get_stays() == expected );
         }
         
         SECTION("realloc room")

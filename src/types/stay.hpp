@@ -55,10 +55,10 @@ class Stay
     private:
         static const StaySystem* s_system;
         static void validate_duration(const jed_utils::datetime& start, const jed_utils::datetime& end);
+        std::string id;
         std::vector<OwnSystemObserver<Guest>> guest_observers;
         OwnSystemObserver<Room> room_observer;
         std::string main_guest_id;    // Guest that pays for everything
-        std::string id;
         jed_utils::datetime start;
         jed_utils::datetime end;
         StayStatus status{StayStatus::initial};

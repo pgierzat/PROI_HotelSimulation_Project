@@ -7,13 +7,15 @@
 #define TIMETABLE_ENTRY
 
 class WorkerSystem;
+class TimetableSystem;
 
 class TimetableEntry
 {
     public:
-        TimetableEntry(const Worker&, const jed_utils::datetime&, Shift);
-        TimetableEntry(const jed_utils::datetime&, Shift);
+        TimetableEntry(const std::string& id, const Worker&, const jed_utils::datetime&, Shift);
+        TimetableEntry(const std::string& id, const jed_utils::datetime&, Shift);
         const Worker& get_worker() const;
+        const std::string& get_id() const noexcept;
         jed_utils::datetime get_date() const noexcept;
         jed_utils::datetime get_start() const;
         jed_utils::datetime get_end() const;
@@ -26,7 +28,9 @@ class TimetableEntry
         static void set_w_system(const WorkerSystem&) noexcept;
     private:
         static const WorkerSystem* w_system;
+        static const TimetableSystem* tt_system;
         static void check_worker_shift(const Worker&, Shift);
+        std::string id;
         std::string worker_id;
         jed_utils::datetime date;
         Shift shift;

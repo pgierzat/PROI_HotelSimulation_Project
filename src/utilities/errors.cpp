@@ -51,6 +51,13 @@ RoomNotInSystemError::RoomNotInSystemError(const std::string& what, const std::s
     std::invalid_argument(what), number{number} {}
 
 
+EntryNotInSystemError::EntryNotInSystemError(const std::string& what, const TimetableEntry& entry) :
+    std::invalid_argument(what), entry{&entry} {}
+
+EntryNotInSystemError::EntryNotInSystemError(const std::string& what, const std::string& id) :
+    std::invalid_argument(what), id{id} {}
+
+
 StayOverlapError::StayOverlapError(const std::string& what, const Stay& old_stay, const Stay& new_stay) :
     std::invalid_argument{what}, old_stay{old_stay}, new_stay{new_stay} {}
 

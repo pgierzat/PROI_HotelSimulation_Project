@@ -26,9 +26,10 @@ TEST_CASE("Test ServiceSystem")
     StaySystem s_system{g_system, rooms_list};
     jed_utils::datetime start1{2024, 5, 21};
     jed_utils::datetime end1{2024, 5, 24};
-    s_system.add_stay(Stay{"id1", room1, guest1, start1, end1});
+    auto stay1_temp = Stay{"id1", room1, guest1, start1, end1};
+    stay1_temp.add_guest(guest2);
+    s_system.add_stay(stay1_temp);
     auto& stay1 = s_system.get_by_id("id1");
-    s_system.add_guest_to_stay(stay1, guest2);
     TaskSystem t_system{w_system, rooms_list, g_system};
     ServiceSystem sc_system{g_system, w_system, rooms_list, s_system, t_system};
     StayService stayservice{"1111", stay1};

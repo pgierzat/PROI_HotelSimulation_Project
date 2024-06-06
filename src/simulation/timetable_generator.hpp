@@ -3,6 +3,7 @@
 
 #include "generator.hpp"
 #include "../systems/timetable_system.hpp"
+#include "../types/timetable_entry.hpp"
 #include "../systems/worker_system.hpp"
 #include "../types/datetime.h"
 #include "../utilities/concepts.hpp"
@@ -41,7 +42,7 @@ std::vector<TimetableEntry> TimetableGenerator::generate_empty_entries(const jed
         {
             auto shift = static_cast<Shift>(i);
             for (unsigned j = 0; j < w_per_shift; ++j)
-                entries.push_back(TTE{current, shift});
+                entries.push_back(TTE{"foo", current, shift});
         }
     return entries;
 }

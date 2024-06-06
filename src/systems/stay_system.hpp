@@ -4,6 +4,7 @@
 #include "../auxiliary/other_system_observer.hpp"
 #include "../types/stay.hpp"
 #include "../utilities/errors.hpp"
+#include <memory>
 
 class HotelSystem;
 class RoomsList;
@@ -21,8 +22,7 @@ class StaySystem : public OtherSystemObserver<Room>, public OtherSystemObserver<
         void remove_stay(const Stay&);
         std::optional<const Stay*> find_by_id(const std::string&) const noexcept;
         const Stay& get_by_id(const std::string&) const;
-        const std::vector<Stay>& get_stays() const noexcept;
-        void add_guest_to_stay(const Stay&, const Guest&);
+        std::vector<const Stay*> get_stays() const noexcept;
         void check_in(const Stay&);
         void check_out(const Stay&);
         void notify_realloc(dummy<Room>) override;
@@ -38,7 +38,7 @@ class StaySystem : public OtherSystemObserver<Room>, public OtherSystemObserver<
         void check_overlap(const Stay&) const;
         const GuestSystem* g_system;
         const RoomsList* rooms_list;
-        std::vector<Stay> stays;
+        std::vector<std::unique_ptr<Stay>> stays;
         jed_utils::datetime time{1970, 1, 1};
 };
 
