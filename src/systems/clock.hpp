@@ -8,6 +8,7 @@
 class Clock : public TimePublisher
 {
     public:
+        explicit Clock() = default;
         explicit Clock(jed_utils::datetime init_time);
         const jed_utils::datetime& get_time() const noexcept;
         jed_utils::timespan get_unit_delta() const noexcept;
