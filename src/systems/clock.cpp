@@ -3,7 +3,7 @@
 
 Clock::Clock(jed_utils::timespan unit_delta) : unit_delta{unit_delta} {}
 
-jed_utils::datetime Clock::get_time() const noexcept { return time; }
+const jed_utils::datetime& Clock::get_time() const noexcept { return time; }
 
 jed_utils::timespan Clock::get_unit_delta() const noexcept { return unit_delta; }
 
