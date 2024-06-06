@@ -14,7 +14,9 @@ int main(int argc, char* argv[]) {
     auto workers = HotelIO::read_workers(argv[1]);
     auto rooms = HotelIO::read_rooms(argv[2]);
 
-    HotelSystem hotel_system;
+    auto init_time = jed_utils::datetime{2024, 6, 6};
+
+    HotelSystem hotel_system{init_time};
     auto& w_system = hotel_system.get_w_system();
     for (const auto& worker : workers)
         w_system.add_worker(*worker);
