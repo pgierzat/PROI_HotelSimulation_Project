@@ -9,7 +9,7 @@
 class TimePublisher
 {
     public:
-        virtual void publish(const jed_utils::datetime&) = 0;
+        virtual void publish(const jed_utils::datetime&) const = 0;
         void subscribe(TimeObserver&);
     protected:
         std::vector<TimeObserver*> observers;
