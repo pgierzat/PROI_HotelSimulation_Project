@@ -10,8 +10,8 @@
 #include <vector>
 
 StayGenerator::StayGenerator(StaySystem& s_system, const RoomsList& rooms_list,
-    const jed_utils::datetime& time) : Generator{time}, s_system{&s_system},
-    rooms_list{&rooms_list}
+    const jed_utils::datetime& time) : Generator{time}, rooms_list{&rooms_list},
+    s_system{&s_system}
 {
     initiate_time_next();
 }
@@ -22,8 +22,8 @@ void StayGenerator::generate()
     std::srand(std::time(0));
     int guests = std::rand() % 4 + 1;
     int days = std::rand() % 7 + 1;
-    std::vector<Guest> guestslist;
-    for (int guests; guests = 0 ; guests--){
+    std::vector<Guest> guestslist{};
+    for (; guests != 0 ; guests--){
         Guest guest = Guest(IDGenerator.generate_id(), "guest");
         guestslist.push_back(guest);
     }

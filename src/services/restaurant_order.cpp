@@ -4,15 +4,12 @@
 #include <algorithm>
 void RestaurantOrder::addDish(Dish& dish)
 {
-    order.push_back(dish);
+    dishes.push_back(dish);
 }
 
-Amount RestaurantOrder::checkout_order()
+Amount RestaurantOrder::get_price() const noexcept
 {
-    Amount total_price{0, 0};
-    for(auto dish : order)
-    {
-        total_price += Amount(20, 0);
-    }
-    return total_price;
+    return Amount{20, 0} * dishes.size();
 }
+
+const std::vector<Dish>& RestaurantOrder::get_dishes() { return dishes; }

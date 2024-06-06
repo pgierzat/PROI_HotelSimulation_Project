@@ -7,6 +7,7 @@ HotelSystem::HotelSystem() :
     t_system{w_system, rooms_list, g_system},
     sc_system{g_system, w_system, rooms_list, s_system, t_system} {}
 
+const Clock& HotelSystem::get_ck() const noexcept { return ck; }
 const GuestSystem& HotelSystem::get_cg_system() const noexcept { return g_system; }
 const WorkerSystem& HotelSystem::get_cw_system() const noexcept { return w_system; }
 const RoomsList& HotelSystem::get_crooms_list() const noexcept { return rooms_list; }

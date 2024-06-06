@@ -1,0 +1,22 @@
+[
+    {
+        "id": "237",
+        "type": "FourRoom"
+    },
+    {
+        "id": "238",
+        "type": "TwoRoom"
+    },
+    {
+        "id": "239",
+        "type": "ThreeRoom"
+    },
+    {
+        "id": "240",
+        "type": "OneRoom"
+    },
+    {
+        "id": "241",
+        "type": "TwoRoom"
+    }
+]

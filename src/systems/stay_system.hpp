@@ -28,6 +28,7 @@ class StaySystem : public OtherSystemObserver<Room>, public OtherSystemObserver<
         void notify_erase(const std::string& erased_obj_id, dummy<Room>) override;
         void notify_realloc(dummy<Guest>) override;
         void notify_erase(const std::string& erased_obj_id, dummy<Guest>) override;
+        bool check_room(const Room&) const;
         static const jed_utils::timespan checkout_time;
         static const jed_utils::timespan checkin_time;
     private:

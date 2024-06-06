@@ -3,13 +3,16 @@
 #include <string>
 #include <vector>
 #include "../types/dish.hpp"
+#include "../types/amount.hpp"
 
 class RestaurantOrder
 {
     protected:
-        std::vector<Dish> order;
+        std::vector<Dish> dishes;
         void addDish(Dish& dish);
     public:
-        Amount checkout_order();
+        Amount get_price() const noexcept;
+        const std::vector<Dish>& get_dishes();
 };
+
 #endif

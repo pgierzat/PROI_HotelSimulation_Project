@@ -16,6 +16,8 @@ class RoomsList : public OtherSystemPublisher<Room>
     private:
         std::list<std::unique_ptr<Room>> rooms;
     public:
+        RoomsList() = default;
+        RoomsList(std::list<std::unique_ptr<Room>> rooms);
         template<SupportedRoom T>
             void add_room(const T&);
         Amount calculate_total_price() const noexcept;

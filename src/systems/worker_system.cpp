@@ -4,6 +4,8 @@
 #include "worker_system.hpp"
 
 
+WorkerSystem::WorkerSystem(std::vector<std::unique_ptr<Worker>> workers) : workers(std::move(workers)) {}
+
 std::optional<const Worker*> WorkerSystem::find_by_id(std::string id) const noexcept
 {
     auto p = std::ranges::find_if(workers, [&](const auto& worker){ return worker -> get_id() == id; });

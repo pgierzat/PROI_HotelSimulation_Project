@@ -13,6 +13,8 @@
 #include <iostream>
 
 
+RoomsList::RoomsList(std::list<std::unique_ptr<Room>> rooms) : rooms(std::move(rooms)) {}
+
 Amount RoomsList::calculate_total_price() const noexcept
 {
     return std::accumulate(rooms.begin(), rooms.end(), Amount{0, 0}, [](Amount sum, const std::unique_ptr<Room>& room) { return sum + room->calculatePrice(); });
