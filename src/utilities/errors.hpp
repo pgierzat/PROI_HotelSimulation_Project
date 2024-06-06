@@ -129,6 +129,15 @@ class RoomNotInSystemError : public std::invalid_argument
         const std::string number = "";
 };
 
+class EntryNotInSystemError : public std::invalid_argument
+{
+    public:
+        EntryNotInSystemError(const std::string& what, const TimetableEntry&);
+        EntryNotInSystemError(const std::string& what, const std::string& id);
+        const TimetableEntry* entry = nullptr;
+        const std::string id = "";
+};
+
 class StayOverlapError : public std::invalid_argument
 {
     public:

@@ -1,12 +1,14 @@
 #include "stay_system.hpp"
 #include "guest_system.hpp"
 #include "../rooms/hpp/rooms_list.hpp"
+#include "../functions/vec_to_pvec.hpp"
 #include "hotel_system.hpp"
 #include "../utilities/errors.hpp"
 #include "../utilities/useful.hpp"
 #include "../functions/has_elem.hpp"
 #include "../functions/s_system_aux.hpp"
 #include <ranges>
+#include <optional>
 #include <algorithm>
 
 const jed_utils::timespan StaySystem::checkout_time = jed_utils::timespan{0, 10, 0, 0};
@@ -33,49 +35,48 @@ void StaySystem::add_stay(const Stay& stay)
         throw StayBackwardBookError("Tried to book a stay that starts on a past hotel nigth.", stay, time);
     if (stay.get_status() != StayStatus::initial)
         throw StayStatusError("Stay added to system must be in initial state.", stay);
-    if (not rooms_list -> find_by_id(stay.get_room_id()))
-        throw RoomNotInSystemError("Tried to add a Stay with unknown Room to StaySystem",
-                                   stay.get_room_id());
-    if (not g_system -> find_by_id(stay.get_main_guest_id()))
-        throw GuestNotInSystemError("Tried to add a Stay with unknown Guest to StaySystem",
-                                    stay.get_main_guest_id());
     check_overlap(stay);
-    stays.push_back(stay);
-    auto& stay_obj = stays.back();
-    stay_obj.get_room_observer().notify_realloc(rooms_list -> get_by_id(stay.get_room_id()));
-    auto& main_guest_id = stay.get_main_guest_id();
-    stay_obj.get_guest_observer(main_guest_id).notify_realloc(g_system -> get_by_id(main_guest_id));
+    stays.emplace_back(std::make_unique<Stay>(stay));
+    auto& stay_obj = *stays.back();
+    try {
+        stay_obj.get_room_observer().notify_realloc(rooms_list -> get_by_id(stay.get_room_id()));
+        for (auto& obs : stay_obj.get_guest_observers())
+        {
+            auto& id = obs -> get_observed_id();
+            auto& guest = g_system -> get_by_id(id);
+            obs -> notify_realloc(guest);
+        }
+    } catch (const RoomNotInSystemError& e) {
+        stays.pop_back();
+        throw e;
+    } catch (const GuestNotInSystemError& e) {
+        stays.pop_back();
+        throw e;
+    }
     stay_obj.set_status(StayStatus::booked);
 }
 
-void StaySystem::remove_stay(const Stay& stay) { std::erase(stays, stay); }
+void StaySystem::remove_stay(const Stay& stay) { std::erase_if(stays, [&](const auto& otr){ return *otr == stay; }); }
 
 std::optional<const Stay*> StaySystem::find_by_id(const std::string& id) const noexcept
 {
-    auto p = std::ranges::find_if(stays, [&](const auto& stay){ return stay.get_id() == id; });
+    auto p = std::ranges::find_if(stays, [&](const auto& stay){ return stay -> get_id() == id; });
     if (p == stays.end())
         return std::nullopt;
-    return &*p;
+    return &**p;
 }
 
 const Stay& StaySystem::get_by_id(const std::string& id) const
 {
-    auto p = std::ranges::find_if(stays, [&](const auto& stay){ return stay.get_id() == id; });
+    auto p = std::ranges::find_if(stays, [&](const auto& stay){ return stay -> get_id() == id; });
     if (p == stays.end())
         throw StayNotInSystemError("get_by_id failed", id);
-    return *p;
+    return **p;
 }
 
-const std::vector<Stay>& StaySystem::get_stays() const noexcept { return stays; }
-
-void StaySystem::add_guest_to_stay(const Stay& stay, const Guest& guest)
+std::vector<const Stay*> StaySystem::get_stays() const noexcept
 {
-    if (not g_system -> find_by_id(guest.get_id()))
-        throw GuestNotInSystemError("Tried to add an unknown Guest to a Stay", guest);
-    auto& stay_obj = get_stay(stay);
-    stay_obj.add_guest(guest);
-    const auto& id = guest.get_id();
-    stay_obj.get_guest_observer(id).notify_realloc(g_system -> get_by_id(id));
+    return vec_to_pvec(stays);
 }
 
 void StaySystem::check_in(const Stay& stay)
@@ -100,10 +101,10 @@ void StaySystem::check_out(const Stay& stay)
 
 std::optional<Stay*> StaySystem::find_stay(const Stay& stay) const noexcept
 {
-    auto p = std::ranges::find(stays, stay);
+    auto p = std::ranges::find(stays, stay, [](const auto& otr_stay){ return *otr_stay; });
     if (p == stays.end())
         return std::nullopt;
-    return const_cast<Stay*>(&*p);
+    return const_cast<Stay*>(&**p);
 }
 
 Stay& StaySystem::get_stay(const Stay& stay) const
@@ -117,20 +118,22 @@ Stay& StaySystem::get_stay(const Stay& stay) const
 void StaySystem::check_overlap(const Stay& stay) const
 {
     auto interval = stay.get_interval();
-    auto room_stays = stays | std::views::filter(StaySameRoom(stay.get_room_id()));
+    auto same_room = StaySameRoom(stay.get_room_id());
+    auto room_stays = stays | std::views::filter([&](const auto& otr_stay){ return same_room(*otr_stay); });
     auto p = std::ranges::find_if(room_stays,
-        [&](const auto& otr_stay){ return distance( interval, otr_stay.get_interval() ) < jed_utils::timespan{0}; });
+        [&](const auto& otr_stay){ return distance( interval, otr_stay -> get_interval() ) < jed_utils::timespan{0}; });
     if ( p != room_stays.end() )
-        throw StayOverlapError("Attempt to add overlapping stay.", *p, stay);
+        throw StayOverlapError("Attempt to add overlapping stay.", **p, stay);
 }
 
 void StaySystem::notify_realloc(dummy<Room>)
 {
     for(auto& stay : stays)
     {
-        auto& id = stay.get_room_observer().get_observed_id();
+        auto& observer = stay -> get_room_observer();
+        auto& id = observer.get_observed_id();
         const auto& new_obj = rooms_list -> get_by_id(id);
-        stay.get_room_observer().notify_realloc(new_obj);
+        observer.notify_realloc(new_obj);
     }
         
 }
@@ -144,7 +147,7 @@ void StaySystem::notify_erase(const std::string& erased_obj_id, dummy<Room>)
 void StaySystem::notify_realloc(dummy<Guest>)
 {
     for(auto& stay : stays) {
-        for (auto& obs : stay.get_guest_observers()) {
+        for (auto& obs : stay -> get_guest_observers()) {
             auto& id = obs -> get_observed_id();
             const auto& new_obj = g_system -> get_by_id(id);
             obs -> notify_realloc(new_obj);
