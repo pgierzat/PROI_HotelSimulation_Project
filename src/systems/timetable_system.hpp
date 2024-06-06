@@ -1,4 +1,5 @@
 #include <vector>
+#include <memory>
 #include "../auxiliary/time_observer.hpp"
 #include "../utilities/useful.hpp"
 #include "../types/timetable_entry.hpp"
@@ -26,13 +27,13 @@ class TimetableSystem : public TimeObserver
         void remove_entry(const TimetableEntry&);
         std::optional<const TimetableEntry*> find_by_id(const std::string&) const;
         const TimetableEntry& get_by_id(const std::string&) const;
-        const std::vector<TimetableEntry>& get_entries() const noexcept;
+        std::vector<const TimetableEntry*> get_entries() const noexcept;
         EntryStatus get_entry_status(const TimetableEntry&) const noexcept;
         std::vector<const Worker*> workers_available() const noexcept;
         bool check_minimal_break(const TimetableEntry&);
         static const jed_utils::timespan minimal_break;
     private:
-        std::vector<TimetableEntry> entries;
+        std::vector<std::unique_ptr<TimetableEntry>> entries;
         WorkerSystem* w_system = nullptr;
         jed_utils::datetime time{1970, 1, 1};
 };

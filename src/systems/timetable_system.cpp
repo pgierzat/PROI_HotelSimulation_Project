@@ -1,6 +1,7 @@
 #include "timetable_system.hpp"
 #include <algorithm>
 #include "../functions/has_elem.hpp"
+#include "../functions/vec_to_pvec.hpp"
 #include "../functions/tt_system_aux.hpp"
 #include "../types/datetime.h"
 #include "../types/timespan.h"
@@ -31,28 +32,28 @@ void TimetableSystem::add_entry(const TimetableEntry& entry)
         throw EntryScheduleError("Tried to add a TimetableEntry that has already started.", entry);
     if (not check_minimal_break(entry))
         throw MinimalBreakError("This worker must have an 11-hour's break between shifts.", entry);
-    entries.push_back(entry);
+    entries.push_back(std::make_unique<TimetableEntry>(entry));
 }
 
 void TimetableSystem::remove_entry(const TimetableEntry& entry) { std::erase(entries, entry); }
 
 std::optional<const TimetableEntry*> TimetableSystem::find_by_id(const std::string& id) const
 {
-    auto p = std::ranges::find_if(entries, [&](const auto& entry){ return entry.get_id() == id; });
+    auto p = std::ranges::find_if(entries, [&](const auto& entry){ return entry -> get_id() == id; });
     if (p == entries.end())
         return std::nullopt;
-    return &*p;
+    return &**p;
 }
 
 const TimetableEntry& TimetableSystem::get_by_id(const std::string& id) const
 {
-    auto p = std::ranges::find_if(entries, [&](const auto& entry){ return entry.get_id() == id; });
+    auto p = std::ranges::find_if(entries, [&](const auto& entry){ return entry -> get_id() == id; });
     if (p == entries.end())
         throw EntryNotInSystemError("TimetableSystem::get_by_id() failed", id);
-    return *p;
+    return **p;
 }
 
-const std::vector<TimetableEntry>& TimetableSystem::get_entries() const noexcept { return entries; }
+std::vector<const TimetableEntry*> TimetableSystem::get_entries() const noexcept { return vec_to_pvec(entries); }
 
 EntryStatus TimetableSystem::get_entry_status(const TimetableEntry& entry) const noexcept
 {
@@ -66,9 +67,9 @@ EntryStatus TimetableSystem::get_entry_status(const TimetableEntry& entry) const
 std::vector<const Worker*> TimetableSystem::workers_available() const noexcept
 {
     std::vector<const Worker*> w_available;
-    auto active_entries_lambda = [&](const auto& entry){ return is_in(time, entry.get_interval()); };
-    for (const TimetableEntry& entry : entries | std::views::filter(active_entries_lambda))
-        w_available.push_back(&entry.get_worker());
+    auto active_entries_lambda = [&](const auto& entry){ return is_in(time, entry -> get_interval()); };
+    for (const auto& entry : entries | std::views::filter(active_entries_lambda))
+        w_available.push_back(&entry -> get_worker());
     return w_available;
 }
 
