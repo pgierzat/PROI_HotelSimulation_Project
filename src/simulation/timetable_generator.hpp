@@ -16,8 +16,8 @@ class TimetableGenerator : public Generator
     public:
         TimetableGenerator(const jed_utils::datetime&, TimetableSystem&, const WorkerSystem&);
     private:
-        void initiate_time_next();
         void generate() override;
+        void initiate_time_next();
         template<SupportedWorker T>
             std::vector<TTE> generate_empty_entries(const jed_utils::datetime& monday);
         template<SupportedWorker T>

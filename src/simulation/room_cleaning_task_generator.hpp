@@ -9,8 +9,8 @@ class RoomCleaningTaskGenerator : public SystematicTaskGenerator
     public:
         RoomCleaningTaskGenerator(TaskSystem&, const RoomsList&, const jed_utils::datetime&);
     private:
-        void initiate_time_next();
         void generate() override;
+        void initiate_time_next();
         jed_utils::timespan get_time_of_gen() const noexcept override;
         const RoomsList* rooms_list;
 };
