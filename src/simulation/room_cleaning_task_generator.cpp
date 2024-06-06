@@ -1,10 +1,11 @@
 #include "room_cleaning_task_generator.hpp"
 #include "../utilities/errors.hpp"
 #include "../tasks/room_cleaning_task.hpp"
+#include "../systems/hotel_system.hpp"
 
-RoomCleaningTaskGenerator::RoomCleaningTaskGenerator(TaskSystem& t_system,
-    const RoomsList& rooms_list, const jed_utils::datetime& time) :
-        SystematicTaskGenerator{time, t_system}, rooms_list{&rooms_list}
+RoomCleaningTaskGenerator::RoomCleaningTaskGenerator(HotelSystem& h_system) :
+    SystematicTaskGenerator{h_system.get_time(), h_system.get_t_system()},
+    rooms_list{&h_system.get_crooms_list()}
 {
     initiate_time_next();
 }

@@ -7,7 +7,7 @@
 class RoomCleaningTaskGenerator : public SystematicTaskGenerator
 {
     public:
-        RoomCleaningTaskGenerator(TaskSystem&, const RoomsList&, const jed_utils::datetime&);
+        RoomCleaningTaskGenerator(HotelSystem&);
     private:
         void generate() override;
         void initiate_time_next();

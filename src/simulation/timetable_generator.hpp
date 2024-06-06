@@ -14,7 +14,7 @@ class TimetableGenerator : public Generator
 {
     using TTE = TimetableEntry;
     public:
-        TimetableGenerator(const jed_utils::datetime&, TimetableSystem&, const WorkerSystem&);
+        TimetableGenerator(HotelSystem&);
     private:
         void generate() override;
         void initiate_time_next();

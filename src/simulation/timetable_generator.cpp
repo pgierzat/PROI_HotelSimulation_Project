@@ -1,8 +1,9 @@
 #include "timetable_generator.hpp"
+#include "../systems/hotel_system.hpp"
 
 
-TimetableGenerator::TimetableGenerator(const jed_utils::datetime& time, TimetableSystem& tt_system,
-    const WorkerSystem& w_system) : Generator{time}, tt_system{&tt_system}, w_system{&w_system}
+TimetableGenerator::TimetableGenerator(HotelSystem& h_system) :
+    Generator{h_system.get_time()}, tt_system{&h_system.get_tt_system()}, w_system{&h_system.get_w_system()}
 {
     initiate_time_next();
 }

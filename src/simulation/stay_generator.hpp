@@ -16,7 +16,7 @@ class StayGenerator : public Generator
         const RoomsList* rooms_list;
         StaySystem* s_system;
     public:
-        StayGenerator(StaySystem&, const RoomsList&, const jed_utils::datetime&);
+        StayGenerator(HotelSystem&);
     private:
         void generate() override;
         void set_time_next() noexcept override;

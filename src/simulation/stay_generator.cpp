@@ -1,4 +1,5 @@
 #include "stay_generator.hpp"
+#include "../systems/hotel_system.hpp"
 #include "../types/guest.hpp"
 #include "../auxiliary/id_generator.hpp"
 #include "../rooms/hpp/one_room.hpp"
@@ -9,9 +10,8 @@
 #include <algorithm>
 #include <vector>
 
-StayGenerator::StayGenerator(StaySystem& s_system, const RoomsList& rooms_list,
-    const jed_utils::datetime& time) : Generator{time}, rooms_list{&rooms_list},
-    s_system{&s_system}
+StayGenerator::StayGenerator(HotelSystem& h_system) : Generator{time},
+    rooms_list{&h_system.get_crooms_list()}, s_system{&h_system.get_s_system()}
 {
     initiate_time_next();
 }
