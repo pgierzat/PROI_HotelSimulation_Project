@@ -8,7 +8,7 @@
 class WakeService : public TaskService
 {
     public:
-        WakeService(const std::string& id, const Guest&, const jed_utils::datetime&);
+        WakeService(const std::string& id, const Guest&, const Room&, const jed_utils::datetime&);
         void add_to_systems(ServiceSystem&) override;
         const std::string& get_description() const noexcept override;
         std::vector<const Task*> get_tasks() const override;
@@ -16,6 +16,7 @@ class WakeService : public TaskService
         Amount get_default_price() const noexcept override;
     private:
         static const std::string description;
+        const Room* room;
         jed_utils::datetime time;
         std::string waketask_id;
 };

@@ -13,8 +13,8 @@
 
 class StayGenerator : public Generator
 {
-    const RoomsList* rooms_list;
-    StaySystem* s_system;
+        const RoomsList* rooms_list;
+        StaySystem* s_system;
     public:
         StayGenerator(StaySystem&, const RoomsList&, const jed_utils::datetime&);
     private:
@@ -22,4 +22,5 @@ class StayGenerator : public Generator
         void set_time_next() noexcept override;
         void initiate_time_next();
 };
+
 #endif

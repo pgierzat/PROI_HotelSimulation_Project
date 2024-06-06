@@ -6,16 +6,26 @@
 #include "../tasks/bring_dish_task.hpp"
 #include "../systems/task_system.hpp"
 #include "../systems/service_system.hpp"
+#include "../types/table.hpp"
+#include "../types/datetime.h"
 #include "task_service.hpp"
 
 class RestaurantOrderService : public TaskService
 {
     private:
         RestaurantOrder order;
+        jed_utils::datetime time;
+        const Room* room = nullptr;
+        const Table* table = nullptr;
+        std::string prepdish_id="";
+        std::string bringtask_id="";
+        std::string roomservice_id="";
     public:
         static const std::string description;
-        RestaurantOrderService(const std::string& id, const Guest& requestee, const jed_utils::datetime& time);
-        RestaurantOrderService(const std::string& id, const Guest& requestee,const jed_utils::datetime& time, const Room& room); // constructor overload for room service
+        RestaurantOrderService(const std::string& id, const Guest& requestee,
+            const jed_utils::datetime& time, const Table&);
+        RestaurantOrderService(const std::string& id, const Guest& requestee,
+            const jed_utils::datetime& time, const Room&); // constructor overload for room service
         void add_to_systems(ServiceSystem&) override;
         const std::string& get_description() const noexcept override;
         std::vector<const Task*> get_tasks() const;

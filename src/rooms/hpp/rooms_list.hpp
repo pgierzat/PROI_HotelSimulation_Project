@@ -16,6 +16,8 @@ class RoomsList : public OtherSystemPublisher<Room>
     private:
         std::list<std::unique_ptr<Room>> rooms;
     public:
+        RoomsList() = default;
+        RoomsList(std::list<std::unique_ptr<Room>> rooms);
         void add_room(unsigned number);
         void add_one_room(unsigned number);
         void add_two_room(unsigned number);
@@ -23,9 +25,8 @@ class RoomsList : public OtherSystemPublisher<Room>
         void add_four_room(unsigned number);
         void add_two_appartment(unsigned number);
         void add_four_appartment(unsigned number);
-        RoomsList() = default;
-        RoomsList(std::list<std::unique_ptr<Room>> rooms);
-
+        template<SupportedRoom T>
+            void add_room(const T&);
         Amount calculate_total_price() const noexcept;
         unsigned calculate_total_rooms() const noexcept;
         std::optional<const Room*> find_by_id(const std::string& number) const noexcept;
@@ -33,7 +34,6 @@ class RoomsList : public OtherSystemPublisher<Room>
         const std::list<std::unique_ptr<Room>>& getRooms() const noexcept;
         void display() const;
         bool room_exists(const std::string& number) const;
-
 };
 
 

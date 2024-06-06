@@ -157,3 +157,8 @@ void StaySystem::notify_erase(const std::string& erased_obj_id, dummy<Guest>)
     std::erase_if(stays, StayHasGuest(erased_obj_id));
     // notify observers
 }
+
+bool StaySystem::check_room(const Room& room) const
+{
+    return (rooms_list -> find_by_id(room.get_id())).has_value();
+}
