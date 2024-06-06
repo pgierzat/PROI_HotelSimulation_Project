@@ -15,6 +15,7 @@ class StaySystem : public OtherSystemObserver<Room>, public OtherSystemObserver<
         using GObserver = OtherSystemObserver<Guest>;
     public:
         StaySystem(GuestSystem&, RoomsList&);
+        StaySystem(const StaySystem&) = delete;
         void set_time(const jed_utils::datetime&);
         void add_stay(const Stay&);
         void remove_stay(const Stay&);

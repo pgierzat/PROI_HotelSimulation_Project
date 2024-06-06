@@ -20,6 +20,7 @@ class ServiceSystem
         using TS = TaskSystem;
     public:
         ServiceSystem(const GS&, const WS&, const RL&, SS&, TS&);
+        ServiceSystem(const ServiceSystem&) = delete;
         std::optional<const Service*> find_by_id(const std::string& id) const noexcept;
         const Service& get_by_id(const std::string& id) const;
         template <SupportedService T>

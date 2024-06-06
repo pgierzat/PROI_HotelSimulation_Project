@@ -15,6 +15,7 @@ class HotelSystem
 {
     public:
         HotelSystem();
+        HotelSystem(const HotelSystem&) = delete;
         const Clock& get_ck() const noexcept;
         const jed_utils::datetime& get_time() const noexcept;
         const GuestSystem& get_cg_system() const noexcept;

@@ -12,6 +12,7 @@ class GuestSystem : public OtherSystemPublisher<Guest>
 {
     public:
         GuestSystem() = default;
+        GuestSystem(const GuestSystem&) = delete;
         void add_guest(const Guest&);
         void remove_guest(const Guest&) noexcept;
         std::optional<const Guest*> find_by_id(const std::string& id) const noexcept;

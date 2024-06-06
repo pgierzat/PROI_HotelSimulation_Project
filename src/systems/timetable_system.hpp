@@ -19,6 +19,7 @@ class TimetableSystem
 {
     public:
         TimetableSystem(WorkerSystem&);
+        TimetableSystem(const TimetableSystem&) = delete;
         const WorkerSystem& get_cw_system() const noexcept;
         const jed_utils::datetime& get_time() const noexcept;
         void set_time(const jed_utils::datetime&);

@@ -13,6 +13,7 @@ class PaycheckSystem
 {
     public:
         PaycheckSystem(WorkerSystem&, TimetableSystem&);
+        PaycheckSystem(const PaycheckSystem&) = delete;
         void set_time(const jed_utils::datetime&);
         const std::vector<Paycheck>& get_paychecks() const noexcept;
     private:
