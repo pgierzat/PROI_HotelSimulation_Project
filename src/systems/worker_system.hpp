@@ -18,10 +18,10 @@ class WorkerSystem
 {
     public:
         WorkerSystem() = default;
-        WorkerSystem(std::vector<std::unique_ptr<Worker>> workers);
         WorkerSystem(const WorkerSystem&) = delete;
         template<SupportedWorker T>
             void add_worker(const T&);
+        void add_worker(const Worker&);
         std::optional<const Worker*> find_by_id(std::string id) const noexcept;
         const Worker& get_by_id(std::string id) const;
         std::vector<const Worker*> get_workers() const;

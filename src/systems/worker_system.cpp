@@ -3,9 +3,26 @@
 #include <concepts>
 #include "worker_system.hpp"
 
-WorkerSystem::WorkerSystem(std::vector<std::unique_ptr<Worker>> workers) : workers(std::move(workers)) {}
 
-WorkerSystem::WorkerSystem(std::vector<std::unique_ptr<Worker>> workers) : workers(std::move(workers)) {}
+void WorkerSystem::add_worker(const Worker& worker)
+{
+    auto cook = dynamic_cast<const Cook*>(&worker);
+    if (cook)
+        add_worker(*cook);
+    return;
+    auto maid = dynamic_cast<const Maid*>(&worker);
+    if (maid)
+        add_worker(*maid);
+    return;
+    auto receptionist = dynamic_cast<const Receptionist*>(&worker);
+    if (receptionist)
+        add_worker(*receptionist);
+    return;
+    auto waiter = dynamic_cast<const Waiter*>(&worker);
+    if (waiter)
+        add_worker(*waiter);
+    throw UnsupportedWorkerTypeError{"Tried to add a Room of unknown type to RoomsList.", worker.get_type()};
+}
 
 std::optional<const Worker*> WorkerSystem::find_by_id(std::string id) const noexcept
 {
