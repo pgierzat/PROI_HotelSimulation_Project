@@ -17,16 +17,9 @@ class RoomsList : public OtherSystemPublisher<Room>
         std::list<std::unique_ptr<Room>> rooms;
     public:
         RoomsList() = default;
-        RoomsList(std::list<std::unique_ptr<Room>> rooms);
-        void add_room(unsigned number);
-        void add_one_room(unsigned number);
-        void add_two_room(unsigned number);
-        void add_three_room(unsigned number);
-        void add_four_room(unsigned number);
-        void add_two_appartment(unsigned number);
-        void add_four_appartment(unsigned number);
         template<SupportedRoom T>
             void add_room(const T&);
+        void add_room(const Room&);
         Amount calculate_total_price() const noexcept;
         unsigned calculate_total_rooms() const noexcept;
         std::optional<const Room*> find_by_id(const std::string& number) const noexcept;

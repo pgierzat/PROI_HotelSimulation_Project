@@ -12,80 +12,33 @@
 #include <algorithm>
 #include <iostream>
 
-RoomsList::RoomsList(std::list<std::unique_ptr<Room>> rooms) : rooms(std::move(rooms)) {}
 
-void RoomsList::add_room(unsigned number)
+void RoomsList::add_room(const Room& room)
 {
-    if (room_exists(number)) {
-        std::cout << "Room with number " << number << " already exists.\n";
-        return;
-    }
-    std::unique_ptr<Room> added_room = std::make_unique<Room>(number, 1);
-    rooms.push_back(std::move(added_room));
+    auto one_room = dynamic_cast<const OneRoom*>(&room);
+    if (one_room)
+        add_room(*one_room);
+    return;
+    auto two_room = dynamic_cast<const TwoRoom*>(&room);
+    if (two_room)
+        add_room(*two_room);
+    return;
+    auto three_room = dynamic_cast<const ThreeRoom*>(&room);
+    if (three_room)
+        add_room(*three_room);
+    return;
+    auto four_room = dynamic_cast<const FourRoom*>(&room);
+    if (four_room)
+        add_room(*four_room);
+    return;
+    auto two_appartment = dynamic_cast<const TwoAppartment*>(&room);
+    if (two_appartment)
+        add_room(*two_appartment);
+    auto four_appartment = dynamic_cast<const FourAppartment*>(&room);
+    if (four_appartment)
+        add_room(*four_appartment);
+    throw UnsupportedRoomTypeError{"Tried to add a Room of unknown type to RoomsList.", room.get_type()};
 }
-
-void RoomsList::add_one_room(unsigned number)
-{
-    if (room_exists(number)) {
-        std::cout << "Room with number " << number << " already exists.\n";
-        return;
-    }
-    std::unique_ptr<OneRoom> added_one_room = std::make_unique<OneRoom>(number);
-    rooms.push_back(std::move(added_one_room));
-}
-
-void RoomsList::add_two_room(unsigned number)
-{
-    if (room_exists(number)) {
-        std::cout << "Room with number " << number << " already exists.\n";
-        return;
-    }
-    std::unique_ptr<TwoRoom> added_two_room = std::make_unique<TwoRoom>(number);
-    rooms.push_back(std::move(added_two_room));
-}
-
-void RoomsList::add_three_room(unsigned number)
-{
-    if (room_exists(number)) {
-        std::cout << "Room with number " << number << " already exists.\n";
-        return;
-    }
-    std::unique_ptr<ThreeRoom> added_three_room = std::make_unique<ThreeRoom>(number);
-    rooms.push_back(std::move(added_three_room));
-}
-
-void RoomsList::add_four_room(unsigned number)
-{
-    if (room_exists(number)) {
-        std::cout << "Room with number " << number << " already exists.\n";
-        return;
-    }
-    std::unique_ptr<FourRoom> added_four_room = std::make_unique<FourRoom>(number);
-    rooms.push_back(std::move(added_four_room));
-}
-
-void RoomsList::add_two_appartment(unsigned number)
-{
-    if (room_exists(number)) {
-        std::cout << "Room with number " << number << " already exists.\n";
-        return;
-    }
-    std::unique_ptr<TwoAppartment> added_two_apartment = std::make_unique<TwoAppartment>(number);
-    rooms.push_back(std::move(added_two_apartment));
-}
-
-void RoomsList::add_four_appartment(unsigned number)
-{
-    if (room_exists(number)) {
-        std::cout << "Room with number " << number << " already exists.\n";
-        return;
-    }
-    std::unique_ptr<FourAppartment> added_four_apartment = std::make_unique<FourAppartment>(number);
-    rooms.push_back(std::move(added_four_apartment));
-}
-
-
-RoomsList::RoomsList(std::list<std::unique_ptr<Room>> rooms) : rooms(std::move(rooms)) {}
 
 Amount RoomsList::calculate_total_price() const noexcept
 {
