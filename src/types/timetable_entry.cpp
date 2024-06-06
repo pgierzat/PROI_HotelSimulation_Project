@@ -4,15 +4,15 @@
 
 const WorkerSystem* TimetableEntry::w_system = nullptr;
 
-TimetableEntry::TimetableEntry(const Worker& worker, const jed_utils::datetime& date, Shift shift) : 
-    worker_id{worker.get_id()}, date{date}, shift{shift}
+TimetableEntry::TimetableEntry(const std::string& id, const Worker& worker, const jed_utils::datetime& date, Shift shift) : 
+    id{id}, worker_id{worker.get_id()}, date{date}, shift{shift}
 {
     (this -> date).trunkate();
     check_worker_shift(worker, shift);
 }
 
-TimetableEntry::TimetableEntry(const jed_utils::datetime& date, Shift shift) :
-    worker_id{}, date{date}, shift{shift}
+TimetableEntry::TimetableEntry(const std::string& id, const jed_utils::datetime& date, Shift shift) :
+    id{id}, worker_id{}, date{date}, shift{shift}
 {
     (this -> date).trunkate();
 }
@@ -21,6 +21,8 @@ const Worker& TimetableEntry::get_worker() const
 {
     return w_system -> get_by_id(worker_id);
 }
+
+const std::string& TimetableEntry::get_id() const noexcept { return id;}
 
 jed_utils::datetime TimetableEntry::get_date() const noexcept { return date; }
 
