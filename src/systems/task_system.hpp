@@ -11,6 +11,7 @@ class TaskSystem
 {
     public:
         TaskSystem(WorkerSystem&, RoomsList&, GuestSystem&);
+        TaskSystem(const TaskSystem&) = delete;
         void assign_task(const Task&, const Worker&);
         void unassign_task(const Task&);
         void complete_task(const Task&);
