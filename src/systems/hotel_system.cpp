@@ -7,7 +7,7 @@ HotelSystem::HotelSystem() :
     t_system{w_system, rooms_list, g_system},
     sc_system{g_system, w_system, rooms_list, s_system, t_system} {}
 
-const Clock& HotelSystem::get_ck() const noexcept { return ck; }
+const Clock& HotelSystem::get_cck() const noexcept { return ck; }
 const jed_utils::datetime& HotelSystem::get_time() const noexcept { return ck.get_time(); }
 const GuestSystem& HotelSystem::get_cg_system() const noexcept { return g_system; }
 const WorkerSystem& HotelSystem::get_cw_system() const noexcept { return w_system; }
@@ -18,6 +18,8 @@ const PaycheckSystem& HotelSystem::get_cpc_system() const noexcept { return pc_s
 const TaskSystem& HotelSystem::get_ct_system() const noexcept { return t_system; }
 const ServiceSystem& HotelSystem::get_csc_system() const noexcept { return sc_system; }
 
+Clock& HotelSystem::get_ck() noexcept { return ck; }
+void HotelSystem::set_time(const jed_utils::datetime time) { ck.set_time(time); }
 GuestSystem& HotelSystem::get_g_system() noexcept { return g_system; }
 WorkerSystem& HotelSystem::get_w_system() noexcept { return w_system; }
 RoomsList& HotelSystem::get_rooms_list() noexcept { return rooms_list; }
