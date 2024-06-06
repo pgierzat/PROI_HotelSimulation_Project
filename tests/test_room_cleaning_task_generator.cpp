@@ -11,9 +11,8 @@
 
 TEST_CASE("Test RoomCleaningTaskGenerator")
 {
-    auto h_system = HotelSystem{};
     jed_utils::datetime time0{2024, 5, 19};
-    h_system.get_ck().set_time(time0);
+    auto h_system = HotelSystem{time0};
     auto& rooms_list = h_system.get_rooms_list();
     rooms_list.add_room(TwoAppartment{"237"});
     rooms_list.add_room(OneRoom{"238"});
