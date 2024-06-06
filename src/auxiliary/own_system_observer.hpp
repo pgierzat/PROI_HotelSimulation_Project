@@ -7,7 +7,7 @@ template<typename T>
 class OwnSystemObserver
 {
     public:
-        OwnSystemObserver(const std::string& observed_id);
+        OwnSystemObserver(const T& observed);
         void notify_realloc(const T& new_obj);
         void notify_erase() noexcept;
         const T& get_observed() const;
@@ -19,8 +19,8 @@ class OwnSystemObserver
 
 
 template<typename T>
-OwnSystemObserver<T>::OwnSystemObserver(const std::string& observed_id) :
-    observed_id{observed_id} {}
+OwnSystemObserver<T>::OwnSystemObserver(const T& observed) :
+    observed{&observed}, observed_id{observed.get_id()} {}
 
 template<typename T>
 void OwnSystemObserver<T>::notify_realloc(const T& new_obj)
