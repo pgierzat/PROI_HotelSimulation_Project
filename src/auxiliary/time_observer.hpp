@@ -4,7 +4,6 @@
 #include "../types/datetime.h"
 
 
-
 class TimeObserver
 {
     public:

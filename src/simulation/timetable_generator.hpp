@@ -3,6 +3,7 @@
 
 #include "generator.hpp"
 #include "../systems/timetable_system.hpp"
+#include "../types/timetable_entry.hpp"
 #include "../systems/worker_system.hpp"
 #include "../types/datetime.h"
 #include "../utilities/concepts.hpp"

@@ -10,9 +10,9 @@ const StaySystem* Stay::s_system = nullptr;
 
 Stay::Stay(const std::string& id, const Room& room, const Guest& main_guest,
            const jed_utils::datetime& start, const jed_utils::datetime& end) :
-    room_observer{room.get_id()}, main_guest_id{main_guest.get_id()}, id{id}, start{start}, end{end}
+    id{id}, room_observer{room}, main_guest_id{main_guest.get_id()}, start{start}, end{end}
 {
-    guest_observers.emplace_back(main_guest_id);
+    guest_observers.emplace_back(main_guest);
     (this -> start).trunkate();
     (this -> end).trunkate();
     validate_duration(start, end);
@@ -96,7 +96,7 @@ void Stay::add_guest(const Guest& guest)
         [&](const auto& obs){ return obs.get_observed().get_id() == id; });
     if (p != guest_observers.end())
         throw std::invalid_argument("Tried to add duplicate Guest to a Stay.");
-    guest_observers.emplace_back(guest.get_id());
+    guest_observers.emplace_back(guest);
 }
 
 void Stay::remove_guest(const Guest& guest)
