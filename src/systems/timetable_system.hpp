@@ -1,5 +1,6 @@
 #include <vector>
 #include <memory>
+#include <optional>
 #include "../auxiliary/time_observer.hpp"
 #include "../utilities/useful.hpp"
 #include "../types/timetable_entry.hpp"

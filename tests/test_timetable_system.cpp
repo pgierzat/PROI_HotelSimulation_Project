@@ -5,6 +5,7 @@
 #include "../src/types/datetime.h"
 #include "../src/functions/tt_system_aux.hpp"
 #include "../src/functions/vec_to_pvec.hpp"
+#include "../src/functions/equal_operators.hpp"
 #include <ranges>
 
 
@@ -16,15 +17,14 @@ TEST_CASE("Test TimetableSystem")
     Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
     w_system.add_worker(Receptionist{"id1", "name1", pay});
     w_system.add_worker(Waiter{"id2", "name2", pay});
-    auto& waiter = w_system.get_by_id("id1"); 
-    auto& receptionist = w_system.get_by_id("id2"); 
+    auto& receptionist = w_system.get_by_id("id1"); 
+    auto& waiter = w_system.get_by_id("id2"); 
     TimetableSystem tt_system{w_system};
     jed_utils::datetime date0{ 2024, 4, 10 };
     Clock ck{date0};
     ck.subscribe(tt_system);
-    const auto& entries = tt_system.get_entries();
 
-    SECTION("init") { REQUIRE(entries.empty()); }
+    SECTION("init") { REQUIRE( tt_system.get_entries().empty()); }
     
     jed_utils::datetime date1{ 2024, 4, 11 };
     jed_utils::datetime date2{ 2024, 4, 12 };
@@ -39,10 +39,10 @@ TEST_CASE("Test TimetableSystem")
     SECTION("simple use")
     {
         std::vector expected1{entry1, entry2, entry3};
-        REQUIRE( entries == expected1 );
+        REQUIRE( tt_system.get_entries() == expected1 );
         tt_system.remove_entry(entry1);
         std::vector expected2{entry2, entry3};
-        REQUIRE( entries == expected2 );
+        REQUIRE( tt_system.get_entries() == expected2 );
     }
 
     SECTION("add entry of an unknown worker")
@@ -76,23 +76,22 @@ TEST_CASE("Test TimetableSystem")
 
     SECTION("interval entries")
     {
-        auto int_entries = interval_entries(vec_to_pvec(entries), TimeInterval{date2, date3});
+        auto int_entries = interval_entries(tt_system.get_entries(), TimeInterval{date2, date3});
         std::vector exp{entry2, entry3};
-        REQUIRE( std::ranges::equal(int_entries, exp, [](const auto e1, const auto& e2) { return *e1 == e2;}) );
+        REQUIRE( int_entries == exp );
     }
 
     SECTION("month entries")
     {
-        auto int_entries = month_entries(vec_to_pvec(entries), 2024y / April);
+        auto int_entries = month_entries(tt_system.get_entries(), 2024y / April);
         std::vector<TimetableEntry> exp{entry1, entry2};
-        REQUIRE( std::ranges::equal(int_entries, exp, [](const auto e1, const auto& e2) { return *e1 == e2;}) );
+        REQUIRE( int_entries == exp );
     }
 
     SECTION("worker entries")
     {
-        auto int_entries = worker_entries(vec_to_pvec(entries), waiter);
         std::vector<TimetableEntry> exp{entry2, entry3};
-        REQUIRE( std::ranges::equal(int_entries, exp, [](const auto e1, const auto& e2) { return *e1 == e2;}) );
+        REQUIRE( worker_entries(tt_system.get_entries(), waiter) == exp );
     }
 
     SECTION("worker available")
@@ -101,6 +100,6 @@ TEST_CASE("Test TimetableSystem")
         ck.set_time(during);
         auto w_available = tt_system.workers_available();
         std::vector<const Worker*> exp{&receptionist};
-        REQUIRE( std::ranges::equal(w_available, exp, [](const auto e1, const auto e2) { return *e1 == *e2;}) );
+        REQUIRE( w_available  == exp );
     }
 }

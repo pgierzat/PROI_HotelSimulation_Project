@@ -33,7 +33,7 @@ const std::vector<Paycheck>& PaycheckSystem::get_paychecks() const noexcept { re
 void PaycheckSystem::calculate_paychecks()
 {
     paychecks.clear();
-    auto all_entries = vec_to_pvec(tt_system -> get_entries());
+    auto all_entries = tt_system -> get_entries();
     for (const Worker* worker : w_system -> get_workers())
     {
         auto prev_month = time.get_year_month() - std::chrono::months{1};

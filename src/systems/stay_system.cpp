@@ -8,6 +8,7 @@
 #include "../functions/has_elem.hpp"
 #include "../functions/s_system_aux.hpp"
 #include <ranges>
+#include <optional>
 #include <algorithm>
 
 const jed_utils::timespan StaySystem::checkout_time = jed_utils::timespan{0, 10, 0, 0};
@@ -55,7 +56,7 @@ void StaySystem::add_stay(const Stay& stay)
     stay_obj.set_status(StayStatus::booked);
 }
 
-void StaySystem::remove_stay(const Stay& stay) { std::erase(stays, stay); }
+void StaySystem::remove_stay(const Stay& stay) { std::erase_if(stays, [&](const auto& otr){ return *otr == stay; }); }
 
 std::optional<const Stay*> StaySystem::find_by_id(const std::string& id) const noexcept
 {
@@ -76,16 +77,6 @@ const Stay& StaySystem::get_by_id(const std::string& id) const
 std::vector<const Stay*> StaySystem::get_stays() const noexcept
 {
     return vec_to_pvec(stays);
-}
-
-void StaySystem::add_guest_to_stay(const Stay& stay, const Guest& guest)
-{
-    if (not g_system -> find_by_id(guest.get_id()))
-        throw GuestNotInSystemError("Tried to add an unknown Guest to a Stay", guest);
-    auto& stay_obj = get_stay(stay);
-    stay_obj.add_guest(guest);
-    const auto& id = guest.get_id();
-    stay_obj.get_guest_observer(id).notify_realloc(g_system -> get_by_id(id));
 }
 
 void StaySystem::check_in(const Stay& stay)

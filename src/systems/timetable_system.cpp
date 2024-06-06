@@ -35,7 +35,10 @@ void TimetableSystem::add_entry(const TimetableEntry& entry)
     entries.push_back(std::make_unique<TimetableEntry>(entry));
 }
 
-void TimetableSystem::remove_entry(const TimetableEntry& entry) { std::erase(entries, entry); }
+void TimetableSystem::remove_entry(const TimetableEntry& entry)
+{
+    std::erase_if(entries, [&](const auto& otr){ return *otr == entry; });
+}
 
 std::optional<const TimetableEntry*> TimetableSystem::find_by_id(const std::string& id) const
 {

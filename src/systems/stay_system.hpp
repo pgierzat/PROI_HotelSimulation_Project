@@ -23,7 +23,6 @@ class StaySystem : public OtherSystemObserver<Room>, public OtherSystemObserver<
         std::optional<const Stay*> find_by_id(const std::string&) const noexcept;
         const Stay& get_by_id(const std::string&) const;
         std::vector<const Stay*> get_stays() const noexcept;
-        void add_guest_to_stay(const Stay&, const Guest&);
         void check_in(const Stay&);
         void check_out(const Stay&);
         void notify_realloc(dummy<Room>) override;

@@ -1,5 +1,6 @@
 #include "catch_amalgamated.hpp"
 #include "../src/systems/paycheck_system.hpp"
+#include "../src/functions/equal_operators.hpp"
 
 TEST_CASE("Test PaycheckSystem")
 {
@@ -12,19 +13,17 @@ TEST_CASE("Test PaycheckSystem")
 
     Amount amount1{3200, 0};
     Pay salary1{PaycheckMethod::Salary, amount1};
-    Waiter waiter{"id1", "name1", salary1};
-    w_system.add_worker(waiter);
+    w_system.add_worker(Waiter{"id1", "name1", salary1});
     Amount amount2{20, 0};
     Pay wage1{PaycheckMethod::Wage, amount2};
-    Maid maid{"id2", "name2", wage1};
-    w_system.add_worker(maid);
+    w_system.add_worker(Maid{"id2", "name2", wage1});
+    auto& waiter = w_system.get_by_id("id1");
+    auto& maid = w_system.get_by_id("id2");
 
     jed_utils::datetime date1{2024y/May/12d};
-    TimetableEntry entry1{waiter, date1, Shift::I};
-    tt_system.add_entry(entry1);
+    tt_system.add_entry(TimetableEntry{"id1", waiter, date1, Shift::I});
     jed_utils::datetime date2{2024y/May/14d};
-    TimetableEntry entry2{maid, date2, Shift::II};
-    tt_system.add_entry(entry2);
+    tt_system.add_entry(TimetableEntry{"id2", maid, date2, Shift::II});
 
     SECTION("simple use")
     {

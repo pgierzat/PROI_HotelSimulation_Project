@@ -22,7 +22,7 @@ TEST_CASE("Test TimetableEntry")
         jed_utils::datetime date_long{ 2024, 4, 11, 2, 32, 55};
         jed_utils::datetime expected_start{ 2024, 4, 11, 22};
         jed_utils::datetime expected_end{ 2024, 4, 12, 6};
-        TimetableEntry entry{receptionist, date_long, Shift::III};
+        TimetableEntry entry{"id1", receptionist, date_long, Shift::III};
         REQUIRE( entry.get_date() == date );
         REQUIRE( entry.get_worker() == receptionist );
         REQUIRE( entry.get_shift() == Shift::III );
@@ -35,7 +35,7 @@ TEST_CASE("Test TimetableEntry")
         Maid maid{"id2", "name2", pay};
         w_system.add_worker(maid);
         // maids work 2 shifts
-        REQUIRE_THROWS( TimetableEntry{maid, date, Shift::III} );
+        REQUIRE_THROWS( TimetableEntry{"id2", maid, date, Shift::III} );
     }
 
     SECTION("opearator ==")
@@ -45,8 +45,8 @@ TEST_CASE("Test TimetableEntry")
         Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
         Receptionist receptionist2{"id2", "name2", pay};
         w_system.add_worker(receptionist2);
-        TimetableEntry entry1{receptionist2, date1, Shift::II};
-        TimetableEntry entry2{receptionist2, date2, Shift::II};
+        TimetableEntry entry1{"id1", receptionist2, date1, Shift::II};
+        TimetableEntry entry2{"id2", receptionist2, date2, Shift::II};
         REQUIRE( entry1 == entry2 );
         TimetableEntry entry3 = entry1;
         REQUIRE( entry1 == entry3 );
