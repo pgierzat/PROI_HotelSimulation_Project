@@ -7,6 +7,10 @@ SameWorker::SameWorker(const Worker& worker) : worker{worker} {}
 
 bool SameWorker::operator()(const TimetableEntry& entry) { return entry.get_worker() == worker; }
 
+bool SameWorker::operator()(const std::unique_ptr<TimetableEntry>& entry) {
+    return entry -> get_worker() == worker;
+}
+
 ShiftInInterval::ShiftInInterval(const Worker& worker, const TimeInterval& interval) :
     same_worker{worker}, interval{interval} {}
 
@@ -15,13 +19,23 @@ bool ShiftInInterval::operator()(const TimetableEntry& entry)
     return same_worker(entry) && is_in(entry.get_start(), interval);
 }
 
+bool ShiftInInterval::operator()(const std::unique_ptr<TimetableEntry>& entry)
+{
+    return same_worker(entry) && is_in(entry -> get_start(), interval);
+}
+
 TooShortBreak::TooShortBreak(const TimeInterval& interval, jed_utils::timespan minimal_break) :
     interval{interval}, minimal_break{minimal_break} {}
 
 bool TooShortBreak::operator()(const TimetableEntry& entry)
 {
     return distance( interval, entry.get_interval() ) < minimal_break;
-} 
+}
+
+bool TooShortBreak::operator()(const std::unique_ptr<TimetableEntry>& entry)
+{
+    return distance( interval, entry -> get_interval() ) < minimal_break;
+}
 
 std::vector<const TimetableEntry*> interval_entries(const std::vector<const TimetableEntry*>& entries,
     const TimeInterval& interval)

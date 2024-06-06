@@ -11,6 +11,7 @@ class SameWorker
     public:
         SameWorker(const Worker&);
         bool operator()(const TimetableEntry&);
+        bool operator()(const std::unique_ptr<TimetableEntry>&);
     private:
         const Worker& worker;
 };
@@ -20,6 +21,7 @@ class ShiftInInterval
     public:
         ShiftInInterval(const Worker&, const TimeInterval&);
         bool operator()(const TimetableEntry&);
+        bool operator()(const std::unique_ptr<TimetableEntry>&);
     private:
         SameWorker same_worker;
         TimeInterval interval;
@@ -30,6 +32,7 @@ class TooShortBreak
     public:
         TooShortBreak(const TimeInterval&, jed_utils::timespan minimal_break);
         bool operator()(const TimetableEntry&);
+        bool operator()(const std::unique_ptr<TimetableEntry>&);
     private:
         TimeInterval interval;
         jed_utils::timespan minimal_break;
