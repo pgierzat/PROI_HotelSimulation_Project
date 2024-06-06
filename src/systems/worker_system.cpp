@@ -3,6 +3,7 @@
 #include <concepts>
 #include "worker_system.hpp"
 
+WorkerSystem::WorkerSystem(std::vector<std::unique_ptr<Worker>> workers) : workers(std::move(workers)) {}
 
 std::optional<const Worker*> WorkerSystem::find_by_id(std::string id) const noexcept
 {
@@ -63,4 +64,4 @@ Worker& WorkerSystem::validate_worker(const Worker& worker)
     if (p == workers.end())
         throw WorkerNotInSystemError("Unsuccesfull worker validation", worker);
     return **p;
-}    
+}
