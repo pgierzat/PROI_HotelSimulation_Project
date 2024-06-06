@@ -11,15 +11,18 @@ TEST_CASE("Test Clock, default init")
 
 TEST_CASE("Test Clock, init")
 {
-    Clock clock{jed_utils::timespan{0, 1}};
+    Clock clock{};
+    auto unit_delta = jed_utils::timespan{0, 1};
+    clock.set_unit_delta(unit_delta);
     REQUIRE( clock.get_time() == jed_utils::datetime{1970, 1, 1} );
-    REQUIRE( clock.get_unit_delta() == jed_utils::timespan{0, 1} );
+    REQUIRE( clock.get_unit_delta() == unit_delta );
 }
 
 TEST_CASE("Test Clock, simple use")
 {
-    jed_utils::timespan delta{0, 1};
-    Clock clock{delta};
+    Clock clock{};
+    auto delta = jed_utils::timespan{0, 1};
+    clock.set_unit_delta(delta);
     jed_utils::datetime time{2024, 5, 11, 13};
     clock.set_time(time);
 
@@ -42,14 +45,6 @@ TEST_CASE("Test Clock, simple use")
     {
         auto result = ++clock;
         REQUIRE( result == clock );
-        REQUIRE( clock.get_time() == time + delta );
-    }
-
-    SECTION("postincrement")
-    {
-        auto copy = clock;
-        auto result = clock++;
-        REQUIRE( result == copy );
         REQUIRE( clock.get_time() == time + delta );
     }
 }

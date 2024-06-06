@@ -5,7 +5,8 @@
 
 TEST_CASE("Test TimetableGenerator")
 {
-    auto h_system = HotelSystem{};
+    auto time0 = jed_utils::datetime{2024, 6, 1};    // saturday
+    auto h_system = HotelSystem{time0};
     auto& w_system = h_system.get_w_system();
     auto pay = Pay{PaycheckMethod::Salary, Amount{3200, 0}};
     auto worker1 = Waiter{"id1", "name1",  pay};
@@ -37,8 +38,6 @@ TEST_CASE("Test TimetableGenerator")
     w_system.add_worker(worker13);
     w_system.add_worker(worker14);
     auto& tt_system = h_system.get_tt_system();
-    auto time0 = jed_utils::datetime{2024, 6, 1};    // saturday
-    h_system.set_time(time0);
     auto gen = TimetableGenerator{h_system};
     REQUIRE(tt_system.get_entries().empty());
 
