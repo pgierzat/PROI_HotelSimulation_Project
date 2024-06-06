@@ -1,10 +1,12 @@
 #include "catch_amalgamated.hpp"
 #include "../src/simulation/timetable_generator.hpp"
+#include "../src/systems/hotel_system.hpp"
 
 
 TEST_CASE("Test TimetableGenerator")
 {
-    auto w_system = WorkerSystem{};
+    auto h_system = HotelSystem{};
+    auto& w_system = h_system.get_w_system();
     auto pay = Pay{PaycheckMethod::Salary, Amount{3200, 0}};
     auto worker1 = Waiter{"id1", "name1",  pay};
     auto worker2 = Waiter{"id2", "name2",  pay};
@@ -34,9 +36,10 @@ TEST_CASE("Test TimetableGenerator")
     w_system.add_worker(worker12);
     w_system.add_worker(worker13);
     w_system.add_worker(worker14);
-    auto tt_system = TimetableSystem{w_system};
+    auto& tt_system = h_system.get_tt_system();
     auto time0 = jed_utils::datetime{2024, 6, 1};    // saturday
-    auto gen = TimetableGenerator{time0, tt_system, w_system};
+    h_system.set_time(time0);
+    auto gen = TimetableGenerator{h_system};
     REQUIRE(tt_system.get_entries().empty());
 
     SECTION("time test")

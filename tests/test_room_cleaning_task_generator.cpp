@@ -1,5 +1,6 @@
 #include "catch_amalgamated.hpp"
 #include "../src/simulation/room_cleaning_task_generator.hpp"
+#include "../src/systems/hotel_system.hpp"
 #include "../src/systems/guest_system.hpp"
 #include "../src/systems/worker_system.hpp"
 #include "../src/rooms/hpp/rooms_list.hpp"
@@ -10,16 +11,16 @@
 
 TEST_CASE("Test RoomCleaningTaskGenerator")
 {
-    auto g_system = GuestSystem{};
-    auto w_system = WorkerSystem{};
-    auto rooms_list = RoomsList{};
+    auto h_system = HotelSystem{};
+    jed_utils::datetime time0{2024, 5, 19};
+    h_system.get_ck().set_time(time0);
+    auto& rooms_list = h_system.get_rooms_list();
     rooms_list.add_room(TwoAppartment{"237"});
     rooms_list.add_room(OneRoom{"238"});
     const auto& room1 = rooms_list.get_by_id("237");
     const auto& room2 = rooms_list.get_by_id("238");
-    auto t_system = TaskSystem{w_system, rooms_list, g_system};
-    jed_utils::datetime time0{2024, 5, 19};
-    auto gen = RoomCleaningTaskGenerator{t_system, rooms_list, time0};
+    auto& t_system = h_system.get_t_system();
+    auto gen = RoomCleaningTaskGenerator{h_system};
 
     SECTION("time test")
     {
