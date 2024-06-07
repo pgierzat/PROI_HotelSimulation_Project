@@ -5,8 +5,8 @@
 #include "../types/guest.hpp"
 #include <vector>
 #include <optional>
+#include <memory>
 
-class HotelSystem;
 
 class GuestSystem : public OtherSystemPublisher<Guest>
 {
@@ -17,9 +17,9 @@ class GuestSystem : public OtherSystemPublisher<Guest>
         void remove_guest(const Guest&) noexcept;
         std::optional<const Guest*> find_by_id(const std::string& id) const noexcept;
         const Guest& get_by_id(const std::string& id) const;
-        const std::vector<Guest>& get_guests() const noexcept;
+        std::vector<const Guest*> get_guests() const noexcept;
     private:
-        std::vector<Guest> guests;
+        std::vector<std::unique_ptr<Guest>> guests;
 };
 
 #endif
