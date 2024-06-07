@@ -14,6 +14,7 @@ class OwnSystemObserver
         const T& get() const;
         const std::string& get_id() const noexcept;
         explicit operator bool() const noexcept;
+        void set(const T&);
     private:
         const T* observed = nullptr;
         std::string observed_id;
@@ -21,8 +22,8 @@ class OwnSystemObserver
 
 
 template<typename T>
-OwnSystemObserver<T>::OwnSystemObserver(const T& observed):
-    observed{&observed}, observed_id{observed.get_id()} {}
+OwnSystemObserver<T>::OwnSystemObserver(const T& obj):
+    observed{&obj}, observed_id{obj.get_id()} {}
 
 template<typename T>
 void OwnSystemObserver<T>::notify_realloc(const T& new_obj)
@@ -48,6 +49,13 @@ const T& OwnSystemObserver<T>::get() const
 
 template<typename T>
 const std::string& OwnSystemObserver<T>::get_id() const noexcept { return observed_id; }
+
+template<typename T>
+void OwnSystemObserver<T>::set(const T& obj)
+{
+    observed_id = obj.get_id();
+    observed = &obj;
+}
 
 template<typename T>
 OwnSystemObserver<T>::operator bool() const noexcept { return observed; }
