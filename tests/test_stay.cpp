@@ -37,6 +37,9 @@ TEST_CASE("Test Stay")
             REQUIRE( stay.get_room() == room1 );
             REQUIRE( stay.get_start() == jed_utils::datetime{2012, 12, 12} );
             REQUIRE( stay.get_end() == jed_utils::datetime{2012, 12, 14} );
+            auto interval = stay.get_interval();
+            REQUIRE( interval.get_start() == start + Stay::checkin_time);
+            REQUIRE( interval.get_end() == end + Stay::checkout_time);
         }
 
         SECTION("setters")

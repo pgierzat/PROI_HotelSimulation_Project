@@ -1,4 +1,5 @@
 #include "catch_amalgamated.hpp"
+#include "../src/systems/clock.hpp"
 #include "../src/systems/guest_system.hpp"
 #include "../src/systems/stay_system.hpp"
 #include "../src/rooms/hpp/rooms_list.hpp"
@@ -9,7 +10,8 @@
 
 TEST_CASE("test StaySystem")
 {
-    GuestSystem g_system{};
+    auto ck = Clock{};
+    auto g_system = GuestSystem{};
     Guest guest1{"id1", "name1"};
     Guest guest2{"id2", "name2"};
     g_system.add_guest(guest1);
@@ -19,7 +21,7 @@ TEST_CASE("test StaySystem")
     rooms_list.add_room(OneRoom{"217"});
     const auto& room1 = rooms_list.get_by_id("237");
     const auto& room2 = rooms_list.get_by_id("217");
-    StaySystem s_system{g_system, rooms_list};
+    StaySystem s_system{ck, g_system, rooms_list};
     jed_utils::datetime start1{2024, 5, 10};
     jed_utils::datetime end1{2024, 5, 14};
     jed_utils::datetime start2{2024, 5, 14};
@@ -85,13 +87,6 @@ TEST_CASE("test StaySystem")
         REQUIRE_THROWS_AS(s_system.add_stay(stay3), StayOverlapError);
     }
 
-    SECTION("stay interval")
-    {
-        auto interval = stay1.get_interval();
-        REQUIRE( interval.get_start() == start1 + StaySystem::checkin_time);
-        REQUIRE( interval.get_end() == end1 + StaySystem::checkout_time);
-    }
-
     SECTION("check-in and check-out")
     {
         jed_utils::datetime before{2024, 5, 10, 6};
@@ -102,60 +97,60 @@ TEST_CASE("test StaySystem")
 
         SECTION("check-in")
         {
-            s_system.set_time(during1);
+            ck.set_time(during1);
             s_system.check_in(stay1);
             REQUIRE(stay1.get_status() == StayStatus::checked_in);
         }
 
         SECTION("double check-in")
         {
-            s_system.set_time(during1);
+            ck.set_time(during1);
             s_system.check_in(stay1);
-            s_system.set_time(during2);
+            ck.set_time(during2);
             s_system.check_in(stay1);
             REQUIRE(stay1.get_status() == StayStatus::checked_in);
         }
 
         SECTION("check-in before and after")
         {
-            s_system.set_time(before);
+            ck.set_time(before);
             REQUIRE_THROWS_AS(s_system.check_in(stay1), StayStatusError);
-            s_system.set_time(after);
+            ck.set_time(after);
             REQUIRE_THROWS_AS(s_system.check_in(stay1), StayStatusError);
         }
 
         SECTION("check-out")
         {
-            s_system.set_time(during1);
+            ck.set_time(during1);
             s_system.check_in(stay1);
-            s_system.set_time(during2);
+            ck.set_time(during2);
             s_system.check_out(stay1);
             REQUIRE(stay1.get_status() == StayStatus::checked_out);
         }
 
         SECTION("double check-out")
         {
-            s_system.set_time(during1);
+            ck.set_time(during1);
             s_system.check_in(stay1);
-            s_system.set_time(during2);
+            ck.set_time(during2);
             s_system.check_out(stay1);
-            s_system.set_time(during3);
+            ck.set_time(during3);
             s_system.check_out(stay1);
             REQUIRE(stay1.get_status() == StayStatus::checked_out);
         }
 
         SECTION("check-in after check-out")
         {
-            s_system.set_time(during1);
+            ck.set_time(during1);
             s_system.check_in(stay1);
-            s_system.set_time(during2);
+            ck.set_time(during2);
             s_system.check_out(stay1);
             REQUIRE_THROWS_AS(s_system.check_in(stay1), StayStatusError);
         }
 
         SECTION("check-out before check-in")
         {
-            s_system.set_time(during1);
+            ck.set_time(during1);
             REQUIRE_THROWS_AS(s_system.check_out(stay1), StayStatusError);
         }
     }
