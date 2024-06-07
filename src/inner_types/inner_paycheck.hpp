@@ -10,6 +10,7 @@ class InnerPaycheck : public Paycheck
 {
     public:
         InnerPaycheck(const Paycheck&);
+        InnerPaycheck(const Worker&, const Amount&);
         OwnSystemObserver<Worker>& get_worker_observer() noexcept;
         const OwnSystemObserver<Worker>& get_cworker_observer() const noexcept;
 };
