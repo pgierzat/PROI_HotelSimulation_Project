@@ -2,28 +2,22 @@
 #include "../workers/worker.hpp"
 #include "../systems/worker_system.hpp"
 
-const WorkerSystem* Paycheck::w_system = nullptr;
-
 Paycheck::Paycheck(const Worker& worker, const Amount& amount) :
-    worker_id{worker.get_id()}, amount{amount} {}
+    w_observer{worker}, amount{amount} {}
 
-const Worker& Paycheck::get_worker() const
-{
-    return w_system -> get_by_id(worker_id);
-}
+const Worker& Paycheck::get_worker() const { return w_observer.get_observed(); }
+
+const std::string& Paycheck::get_worker_id() const { return w_observer.get_observed_id(); }
 
 Amount Paycheck::get_amount() const noexcept { return amount; }
 
 bool Paycheck::operator==(const Paycheck& other) const
 {
-    return worker_id == other.worker_id &&
+    return get_worker() == other.get_worker() &&
         amount == other.amount;
 }
 
-void Paycheck::set_w_system(const WorkerSystem& w_system)
-{
-    Paycheck::w_system = &w_system;
-}
+OwnSystemObserver<Worker>& Paycheck::get_w_observer() noexcept { return w_observer; }
 
 std::ostream& operator<<(std::ostream& os, const Paycheck& paycheck)
 {
