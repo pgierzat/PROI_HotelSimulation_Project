@@ -2,11 +2,13 @@
 #include "../utilities/errors.hpp"
 #include "../functions/tt_system_aux.hpp"
 #include "../functions/vec_to_pvec.hpp"
+#include "../functions/pc_system_aux.hpp"
 
 
 PaycheckSystem::PaycheckSystem(TimePublisher& publisher, WorkerSystem& w_system, TimetableSystem& tt_system) :
     w_system{&w_system}, tt_system{&tt_system}, time{publisher.get_time()}
 {
+    w_system.subscribe(*this);
     publisher.subscribe(*this);
 }
 
@@ -21,7 +23,11 @@ void PaycheckSystem::calculate_paychecks(std::chrono::year_month month)
         unsigned hours = hours_worked(all_entries, *worker, month);
         auto paycheck = worker -> calculate_paycheck(hours); 
         if (paycheck != Amount{0, 0})
+        {
             paychecks.emplace_back(*worker, paycheck);
+            
+        }
+            
     }
 }
 
@@ -41,4 +47,20 @@ void PaycheckSystem::notify(const jed_utils::datetime& time)
         w_system -> reset_stats();
     }
     this -> time = time;
+}
+
+void PaycheckSystem::notify_realloc(dummy<Worker>)
+{
+    for(auto& paycheck : paychecks)
+    {
+        auto& observer = paycheck.get_w_observer();
+        auto& id = observer.get_observed_id();
+        const auto& new_obj = w_system -> get_by_id(id);
+        observer.notify_realloc(new_obj);
+    }  
+}
+
+void PaycheckSystem::notify_erase(const std::string& erased_obj_id, dummy<Worker>)
+{
+    std::erase_if(paychecks, PaycheckSameWorkerID(erased_obj_id));
 }

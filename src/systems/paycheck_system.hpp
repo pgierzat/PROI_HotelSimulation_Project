@@ -11,13 +11,15 @@
 
 class HotelSystem;
 
-class PaycheckSystem : public TimeObserver
+class PaycheckSystem : public TimeObserver, public OtherSystemObserver<Worker>
 {
     public:
         PaycheckSystem(TimePublisher&, WorkerSystem&, TimetableSystem&);
         PaycheckSystem(const PaycheckSystem&) = delete;
         const std::vector<Paycheck>& get_paychecks() const noexcept;
         void notify(const jed_utils::datetime&) override;
+        void notify_realloc(dummy<Worker>);
+        void notify_erase(const std::string& erased_obj_id, dummy<Worker>);
     private:
         void calculate_paychecks(std::chrono::year_month);
         WorkerSystem* w_system;
