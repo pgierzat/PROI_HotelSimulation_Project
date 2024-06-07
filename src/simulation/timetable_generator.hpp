@@ -11,6 +11,8 @@
 #include <chrono>
 #include <utility>
 
+class HotelSystem;
+
 class TimetableGenerator : public Generator
 {
     using TTE = TimetableEntry;
