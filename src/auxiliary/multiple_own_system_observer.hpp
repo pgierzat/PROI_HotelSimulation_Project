@@ -18,7 +18,7 @@ class MultipleOwnSystemObserver
         const T& get_by_id(const std::string&) const;
         std::vector<const std::string*> get_ids() const noexcept;
         unsigned size() const noexcept;
-        void add_observed(const T&) noexcept;
+        void add_observed(const T&);
         void remove_observed(const T&) noexcept;
     private:
         std::optional<OwnSystemObserver<T>*> find_observer(const std::string& id);
@@ -60,7 +60,11 @@ std::optional<const T*> MultipleOwnSystemObserver<T>::find_by_id(const std::stri
 template<typename T>
 const T& MultipleOwnSystemObserver<T>::get_by_id(const std::string& id) const
 {
-    return get_observer(id).get();
+    auto p = std::ranges::find_if(observers,
+        [&](const auto& obs){ return obs.get_id() == id; });
+    if (p == observers.end())
+        throw MultipleOwnSystemObserverError<T>("Couldn't get observed object by id.", *this);
+    return p -> get();
 }
 
 template<typename T>
@@ -75,10 +79,10 @@ template<typename T>
 unsigned MultipleOwnSystemObserver<T>::size() const noexcept { return observers.size(); }
 
 template<typename T>
-void MultipleOwnSystemObserver<T>::add_observed(const T& obj) noexcept
+void MultipleOwnSystemObserver<T>::add_observed(const T& obj)
 {
     if (find_observer(obj.get_id()))
-        throw OwnSystemObserverError<T>("Tried to add duplicate observed object.", *this);
+        throw MultipleOwnSystemObserverError<T>("Tried to add duplicate observed object.", *this);
     observers.emplace_back(obj);
 }
 
@@ -91,10 +95,11 @@ void MultipleOwnSystemObserver<T>::remove_observed(const T& obj) noexcept
 template<typename T>
 std::optional<OwnSystemObserver<T>*> MultipleOwnSystemObserver<T>::find_observer(const std::string& id)
 {
-    auto obs_opt = find_by_id(id);
-    if (not obs_opt)
+    auto p = std::ranges::find_if(observers,
+        [&](const auto& obs){ return obs.get_id() == id; });
+    if (p != observers.end())
         return std::nullopt;
-    return const_cast<OwnSystemObserver<T>*>(obs_opt.value());
+    return &*p;
 }
 
 template<typename T>

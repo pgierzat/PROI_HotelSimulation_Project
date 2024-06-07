@@ -54,7 +54,6 @@ StayStatus Stay::get_status() const noexcept { return status; }
 
 void Stay::add_guest(const Guest& guest)
 {
-    const auto& id = guest.get_id();
     auto& room = get_room();
     if (GuestsObs::size() + 1 > room.getCapacity())
         throw RoomCapacityExceededError("Tried to add 'na waleta' Guest", *this);
