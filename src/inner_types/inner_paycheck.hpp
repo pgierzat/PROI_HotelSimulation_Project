@@ -6,10 +6,10 @@
 #include <vector>
 
 
-class InnePaycheck : public Paycheck
+class InnerPaycheck : public Paycheck
 {
     public:
-        InnePaycheck(const Paycheck&);
+        InnerPaycheck(const Paycheck&);
         OwnSystemObserver<Worker>& get_worker_observer() noexcept;
         const OwnSystemObserver<Worker>& get_cworker_observer() const noexcept;
 };

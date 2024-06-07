@@ -1,6 +1,6 @@
 #include "inner_paycheck.hpp"
 
 
-InnePaycheck::InnePaycheck(const Paycheck& paycheck) : Paycheck{paycheck} {}
-OwnSystemObserver<Worker>& InnePaycheck::get_worker_observer() noexcept { return *this; }
-const OwnSystemObserver<Worker>& InnePaycheck::get_cworker_observer() const noexcept { return *this; }
+InnerPaycheck::InnerPaycheck(const Paycheck& paycheck) : Paycheck{paycheck} {}
+OwnSystemObserver<Worker>& InnerPaycheck::get_worker_observer() noexcept { return *this; }
+const OwnSystemObserver<Worker>& InnerPaycheck::get_cworker_observer() const noexcept { return *this; }
