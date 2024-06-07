@@ -4,7 +4,7 @@
 #include "../auxiliary/other_system_observer.hpp"
 #include "../auxiliary/time_observer.hpp"
 #include "../auxiliary/time_publisher.hpp"
-#include "../types/stay.hpp"
+#include "../inner_types/inner_stay.hpp"
 #include "../utilities/errors.hpp"
 #include <memory>
 
@@ -33,13 +33,13 @@ class StaySystem : public OtherSystemObserver<Room>, public OtherSystemObserver<
         void notify_erase(const std::string& erased_obj_id, dummy<Guest>) override;
         bool check_room(const Room&) const;
     private:
-        std::optional<Stay*> find_stay(const Stay&) const noexcept;
-        Stay& get_stay(const Stay&) const;
+        std::optional<InnerStay*> find_stay(const Stay&) const noexcept;
+        InnerStay& get_stay(const Stay&) const;
         void check_overlap(const Stay&) const;
         jed_utils::datetime time{1970, 1, 1};
         const GuestSystem* g_system;
         const RoomsList* rooms_list;
-        std::vector<std::unique_ptr<Stay>> stays;
+        std::vector<std::unique_ptr<InnerStay>> stays;
 };
 
 
