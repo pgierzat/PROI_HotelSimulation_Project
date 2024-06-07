@@ -12,9 +12,10 @@
 
 const jed_utils::timespan TimetableSystem::minimal_break = jed_utils::timespan{0, 11, 0, 0};;
 
-TimetableSystem::TimetableSystem(WorkerSystem& w_system) : w_system{&w_system}
+TimetableSystem::TimetableSystem(TimePublisher& t_publisher, WorkerSystem& w_system) :
+    time{t_publisher.get_time()}, w_system{&w_system}
 {
-    TimetableEntry::set_w_system(w_system);
+    w_system.subscribe(*this);
 }
 
 const jed_utils::datetime& TimetableSystem::get_time() const noexcept { return time; }
@@ -74,6 +75,15 @@ std::vector<const Worker*> TimetableSystem::workers_available() const noexcept
     for (const auto& entry : entries | std::views::filter(active_entries_lambda))
         w_available.push_back(&entry -> get_worker());
     return w_available;
+}
+
+void TimetableSystem::notify_realloc(dummy<Worker>)
+{
+}
+
+void TimetableSystem::notify_erase(const std::string& erased_obj_id, dummy<Worker>)
+{
+
 }
 
 bool TimetableSystem::check_minimal_break(const TimetableEntry& entry)

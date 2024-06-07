@@ -2,6 +2,8 @@
 #include <memory>
 #include <optional>
 #include "../auxiliary/time_observer.hpp"
+#include "../auxiliary/time_publisher.hpp"
+#include "../auxiliary/other_system_observer.hpp"
 #include "../utilities/useful.hpp"
 #include "../types/timetable_entry.hpp"
 
@@ -17,10 +19,10 @@ enum class EntryStatus {
     finished
 };
 
-class TimetableSystem : public TimeObserver
+class TimetableSystem : public TimeObserver, public OtherSystemObserver<Worker>
 {
     public:
-        TimetableSystem(WorkerSystem&);
+        TimetableSystem(TimePublisher&, WorkerSystem&);
         TimetableSystem(const TimetableSystem&) = delete;
         const jed_utils::datetime& get_time() const noexcept;
         void notify(const jed_utils::datetime&) override;
@@ -31,12 +33,14 @@ class TimetableSystem : public TimeObserver
         std::vector<const TimetableEntry*> get_entries() const noexcept;
         EntryStatus get_entry_status(const TimetableEntry&) const noexcept;
         std::vector<const Worker*> workers_available() const noexcept;
+        void notify_realloc(dummy<Worker>);
+        void notify_erase(const std::string& erased_obj_id, dummy<Worker>);
         bool check_minimal_break(const TimetableEntry&);
         static const jed_utils::timespan minimal_break;
     private:
-        std::vector<std::unique_ptr<TimetableEntry>> entries;
-        WorkerSystem* w_system = nullptr;
         jed_utils::datetime time{1970, 1, 1};
+        WorkerSystem* w_system = nullptr;
+        std::vector<std::unique_ptr<TimetableEntry>> entries;
 };
 
 #endif
