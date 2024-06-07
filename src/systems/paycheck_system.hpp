@@ -3,26 +3,29 @@
 
 #include "../workers/worker.hpp"
 #include "../types/paycheck.hpp"
+#include "../auxiliary/time_publisher.hpp"
+#include "../auxiliary/time_observer.hpp"
 #include "worker_system.hpp"
 #include "timetable_system.hpp"
 #include <chrono>
 
 class HotelSystem;
 
-class PaycheckSystem
+class PaycheckSystem : public TimeObserver, public OtherSystemObserver<Worker>
 {
     public:
-        PaycheckSystem(WorkerSystem&, TimetableSystem&);
+        PaycheckSystem(TimePublisher&, WorkerSystem&, TimetableSystem&);
         PaycheckSystem(const PaycheckSystem&) = delete;
-        void set_time(const jed_utils::datetime&);
         const std::vector<Paycheck>& get_paychecks() const noexcept;
+        void notify(const jed_utils::datetime&) override;
+        void notify_realloc(dummy<Worker>);
+        void notify_erase(const std::string& erased_obj_id, dummy<Worker>);
     private:
-        void calculate_paychecks();
+        void calculate_paychecks(std::chrono::year_month);
         WorkerSystem* w_system;
         const TimetableSystem* tt_system;
+        jed_utils::datetime time;
         std::vector<Paycheck> paychecks;
-        jed_utils::datetime time{1970, 1, 1};
-        std::chrono::year_month current_month{time.get_year_month()};
 };
 
 #endif

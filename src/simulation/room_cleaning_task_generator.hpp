@@ -4,6 +4,8 @@
 #include "systematic_task_generator.hpp"
 #include "../workers/maid.hpp"
 
+class HotelSystem;
+
 class RoomCleaningTaskGenerator : public SystematicTaskGenerator
 {
     public:

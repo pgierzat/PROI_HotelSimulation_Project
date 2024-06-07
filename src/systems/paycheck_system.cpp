@@ -2,44 +2,65 @@
 #include "../utilities/errors.hpp"
 #include "../functions/tt_system_aux.hpp"
 #include "../functions/vec_to_pvec.hpp"
+#include "../functions/pc_system_aux.hpp"
 
 
-PaycheckSystem::PaycheckSystem(WorkerSystem& w_system, TimetableSystem& tt_system) :
-    w_system{&w_system}, tt_system{&tt_system}
+PaycheckSystem::PaycheckSystem(TimePublisher& publisher, WorkerSystem& w_system, TimetableSystem& tt_system) :
+    w_system{&w_system}, tt_system{&tt_system}, time{publisher.get_time()}
 {
-    Paycheck::set_w_system(w_system);
+    w_system.subscribe(*this);
+    publisher.subscribe(*this);
+}
+
+const std::vector<Paycheck>& PaycheckSystem::get_paychecks() const noexcept { return paychecks; }
+
+void PaycheckSystem::calculate_paychecks(std::chrono::year_month month)
+{
+    paychecks.clear();
+    auto all_entries = tt_system -> get_entries();
+    for (const Worker* worker : w_system -> get_workers())
+    {
+        unsigned hours = hours_worked(all_entries, *worker, month);
+        auto paycheck = worker -> calculate_paycheck(hours); 
+        if (paycheck != Amount{0, 0})
+        {
+            paychecks.emplace_back(*worker, paycheck);
+            
+        }
+            
+    }
 }
 
 // Time has to be set at least once a month. Every "bonus" that is assigned to worker between
 // the start of a month and the moment of time set is included in previous month's paycheck.
 // So it is best to synchonise all systems with the same time and process Tasks (assigning bonus attributes)
 // after synchronising.
-void PaycheckSystem::set_time(const jed_utils::datetime& time)
+void PaycheckSystem::notify(const jed_utils::datetime& time)
 {
     if (time < this -> time)
         throw TurnBackTimeError("Tried to turn PaycheckSystem's time back.", time);
-    this -> time = time;
-    auto month = time.get_year_month();
-    if (month != current_month)
+    auto curr_month = time.get_year_month();
+    auto prev_month = (this -> time).get_year_month();
+    if (curr_month != prev_month)
     {
-        calculate_paychecks();
+        calculate_paychecks(prev_month);
         w_system -> reset_stats();
-        current_month = month;
     }
+    this -> time = time;
 }
 
-const std::vector<Paycheck>& PaycheckSystem::get_paychecks() const noexcept { return paychecks; }
-
-void PaycheckSystem::calculate_paychecks()
+void PaycheckSystem::notify_realloc(dummy<Worker>)
 {
-    paychecks.clear();
-    auto all_entries = tt_system -> get_entries();
-    for (const Worker* worker : w_system -> get_workers())
+    for(auto& paycheck : paychecks)
     {
-        auto prev_month = time.get_year_month() - std::chrono::months{1};
-        unsigned hours = hours_worked(all_entries, *worker, prev_month);
-        auto paycheck = worker -> calculate_paycheck(hours); 
-        if (paycheck != Amount{0, 0})
-            paychecks.emplace_back(*worker, paycheck);
-    }
+        auto& observer = paycheck.get_w_observer();
+        auto& id = observer.get_observed_id();
+        const auto& new_obj = w_system -> get_by_id(id);
+        observer.notify_realloc(new_obj);
+    }  
+}
+
+void PaycheckSystem::notify_erase(const std::string& erased_obj_id, dummy<Worker>)
+{
+    std::erase_if(paychecks, PaycheckSameWorkerID(erased_obj_id));
 }

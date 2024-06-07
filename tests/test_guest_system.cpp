@@ -1,5 +1,6 @@
 #include "catch_amalgamated.hpp"
 #include "../src/systems/guest_system.hpp"
+#include "../src/functions/equal_operators.hpp"
 
 TEST_CASE("test GuestSystem")
 {
@@ -8,12 +9,11 @@ TEST_CASE("test GuestSystem")
     Guest guest2{"id2", "name2"};
     g_system.add_guest(guest1);
     g_system.add_guest(guest2);
-    const auto& guests = g_system.get_guests();
 
     SECTION("add guest")
     {
         std::vector expected{guest1, guest2};
-        REQUIRE( guests == expected );
+        REQUIRE( g_system.get_guests() == expected );
     }
 
     SECTION("find by name hit")
@@ -31,6 +31,6 @@ TEST_CASE("test GuestSystem")
     {
         g_system.remove_guest(guest1);
         std::vector<Guest> expected{guest2};
-        REQUIRE( guests == expected );
+        REQUIRE( g_system.get_guests() == expected );
     }
 }

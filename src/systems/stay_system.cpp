@@ -118,7 +118,7 @@ Stay& StaySystem::get_stay(const Stay& stay) const
 void StaySystem::check_overlap(const Stay& stay) const
 {
     auto interval = stay.get_interval();
-    auto same_room = StaySameRoom(stay.get_room_id());
+    auto same_room = StaySameRoomID(stay.get_room_id());
     auto room_stays = stays | std::views::filter([&](const auto& otr_stay){ return same_room(*otr_stay); });
     auto p = std::ranges::find_if(room_stays,
         [&](const auto& otr_stay){ return distance( interval, otr_stay -> get_interval() ) < jed_utils::timespan{0}; });
@@ -134,13 +134,12 @@ void StaySystem::notify_realloc(dummy<Room>)
         auto& id = observer.get_observed_id();
         const auto& new_obj = rooms_list -> get_by_id(id);
         observer.notify_realloc(new_obj);
-    }
-        
+    }    
 }
 
 void StaySystem::notify_erase(const std::string& erased_obj_id, dummy<Room>)
 {
-    std::erase_if(stays, StaySameRoom(erased_obj_id));
+    std::erase_if(stays, StaySameRoomID(erased_obj_id));
     // notify observers
 }
 
@@ -157,7 +156,7 @@ void StaySystem::notify_realloc(dummy<Guest>)
 
 void StaySystem::notify_erase(const std::string& erased_obj_id, dummy<Guest>)
 {
-    std::erase_if(stays, StayHasGuest(erased_obj_id));
+    std::erase_if(stays, StayHasGuestID(erased_obj_id));
     // notify observers
 }
 
