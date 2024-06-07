@@ -5,22 +5,20 @@
 
 
 PaycheckSystem::PaycheckSystem(TimePublisher& publisher, WorkerSystem& w_system, TimetableSystem& tt_system) :
-    time{publisher.get_time()}, w_system{&w_system}, tt_system{&tt_system}
+    w_system{&w_system}, tt_system{&tt_system}, time{publisher.get_time()}
 {
     publisher.subscribe(*this);
-    Paycheck::set_w_system(w_system);
 }
 
 const std::vector<Paycheck>& PaycheckSystem::get_paychecks() const noexcept { return paychecks; }
 
-void PaycheckSystem::calculate_paychecks()
+void PaycheckSystem::calculate_paychecks(std::chrono::year_month month)
 {
     paychecks.clear();
     auto all_entries = tt_system -> get_entries();
     for (const Worker* worker : w_system -> get_workers())
     {
-        auto prev_month = time.get_year_month() - std::chrono::months{1};
-        unsigned hours = hours_worked(all_entries, *worker, prev_month);
+        unsigned hours = hours_worked(all_entries, *worker, month);
         auto paycheck = worker -> calculate_paycheck(hours); 
         if (paycheck != Amount{0, 0})
             paychecks.emplace_back(*worker, paycheck);
@@ -35,12 +33,12 @@ void PaycheckSystem::notify(const jed_utils::datetime& time)
 {
     if (time < this -> time)
         throw TurnBackTimeError("Tried to turn PaycheckSystem's time back.", time);
-    this -> time = time;
-    auto month = time.get_year_month();
-    if (month != current_month)
+    auto curr_month = time.get_year_month();
+    auto prev_month = (this -> time).get_year_month();
+    if (curr_month != prev_month)
     {
-        calculate_paychecks();
+        calculate_paychecks(prev_month);
         w_system -> reset_stats();
-        current_month = month;
     }
+    this -> time = time;
 }

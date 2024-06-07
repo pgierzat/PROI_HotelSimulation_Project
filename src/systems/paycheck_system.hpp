@@ -19,12 +19,11 @@ class PaycheckSystem : public TimeObserver
         const std::vector<Paycheck>& get_paychecks() const noexcept;
         void notify(const jed_utils::datetime&) override;
     private:
-        void calculate_paychecks();
+        void calculate_paychecks(std::chrono::year_month);
         WorkerSystem* w_system;
         const TimetableSystem* tt_system;
+        jed_utils::datetime time;
         std::vector<Paycheck> paychecks;
-        jed_utils::datetime time{1970, 1, 1};
-        std::chrono::year_month current_month{time.get_year_month()};
 };
 
 #endif
