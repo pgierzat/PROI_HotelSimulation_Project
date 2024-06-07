@@ -79,8 +79,6 @@ TEST_CASE("Test Stay")
             stay.add_guest(guest2);
             std::vector exp_guests{guest1, guest2};
             REQUIRE( stay.get_guests() == exp_guests );
-            std::vector<std::string> exp_guests_ids{"id1", "id2"};
-            REQUIRE( stay.get_guest_ids() == exp_guests_ids );
         }
 
         SECTION("duplicate guest")

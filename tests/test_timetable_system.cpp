@@ -13,16 +13,16 @@ TEST_CASE("Test TimetableSystem")
 {
     using namespace std::chrono;
 
+    jed_utils::datetime date0{ 2024, 4, 10 };
+    auto ck = Clock{date0};
     WorkerSystem w_system{};
     Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
     w_system.add_worker(Receptionist{"id1", "name1", pay});
     w_system.add_worker(Waiter{"id2", "name2", pay});
     auto& receptionist = w_system.get_by_id("id1"); 
     auto& waiter = w_system.get_by_id("id2"); 
-    TimetableSystem tt_system{w_system};
-    jed_utils::datetime date0{ 2024, 4, 10 };
-    Clock ck{date0};
-    ck.subscribe(tt_system);
+    TimetableSystem tt_system{ck, w_system};
+    
 
     SECTION("init") { REQUIRE( tt_system.get_entries().empty()); }
     
