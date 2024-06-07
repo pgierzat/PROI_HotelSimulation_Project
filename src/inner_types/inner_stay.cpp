@@ -2,8 +2,7 @@
 #include <algorithm>
 
 
-InnerStay::InnerStay(const Stay& stay) :
-    Stay{id, stay.get_room(), stay.get_main_guest(), stay.get_start(), stay.get_end()} {}
+InnerStay::InnerStay(const Stay& stay) : Stay{stay} {}
 
 OwnSystemObserver<Room>& InnerStay::get_room_observer() noexcept { return *this; }
 
