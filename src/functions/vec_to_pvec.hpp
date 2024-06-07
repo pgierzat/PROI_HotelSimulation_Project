@@ -5,40 +5,29 @@
 #include <ranges>
 #include <memory>
 
-template<typename T>
-std::vector<const T*> vec_to_pvec(const std::vector<T>& vec)
+template<typename T, typename U = T>
+std::vector<const U*> vec_to_pvec(const std::vector<T>& vec)
 {
-    std::vector<const T*> pvec{};
+    std::vector<const U*> pvec{};
     std::ranges::for_each(vec, [&](const T& elem){ pvec.push_back(&elem); });
     return pvec;
 }
 
-template<typename T>
-std::vector<T*> vec_to_pvec(std::vector<T>& vec)
+template<typename T, typename U = T>
+std::vector<U*> vec_to_pvec(std::vector<T>& vec)
 {
-    std::vector<T*> pvec{};
+    std::vector<U*> pvec{};
     std::ranges::for_each(vec, [&](const T& elem){ pvec.push_back(&elem); });
     return pvec;
 }
 
-template<typename T>
-std::vector<const T*> vec_to_pvec(const std::vector<std::unique_ptr<T>>& vec)
+template<typename T, typename U = T>
+std::vector<const U*> vec_to_pvec(const std::vector<std::unique_ptr<T>>& vec)
 {
-    auto pvec = std::vector<const T*>{};
+    auto pvec = std::vector<const U*>{};
     std::ranges::for_each(vec, [&](const auto& elem){ pvec. push_back(elem.get()); });
     return pvec;
 }
 
-
-template<typename T, typename U>
-std::vector<const U*> vec_to_pvec(const std::vector<std::unique_ptr<T>>& vec)
-{
-    std::vector<const U*> pvec{};
-    for (const auto& elem : vec)
-    {
-        pvec.push_back(elem.get());
-    }
-    return pvec;
-}
 
 #endif
