@@ -11,18 +11,15 @@
 #include <optional>
 #include <algorithm>
 
-const jed_utils::timespan StaySystem::checkout_time = jed_utils::timespan{0, 10, 0, 0};
-
-const jed_utils::timespan StaySystem::checkin_time = jed_utils::timespan{0, 16, 0, 0};
-
-StaySystem::StaySystem(GuestSystem& g_system, RoomsList& rooms_list) :
-    g_system{&g_system}, rooms_list{&rooms_list}
+StaySystem::StaySystem(TimePublisher& t_publisher, GuestSystem& g_system, RoomsList& rooms_list) :
+    time{t_publisher.get_time()}, g_system{&g_system}, rooms_list{&rooms_list}
 {
+    t_publisher.subscribe(*this);
     g_system.subscribe(*this);
     rooms_list.subscribe(*this);
 }
 
-void StaySystem::set_time(const jed_utils::datetime& time)
+void StaySystem::notify(const jed_utils::datetime& time)
 {
     if (time < this -> time)
         throw TurnBackTimeError("Tried to turn StaySystem's time back.", time);
@@ -94,7 +91,7 @@ void StaySystem::check_out(const Stay& stay)
         return;
     if (stay.get_status() != StayStatus::checked_in)
         throw StayStatusError("Tried to check-out a stay that wasn't checked-in.", stay);
-    if (time < stay.get_start() + checkin_time)
+    if (time < stay.get_start() + Stay::checkin_time)
         throw StayStatusError("Tried to check-out a stay that hasn't yet started.", stay);
     get_stay(stay).set_status(StayStatus::checked_out);   // here, can impose fees for late check-out 
 }

@@ -6,7 +6,9 @@
 #include <algorithm>
 
 
-const StaySystem* Stay::s_system = nullptr;
+const jed_utils::timespan Stay::checkout_time = jed_utils::timespan{0, 10, 0, 0};
+
+const jed_utils::timespan Stay::checkin_time = jed_utils::timespan{0, 16, 0, 0};
 
 Stay::Stay(const std::string& id, const Room& room, const Guest& main_guest,
            const jed_utils::datetime& start, const jed_utils::datetime& end) :
@@ -77,7 +79,7 @@ jed_utils::datetime Stay::get_end() const noexcept { return end; }
 
 TimeInterval Stay::get_interval() const noexcept
 {
-    return TimeInterval{start + s_system -> checkin_time, end + s_system -> checkout_time};
+    return TimeInterval{start + checkin_time, end + checkout_time};
 }
 
 Amount Stay::get_price() const { return get_room().calculatePrice() * get_duration(); }
@@ -136,5 +138,3 @@ void Stay::validate_duration(const jed_utils::datetime& start, const jed_utils::
     if (start >= end)
         throw std::invalid_argument("Stay must start before it ends.");
 }
-
-void Stay::set_s_system(const StaySystem& s_system) { Stay::s_system = &s_system; }

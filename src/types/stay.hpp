@@ -51,9 +51,9 @@ class Stay
         void set_end(const jed_utils::datetime end);
         void set_status(StayStatus);
         bool operator==(const Stay&) const;
-        static void set_s_system(const StaySystem&);
-    private:
-        static const StaySystem* s_system;
+        static const jed_utils::timespan checkout_time;
+        static const jed_utils::timespan checkin_time;
+    private:   
         static void validate_duration(const jed_utils::datetime& start, const jed_utils::datetime& end);
         std::string id;
         std::vector<OwnSystemObserver<Guest>> guest_observers;

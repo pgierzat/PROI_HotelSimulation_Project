@@ -2,7 +2,7 @@
 
 
 HotelSystem::HotelSystem(const jed_utils::datetime init_time) :
-    ck{init_time}, g_system{}, w_system{}, rooms_list{}, s_system{g_system, rooms_list},
+    ck{init_time}, g_system{}, w_system{}, rooms_list{}, s_system{ck, g_system, rooms_list},
     tt_system{w_system}, pc_system{ck, w_system, tt_system},
     t_system{w_system, rooms_list, g_system},
     sc_system{g_system, w_system, rooms_list, s_system, t_system} {}
