@@ -23,6 +23,8 @@ namespace jed_utils {
 }
 template<typename T>
 class OwnSystemObserver;
+template<typename T>
+class MultipleOwnSystemObserver;
 
 
 class UnsupportedWorkerTypeError : public std::invalid_argument
@@ -321,5 +323,19 @@ public:
 template<typename T>
 OwnSystemObserverError<T>::OwnSystemObserverError(const std::string& what, const OwnSystemObserver<T>& observer) :
     std::runtime_error{what}, observer{observer} {}
+
+template<typename T>
+class MultipleOwnSystemObserverError : public std::runtime_error
+{
+public:
+    MultipleOwnSystemObserverError(const std::string&, const MultipleOwnSystemObserver<T>&);
+    const MultipleOwnSystemObserver<T>& observer;
+};
+
+template<typename T>
+MultipleOwnSystemObserverError<T>::MultipleOwnSystemObserverError(
+    const std::string& what, const MultipleOwnSystemObserver<T>& observer) :
+        std::runtime_error{what}, observer{observer} {}
+
 
 #endif
