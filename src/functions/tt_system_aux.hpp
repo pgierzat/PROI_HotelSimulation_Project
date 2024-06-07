@@ -6,10 +6,10 @@
 #include <vector>
 
 
-class SameWorker
+class SameWorkerID
 {
     public:
-        SameWorker(const Worker&);
+        SameWorkerID(const Worker&);
         bool operator()(const TimetableEntry&);
         bool operator()(const std::unique_ptr<TimetableEntry>&);
     private:
@@ -23,7 +23,7 @@ class ShiftInInterval
         bool operator()(const TimetableEntry&);
         bool operator()(const std::unique_ptr<TimetableEntry>&);
     private:
-        SameWorker same_worker;
+        SameWorkerID same_worker;
         TimeInterval interval;
 };
 
