@@ -11,29 +11,29 @@ RegressionStatus check_regression(const Stay& stay, StayStatus new_status)
     return RegressionStatus::progression;
 }
 
-StaySameRoom::StaySameRoom(const Room& room) noexcept : room_id{room.get_id()} {}
-StaySameRoom::StaySameRoom(const std::string& room_id) noexcept : room_id{room_id} {}
+StaySameRoomID::StaySameRoomID(const Room& room) noexcept : room_id{room.get_id()} {}
+StaySameRoomID::StaySameRoomID(const std::string& room_id) noexcept : room_id{room_id} {}
 
-bool StaySameRoom::operator()(const Stay& stay) const noexcept {
+bool StaySameRoomID::operator()(const Stay& stay) const noexcept {
     return stay.get_room_id() == room_id;
 }
 
-bool StaySameRoom::operator()(const std::unique_ptr<Stay>& stay) const noexcept {
+bool StaySameRoomID::operator()(const std::unique_ptr<Stay>& stay) const noexcept {
     return stay -> get_room_id() == room_id;
 }
 
 
-StayHasGuest::StayHasGuest(const Guest& guest) noexcept : guest_id{guest.get_id()} {}
-StayHasGuest::StayHasGuest(const std::string& guest_id) noexcept : guest_id{guest_id} {}
+StayHasGuestID::StayHasGuestID(const Guest& guest) noexcept : guest_id{guest.get_id()} {}
+StayHasGuestID::StayHasGuestID(const std::string& guest_id) noexcept : guest_id{guest_id} {}
 
-bool StayHasGuest::operator()(const Stay& stay) const noexcept
+bool StayHasGuestID::operator()(const Stay& stay) const noexcept
 {
     auto ids = stay.get_guest_ids();
     auto p = std::ranges::find(ids, guest_id, [](auto ptr){ return *ptr; });
     return p != ids.end();
 }
 
-bool StayHasGuest::operator()(const std::unique_ptr<Stay>& stay) const noexcept
+bool StayHasGuestID::operator()(const std::unique_ptr<Stay>& stay) const noexcept
 {
     auto ids = stay -> get_guest_ids();
     auto p = std::ranges::find(ids, guest_id, [](auto ptr){ return *ptr; });

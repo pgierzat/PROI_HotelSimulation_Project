@@ -3,9 +3,13 @@
 #include <algorithm>
 
 
-SameWorker::SameWorker(const Worker& worker) : worker{worker} {}
+SameWorkerID::SameWorkerID(const Worker& worker) : worker{worker} {}
 
-bool SameWorker::operator()(const TimetableEntry& entry) { return entry.get_worker() == worker; }
+bool SameWorkerID::operator()(const TimetableEntry& entry) { return entry.get_worker() == worker; }
+
+bool SameWorkerID::operator()(const std::unique_ptr<TimetableEntry>& entry) {
+    return entry -> get_worker() == worker;
+}
 
 bool SameWorker::operator()(const std::unique_ptr<TimetableEntry>& entry) {
     return entry -> get_worker() == worker;

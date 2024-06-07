@@ -10,7 +10,7 @@ class Clock : public TimePublisher
     public:
         explicit Clock() = default;
         explicit Clock(jed_utils::datetime init_time);
-        const jed_utils::datetime& get_time() const noexcept;
+        const jed_utils::datetime& get_time() const noexcept override;
         jed_utils::timespan get_unit_delta() const noexcept;
         void set_time(const jed_utils::datetime&);
         void set_unit_delta(const jed_utils::timespan&);

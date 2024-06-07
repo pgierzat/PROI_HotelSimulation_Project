@@ -78,7 +78,7 @@ std::vector<const Worker*> TimetableSystem::workers_available() const noexcept
 
 bool TimetableSystem::check_minimal_break(const TimetableEntry& entry)
 {
-    auto worker_entries = std::ranges::filter_view(entries, SameWorker(entry.get_worker()));
+    auto worker_entries = std::ranges::filter_view(entries, SameWorkerID(entry.get_worker()));
     auto p = std::ranges::find_if(worker_entries, TooShortBreak{entry.get_interval(), minimal_break});
     return p == worker_entries.end();
 }

@@ -9,12 +9,13 @@
 #include "../workers/waiter.hpp"
 #include "../utilities/errors.hpp"
 #include "../utilities/concepts.hpp"
+#include "../auxiliary/other_system_publisher.hpp"
 
 
 #ifndef WORKER_SYSTEM_HPP
 #define WORKER_SYSTEM_HPP
 
-class WorkerSystem
+class WorkerSystem : public OtherSystemPublisher<Worker>
 {
     public:
         WorkerSystem() = default;

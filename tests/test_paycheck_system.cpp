@@ -1,4 +1,5 @@
 #include "catch_amalgamated.hpp"
+#include "../src/systems/clock.hpp"
 #include "../src/systems/paycheck_system.hpp"
 #include "../src/functions/equal_operators.hpp"
 
@@ -6,9 +7,11 @@ TEST_CASE("Test PaycheckSystem")
 {
     using namespace std::chrono;
 
+    jed_utils::datetime time0{2024y/May/11d};
+    Clock ck{time0};
     WorkerSystem w_system{};
     TimetableSystem tt_system{w_system};
-    PaycheckSystem pc_system{w_system, tt_system};
+    PaycheckSystem pc_system{ck, w_system, tt_system};
     const auto& paychecks = pc_system.get_paychecks();
 
     Amount amount1{3200, 0};
@@ -28,29 +31,18 @@ TEST_CASE("Test PaycheckSystem")
     SECTION("simple use")
     {
         REQUIRE( paychecks.empty() );
-        jed_utils::datetime time1{2024y/May/11d};
-        pc_system.set_time(time1);
-        Paycheck exp_waiter_pc{waiter, amount1};
-        std::vector expected_pcs1{exp_waiter_pc};
-        REQUIRE( paychecks == expected_pcs1 );
         jed_utils::datetime time2{2024y/June/1d};
-        pc_system.set_time(time2);
+        ck.set_time(time2);
+        Paycheck exp_waiter_pc{waiter, amount1};
         Paycheck exp_maid_pc{maid, amount2 * maid.get_shift_duration().get_hours()};
-        std::vector expected_pcs2{exp_waiter_pc, exp_maid_pc};
-        REQUIRE( paychecks == expected_pcs2 );
-        jed_utils::datetime time3{2024y/June/2d};
-        pc_system.set_time(time3);
-        REQUIRE( paychecks == expected_pcs2 );
-        jed_utils::datetime time4{2024y/July/2d};
-        pc_system.set_time(time4);
+        std::vector expected_pcs1{exp_waiter_pc, exp_maid_pc};
         REQUIRE( paychecks == expected_pcs1 );
-    }
-
-    SECTION("turn back time")
-    {
-        jed_utils::datetime time1{2024y/May/11d};
-        pc_system.set_time(time1);
-        jed_utils::datetime time2{2024y/May/10d};
-        REQUIRE_THROWS_AS( pc_system.set_time(time2), TurnBackTimeError );
+        jed_utils::datetime time3{2024y/June/2d};
+        ck.set_time(time3);
+        REQUIRE( paychecks == expected_pcs1 );
+        jed_utils::datetime time4{2024y/July/2d};
+        ck.set_time(time4);
+        std::vector expected_pcs2{exp_waiter_pc};
+        REQUIRE( paychecks == expected_pcs2 );
     }
 }
