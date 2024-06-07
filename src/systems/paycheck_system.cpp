@@ -4,28 +4,11 @@
 #include "../functions/vec_to_pvec.hpp"
 
 
-PaycheckSystem::PaycheckSystem(WorkerSystem& w_system, TimetableSystem& tt_system) :
-    w_system{&w_system}, tt_system{&tt_system}
+PaycheckSystem::PaycheckSystem(TimePublisher& publisher, WorkerSystem& w_system, TimetableSystem& tt_system) :
+    time{publisher.get_time()}, w_system{&w_system}, tt_system{&tt_system}
 {
+    publisher.subscribe(*this);
     Paycheck::set_w_system(w_system);
-}
-
-// Time has to be set at least once a month. Every "bonus" that is assigned to worker between
-// the start of a month and the moment of time set is included in previous month's paycheck.
-// So it is best to synchonise all systems with the same time and process Tasks (assigning bonus attributes)
-// after synchronising.
-void PaycheckSystem::set_time(const jed_utils::datetime& time)
-{
-    if (time < this -> time)
-        throw TurnBackTimeError("Tried to turn PaycheckSystem's time back.", time);
-    this -> time = time;
-    auto month = time.get_year_month();
-    if (month != current_month)
-    {
-        calculate_paychecks();
-        w_system -> reset_stats();
-        current_month = month;
-    }
 }
 
 const std::vector<Paycheck>& PaycheckSystem::get_paychecks() const noexcept { return paychecks; }
@@ -41,5 +24,23 @@ void PaycheckSystem::calculate_paychecks()
         auto paycheck = worker -> calculate_paycheck(hours); 
         if (paycheck != Amount{0, 0})
             paychecks.emplace_back(*worker, paycheck);
+    }
+}
+
+// Time has to be set at least once a month. Every "bonus" that is assigned to worker between
+// the start of a month and the moment of time set is included in previous month's paycheck.
+// So it is best to synchonise all systems with the same time and process Tasks (assigning bonus attributes)
+// after synchronising.
+void PaycheckSystem::notify(const jed_utils::datetime& time)
+{
+    if (time < this -> time)
+        throw TurnBackTimeError("Tried to turn PaycheckSystem's time back.", time);
+    this -> time = time;
+    auto month = time.get_year_month();
+    if (month != current_month)
+    {
+        calculate_paychecks();
+        w_system -> reset_stats();
+        current_month = month;
     }
 }
