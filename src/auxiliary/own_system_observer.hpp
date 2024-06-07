@@ -7,11 +7,13 @@ template<typename T>
 class OwnSystemObserver
 {
     public:
-        OwnSystemObserver(const T& observed);
+        OwnSystemObserver() = default;
+        explicit OwnSystemObserver(const T& observed);
         void notify_realloc(const T& new_obj);
         void notify_erase() noexcept;
-        const T& get_observed() const;
-        const std::string& get_observed_id() const noexcept;
+        const T& get() const;
+        const std::string& get_id() const noexcept;
+        explicit operator bool() const noexcept;
     private:
         const T* observed = nullptr;
         std::string observed_id;
@@ -19,7 +21,7 @@ class OwnSystemObserver
 
 
 template<typename T>
-OwnSystemObserver<T>::OwnSystemObserver(const T& observed) :
+OwnSystemObserver<T>::OwnSystemObserver(const T& observed):
     observed{&observed}, observed_id{observed.get_id()} {}
 
 template<typename T>
@@ -37,7 +39,7 @@ void OwnSystemObserver<T>::notify_erase() noexcept
 }
 
 template<typename T>
-const T& OwnSystemObserver<T>::get_observed() const
+const T& OwnSystemObserver<T>::get() const
 {
     if (not observed)
         throw OwnSystemObserverError<T>("Tried to access observed object of an 'empty' observer.", *this);
@@ -45,7 +47,10 @@ const T& OwnSystemObserver<T>::get_observed() const
 }
 
 template<typename T>
-const std::string& OwnSystemObserver<T>::get_observed_id() const noexcept { return observed_id; }
+const std::string& OwnSystemObserver<T>::get_id() const noexcept { return observed_id; }
+
+template<typename T>
+OwnSystemObserver<T>::operator bool() const noexcept { return observed; }
 
 
 #endif
