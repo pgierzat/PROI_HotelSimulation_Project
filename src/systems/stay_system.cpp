@@ -30,7 +30,7 @@ void StaySystem::add_stay(const Stay& stay)
 {
     if (time - stay.get_start() >= jed_utils::timespan(1))
         throw StayBackwardBookError("Tried to book a stay that starts on a past hotel nigth.", stay, time);
-    if (stay.get_status() != StayStatus::initial)
+    if (stay.get_status() != StayStatus::booked)
         throw StayStatusError("Stay added to system must be in initial state.", stay);
     check_overlap(stay);
     stays.emplace_back(std::make_unique<InnerStay>(stay));
@@ -40,8 +40,8 @@ void StaySystem::add_stay(const Stay& stay)
     try {
         auto room_id = room_observer.get_id();
         room_observer.notify_realloc(rooms_list -> get_by_id(room_id));
-        for (auto guest : guests_observer.get())
-            guests_observer.notify_realloc(*guest);
+        for (auto guest_id : guests_observer.get_ids())
+            guests_observer.notify_realloc(g_system -> get_by_id(*guest_id));
     } catch (const RoomNotInSystemError& e) {
         stays.pop_back();
         throw e;
