@@ -10,14 +10,9 @@ TEST_CASE("Test PaycheckSystem")
     jed_utils::datetime time0{2024y/May/11d};
     Clock ck{time0};
     WorkerSystem w_system{};
-<<<<<<< HEAD
     TimetableSystem tt_system{ck, w_system};
     PaycheckSystem pc_system{ck, w_system, tt_system};
-=======
-    TimetableSystem tt_system{w_system};
-    PaycheckSystem pc_system{ck, w_system, tt_system};
     const auto& paychecks = pc_system.get_paychecks();
->>>>>>> main
 
     Amount amount1{3200, 0};
     Amount amount2{20, 0};
