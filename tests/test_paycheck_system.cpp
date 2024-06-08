@@ -12,6 +12,7 @@ TEST_CASE("Test PaycheckSystem")
     WorkerSystem w_system{};
     TimetableSystem tt_system{ck, w_system};
     PaycheckSystem pc_system{ck, w_system, tt_system};
+    const auto& paychecks = pc_system.get_paychecks();
 
     Amount amount1{3200, 0};
     Amount amount2{20, 0};
