@@ -37,7 +37,6 @@ template<typename T>
 void OwnSystemObserver<T>::notify_erase() noexcept
 {
     observed = nullptr;
-    observed_id = "";
 }
 
 template<typename T>
