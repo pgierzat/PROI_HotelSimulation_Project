@@ -2,7 +2,7 @@
 #define PAYCHECK_SYSTEM_HPP
 
 #include "../workers/worker.hpp"
-#include "../types/paycheck.hpp"
+#include "../inner_types/inner_paycheck.hpp"
 #include "../auxiliary/time_publisher.hpp"
 #include "../auxiliary/time_observer.hpp"
 #include "worker_system.hpp"
@@ -16,7 +16,7 @@ class PaycheckSystem : public TimeObserver, public OtherSystemObserver<Worker>
     public:
         PaycheckSystem(TimePublisher&, WorkerSystem&, TimetableSystem&);
         PaycheckSystem(const PaycheckSystem&) = delete;
-        const std::vector<Paycheck>& get_paychecks() const noexcept;
+        std::vector<const Paycheck*> get_paychecks() const noexcept;
         void notify(const jed_utils::datetime&) override;
         void notify_realloc(dummy<Worker>);
         void notify_erase(const std::string& erased_obj_id, dummy<Worker>);
@@ -25,7 +25,7 @@ class PaycheckSystem : public TimeObserver, public OtherSystemObserver<Worker>
         WorkerSystem* w_system;
         const TimetableSystem* tt_system;
         jed_utils::datetime time;
-        std::vector<Paycheck> paychecks;
+        std::vector<InnerPaycheck> paychecks;
 };
 
 #endif

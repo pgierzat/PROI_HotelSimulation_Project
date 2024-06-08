@@ -19,13 +19,13 @@ class OtherSystemPublisher
 template<typename T>
 void OtherSystemPublisher<T>::publish_realloc()
 {
-    std::ranges::for_each(observers, [](auto obs){ obs -> notify_realloc(dummy<T>{}); });
+    std::ranges::for_each(observers, [](auto& obs){ obs -> notify_realloc(dummy<T>{}); });
 }
 
 template<typename T>
 void OtherSystemPublisher<T>::publish_erase(const std::string& erased_id)
 {
-    std::ranges::for_each(observers, [&](auto obs){ obs -> notify_erase(erased_id, dummy<T>{}); });
+    std::ranges::for_each(observers, [&](auto& obs){ obs -> notify_erase(erased_id, dummy<T>{}); });
 }
 
 template<typename T>

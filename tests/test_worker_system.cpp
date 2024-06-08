@@ -99,4 +99,13 @@ TEST_CASE("Test WorkerSystem")
         auto exp = std::vector<const Receptionist*>{&receptionist, &receptionist2};
         REQUIRE(std::ranges::equal(receptionists, exp, [](auto p1, auto p2){ return *p1 == *p2; }));
     }
+
+    SECTION("Test get_specific_workers, maid")
+    {
+        auto maid2 = Maid{"5555", "name5", pay};
+        w_system.add_worker(maid2);
+        auto receptionists = w_system.get_specific_workers<Maid>();
+        auto exp = std::vector<const Maid*>{&maid, &maid2};
+        REQUIRE(std::ranges::equal(receptionists, exp, [](auto p1, auto p2){ return *p1 == *p2; }));
+    }
 }
