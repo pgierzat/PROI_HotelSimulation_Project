@@ -12,10 +12,10 @@ TEST_CASE("test StaySystem")
 {
     auto ck = Clock{};
     auto g_system = GuestSystem{};
-    Guest guest1{"id1", "name1"};
-    Guest guest2{"id2", "name2"};
-    g_system.add_guest(guest1);
-    g_system.add_guest(guest2);
+    g_system.add_guest(Guest{"id1", "name1"});
+    g_system.add_guest(Guest{"id2", "name2"});
+    auto guest1 = g_system.get_by_id("id1");
+    auto guest2 = g_system.get_by_id("id2");
     RoomsList rooms_list{};
     rooms_list.add_room(TwoRoom{"237"});
     rooms_list.add_room(OneRoom{"217"});

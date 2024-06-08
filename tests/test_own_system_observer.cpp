@@ -17,13 +17,15 @@ TEST_CASE("Test OwnSystemObserver")
 
     SECTION("Test default init")
     {
-        REQUIRE_THROWS_AS( observer.get() == cook,  OwnSystemObserverError<Worker> );
+        auto observer = OwnSystemObserver<Worker>();
+        REQUIRE_THROWS_AS( observer.get() ,  OwnSystemObserverError<Worker> );
         REQUIRE( observer.get_id() == "" );
     }
 
     SECTION("Test set")
     {
         auto maid = Maid{"id2", "name2", Pay{PaycheckMethod::Salary, Amount{3200, 0}}};
+        observer.set(maid);
         REQUIRE( observer.get() == maid );
         REQUIRE( observer.get_id() == "id2" );
     }
@@ -32,7 +34,7 @@ TEST_CASE("Test OwnSystemObserver")
     {
         observer.notify_erase();
         REQUIRE_THROWS_AS( observer.get(),  OwnSystemObserverError<Worker> );
-        REQUIRE( observer.get_id() == "" );
+        REQUIRE( observer.get_id() == "id1" );
     }
 
     SECTION("Test notify realloc")
@@ -40,7 +42,7 @@ TEST_CASE("Test OwnSystemObserver")
         auto cook2 = cook;
         cook2.set_name("othername");
         observer.notify_realloc(cook2);
-        REQUIRE( observer.get() == cook );
+        REQUIRE( observer.get() == cook2 );
         REQUIRE( observer.get_id() == "id1" );
     }
 
