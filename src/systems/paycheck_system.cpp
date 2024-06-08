@@ -48,17 +48,6 @@ void PaycheckSystem::notify(const jed_utils::datetime& time)
     this -> time = time;
 }
 
-void PaycheckSystem::notify_realloc(dummy<Worker>)
-{
-    for(auto& paycheck : paychecks)
-    {
-        auto& worker_observer = paycheck.get_worker_observer();
-        auto& id = worker_observer.get_id();
-        const auto& new_obj = w_system -> get_by_id(id);
-        worker_observer.notify_realloc(new_obj);
-    }  
-}
-
 void PaycheckSystem::notify_erase(const std::string& erased_obj_id, dummy<Worker>)
 {
     std::erase_if(paychecks, PaycheckSameWorkerID(erased_obj_id));
