@@ -12,14 +12,10 @@ PaycheckSystem::PaycheckSystem(TimePublisher& publisher, WorkerSystem& w_system,
     publisher.subscribe(*this);
 }
 
-<<<<<<< HEAD
 std::vector<const Paycheck*> PaycheckSystem::get_paychecks() const noexcept
 {
     return vec_to_pvec<InnerPaycheck, Paycheck>(paychecks);
 }
-=======
-const std::vector<Paycheck>& PaycheckSystem::get_paychecks() const noexcept { return paychecks; }
->>>>>>> main
 
 void PaycheckSystem::calculate_paychecks(std::chrono::year_month month)
 {
