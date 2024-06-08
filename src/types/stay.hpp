@@ -18,7 +18,6 @@ class GuestSystem;
 class RoomsList;
 
 enum class StayStatus : unsigned {
-    initial,
     booked,
     checked_in,
     checked_out
@@ -56,7 +55,7 @@ class Stay : protected OwnSystemObserver<Room>, protected MultipleOwnSystemObser
         std::string main_guest_id;    // Guest that pays for everything
         jed_utils::datetime start;
         jed_utils::datetime end;
-        StayStatus status{StayStatus::initial};
+        StayStatus status{StayStatus::booked};
 };
 
 #endif
