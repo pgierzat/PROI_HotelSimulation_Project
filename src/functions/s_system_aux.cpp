@@ -28,10 +28,10 @@ StayHasGuestID::StayHasGuestID(const std::string& guest_id) noexcept : guest_id{
 
 bool StayHasGuestID::operator()(const InnerStay& stay) const noexcept
 {
-    return stay.get_cguests_observer().find_by_id(guest_id).value();
+    return stay.get_cguests_observer().has_id(guest_id);
 }
 
 bool StayHasGuestID::operator()(const std::unique_ptr<InnerStay>& stay) const noexcept
 {
-    return stay -> get_cguests_observer().find_by_id(guest_id).value();
+    return stay -> get_cguests_observer().has_id(guest_id);
 }
