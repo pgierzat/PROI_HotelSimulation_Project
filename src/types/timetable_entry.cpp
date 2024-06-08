@@ -3,21 +3,19 @@
 #include <stdexcept>
 
 TimetableEntry::TimetableEntry(const std::string& id, const Worker& worker, const jed_utils::datetime& date, Shift shift) : 
-    id{id}, w_observer{worker}, date{date}, shift{shift}
+    OwnSystemObserver<Worker>{worker}, id{id}, date{date}, shift{shift}
 {
     (this -> date).trunkate();
     check_worker_shift(worker, shift);
 }
 
 TimetableEntry::TimetableEntry(const std::string& id, const jed_utils::datetime& date, Shift shift) :
-    id{id}, w_observer{}, date{date}, shift{shift}
+    OwnSystemObserver<Worker>{}, id{id}, date{date}, shift{shift}
 {
     (this -> date).trunkate();
 }
 
-const Worker& TimetableEntry::get_worker() const { return w_observer.get(); }
-
-const std::string& TimetableEntry::get_worker_id() const noexcept { return w_observer.get_id(); }
+const Worker& TimetableEntry::get_worker() const { return OwnSystemObserver<Worker>::get(); }
 
 const std::string& TimetableEntry::get_id() const noexcept { return id;}
 
@@ -44,7 +42,7 @@ Shift TimetableEntry::get_shift() const noexcept { return shift; }
 void TimetableEntry::set_worker(const Worker& worker)
 {
     check_worker_shift(worker, shift);
-    w_observer.set(worker);
+    OwnSystemObserver<Worker>::set(worker);
 }
 
 void TimetableEntry::set_shift(Shift shift)
@@ -61,7 +59,7 @@ void TimetableEntry::set_date(const jed_utils::datetime& date)
 
 bool TimetableEntry::operator==(const TimetableEntry& other) const
 {
-    return get_worker_id() == other.get_worker_id() &&
+    return get_worker() == other.get_worker() &&
         date == other.date &&
         shift == other.shift;
 }

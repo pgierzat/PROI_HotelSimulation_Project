@@ -10,13 +10,12 @@
 class WorkerSystem;
 class TimetableSystem;
 
-class TimetableEntry
+class TimetableEntry : protected OwnSystemObserver<Worker>
 {
     public:
         TimetableEntry(const std::string& id, const Worker&, const jed_utils::datetime&, Shift);
         TimetableEntry(const std::string& id, const jed_utils::datetime&, Shift);
         const Worker& get_worker() const;
-        const std::string& get_worker_id() const noexcept;
         const std::string& get_id() const noexcept;
         jed_utils::datetime get_date() const noexcept;
         jed_utils::datetime get_start() const;
@@ -30,7 +29,6 @@ class TimetableEntry
     private:
         static void check_worker_shift(const Worker&, Shift);
         std::string id;
-        OwnSystemObserver<Worker> w_observer;
         jed_utils::datetime date;
         Shift shift;
 };
