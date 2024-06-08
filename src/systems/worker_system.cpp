@@ -7,20 +7,25 @@
 void WorkerSystem::add_worker(const Worker& worker)
 {
     auto cook = dynamic_cast<const Cook*>(&worker);
-    if (cook)
+    if (cook){
         add_worker(*cook);
     return;
+    }
     auto maid = dynamic_cast<const Maid*>(&worker);
-    if (maid)
+    if (maid){
         add_worker(*maid);
     return;
+    }
     auto receptionist = dynamic_cast<const Receptionist*>(&worker);
-    if (receptionist)
+    if (receptionist){
         add_worker(*receptionist);
     return;
+    }
     auto waiter = dynamic_cast<const Waiter*>(&worker);
-    if (waiter)
+    if (waiter){
         add_worker(*waiter);
+    return;
+    }
     throw UnsupportedWorkerTypeError{"Tried to add a Room of unknown type to RoomsList.", worker.get_type()};
 }
 
