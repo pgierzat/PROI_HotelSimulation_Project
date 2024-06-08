@@ -10,7 +10,6 @@ bool SameWorkerID::operator()(const TimetableEntry& entry) { return entry.get_wo
 bool SameWorkerID::operator()(const std::unique_ptr<InnerTimetableEntry>& entry) {
     return entry -> get_worker() == worker;
 }
-
 ShiftInInterval::ShiftInInterval(const Worker& worker, const TimeInterval& interval) :
     same_worker{worker}, interval{interval} {}
 

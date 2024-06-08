@@ -52,7 +52,11 @@ void StaySystem::add_stay(const Stay& stay)
     stay_obj.set_status(StayStatus::booked);
 }
 
-void StaySystem::remove_stay(const Stay& stay) { std::erase_if(stays, [&](const auto& otr){ return *otr == stay; }); }
+void StaySystem::remove_stay(const Stay& stay)
+{
+    auto id = stay.get_id();
+    std::erase_if(stays, [&](const auto& otr){ return otr -> get_id() == id; });
+}
 
 std::optional<const Stay*> StaySystem::find_by_id(const std::string& id) const noexcept
 {
