@@ -95,7 +95,7 @@ std::vector<const Worker*> TimetableSystem::workers_available() const noexcept
 
 void TimetableSystem::notify_erase(const std::string& erased_obj_id, dummy<Worker>)
 {
-    std::erase_if(entries, [](const auto& entry){ return entry -> get_id() == erased_obj_id; });
+    std::erase_if(entries, [&](const auto& entry){ return entry -> get_id() == erased_obj_id; });
 }
 
 bool TimetableSystem::check_minimal_break(const TimetableEntry& entry)
