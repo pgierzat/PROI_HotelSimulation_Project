@@ -14,15 +14,16 @@ class MultipleOwnSystemObserver
         void notify_realloc(const T& new_obj);
         void notify_erase(const std::string& erased_id);
         std::vector<const T*> get() const;
-        std::optional<const T*> find_by_id(const std::string&) const noexcept;
+        std::optional<const T*> find_by_id(const std::string&) const;
         const T& get_by_id(const std::string&) const;
         std::vector<const std::string*> get_ids() const noexcept;
+        bool has_id(const std::string&) const noexcept;
         unsigned size() const noexcept;
         void add_observed(const T&);
         void remove_observed(const T&) noexcept;
     private:
         std::optional<OwnSystemObserver<T>*> find_observer(const std::string& id);
-        OwnSystemObserver<T> get_observer(const std::string& id);
+        OwnSystemObserver<T>& get_observer(const std::string& id);
         std::vector<OwnSystemObserver<T>> observers;
 };
 
@@ -48,7 +49,7 @@ std::vector<const T*> MultipleOwnSystemObserver<T>::get() const
 }
 
 template<typename T>
-std::optional<const T*> MultipleOwnSystemObserver<T>::find_by_id(const std::string& id) const noexcept
+std::optional<const T*> MultipleOwnSystemObserver<T>::find_by_id(const std::string& id) const
 {
     auto p = std::ranges::find_if(observers,
         [&](const auto& obs){ return obs.get_id() == id; });
@@ -73,6 +74,16 @@ std::vector<const std::string*> MultipleOwnSystemObserver<T>::get_ids() const no
     auto ids = std::vector<const std::string*>{};
     std::ranges::for_each(observers, [&](const auto& obs){ ids.push_back(&obs.get_id()); });
     return ids;
+}
+
+template<typename T>
+bool MultipleOwnSystemObserver<T>::has_id(const std::string& id) const noexcept
+{
+    auto p = std::ranges::find_if(observers,
+        [&](const auto& obs){ return obs.get_id() == id; });
+    if (p == observers.end())
+        return false;
+    return true;
 }
 
 template<typename T>
@@ -103,7 +114,7 @@ std::optional<OwnSystemObserver<T>*> MultipleOwnSystemObserver<T>::find_observer
 }
 
 template<typename T>
-OwnSystemObserver<T> MultipleOwnSystemObserver<T>::get_observer(const std::string& id)
+OwnSystemObserver<T>& MultipleOwnSystemObserver<T>::get_observer(const std::string& id)
 {
     auto p = std::ranges::find_if(observers,
         [&](const auto& obs){ return obs.get_id() == id; });
