@@ -2,9 +2,6 @@
 #include "../systems/task_system.hpp"
 #include "../utilities/errors.hpp"
 
-const WorkerSystem* Task::w_system = nullptr;
-const RoomsList* Task::rooms_list = nullptr;
-const GuestSystem* Task::g_system = nullptr;
 
 Task::Task(const std::string& id, const std::string& description) :
     id{id}, description{description}, status{TaskStatus::unassigned} {}
@@ -23,10 +20,6 @@ void Task::mark_completed()
         throw TaskStatusError("Task has to be assigned first before completion.", *this);
     this -> status = TaskStatus::completed;
 }
-
-void Task::set_w_system(const WorkerSystem& t_system) { Task::w_system = &t_system; }
-void Task::set_rooms_list(const RoomsList& rooms_list) { Task::rooms_list = &rooms_list; }
-void Task::set_g_system(const GuestSystem& g_system) { Task::g_system = &g_system; }
 
 void Task::can_assign(const Worker& worker) const
 {

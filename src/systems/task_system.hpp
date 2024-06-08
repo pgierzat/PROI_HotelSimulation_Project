@@ -41,10 +41,10 @@ template<SupportedTask T>
 void TaskSystem::add_task(const T& task)
 {
     check_task_status(task);
-    auto task_opt = find_by_id(task.get_id());
+    auto task_opt = find_by_id(task.Task::get_id());
     if (task_opt)
         throw DuplicateTaskIDError("Tried to add a duplicate task to TaskSystem.", task);
-    id_gen.forbid_id(task.get_id());
+    id_gen.forbid_id(task.Task::get_id());
     tasks.push_back(std::move(std::make_unique<T>(task)));
 }
 
@@ -64,11 +64,10 @@ std::string TaskSystem::add_task_id(T&& task)
 {
     check_task_status(task);
     auto new_id = id_gen.generate_id();
-    task.set_id(new_id);
+    task.Task::set_id(new_id);
     tasks.push_back(std::move(std::make_unique<T>(task)));
     return new_id;
 }
-
 
 
 #endif

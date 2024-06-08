@@ -6,12 +6,12 @@
 #include "../utilities/concepts.hpp"
 
 template<SupportedWorker T>
-class SmallTask : public Task
+class SmallTask : public Task, protected OwnSystemObserver<Worker>
 {
     protected:
         SmallTask(const std::string& id, const std::string& description);
-        const T* assignee = nullptr;
     public:
+            using WorkerObs = OwnSystemObserver<Worker>;
         const T& get_assignee() const;
         void assign(const T&);
         void assign(const Worker&) override;
@@ -21,14 +21,12 @@ class SmallTask : public Task
 
 template<SupportedWorker T>
 SmallTask<T>::SmallTask(const std::string& id, const std::string& description) :
-    Task{id, description} {}
+    Task{id, description}, OwnSystemObserver<Worker>{} {}
 
 template<SupportedWorker T>
 const T& SmallTask<T>::get_assignee() const
 {
-    if (not assignee)
-        throw TaskStatusError("Tried to get the assignee of an unassigned task.", *this);
-    return *assignee;
+    return dynamic_cast<const T&>(WorkerObs::get());
 }
 
 template<SupportedWorker T>
@@ -36,7 +34,7 @@ void SmallTask<T>::assign(const T& worker)
 {
     can_assign(worker);
     status = TaskStatus::assigned;
-    assignee = &worker;
+    WorkerObs::set(worker);
 }
 
 template<SupportedWorker T>
@@ -52,7 +50,7 @@ template<SupportedWorker T>
 void SmallTask<T>::unassign()
 {
     can_unassign();
-    assignee = nullptr;
+    WorkerObs::reset();
     status = TaskStatus::unassigned;
 }
 
