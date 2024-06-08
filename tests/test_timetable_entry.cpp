@@ -13,9 +13,7 @@ TEST_CASE("Test TimetableEntry")
     Pay pay{PaycheckMethod::Salary, Amount{0, 0}};
     Receptionist receptionist{"id1", "name1", pay};
     w_system.add_worker(receptionist);
-    TimetableSystem tt_system{w_system};
     jed_utils::datetime date{ 2024, 4, 11 };
-    
 
     SECTION("init")
     {

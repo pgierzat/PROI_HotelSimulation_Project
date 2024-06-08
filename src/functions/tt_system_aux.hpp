@@ -1,7 +1,7 @@
 #ifndef TT_SYSTEM_AUX_HPP
 #define TT_SYSTEM_AUX_HPP
 
-#include "../types/timetable_entry.hpp"
+#include "../inner_types/inner_timetable_entry.hpp"
 #include "../types/time_interval.hpp"
 #include <vector>
 
@@ -11,7 +11,7 @@ class SameWorkerID
     public:
         SameWorkerID(const Worker&);
         bool operator()(const TimetableEntry&);
-        bool operator()(const std::unique_ptr<TimetableEntry>&);
+        bool operator()(const std::unique_ptr<InnerTimetableEntry>&);
     private:
         const Worker& worker;
 };
@@ -21,7 +21,7 @@ class ShiftInInterval
     public:
         ShiftInInterval(const Worker&, const TimeInterval&);
         bool operator()(const TimetableEntry&);
-        bool operator()(const std::unique_ptr<TimetableEntry>&);
+        bool operator()(const std::unique_ptr<InnerTimetableEntry>&);
     private:
         SameWorkerID same_worker;
         TimeInterval interval;
@@ -32,7 +32,7 @@ class TooShortBreak
     public:
         TooShortBreak(const TimeInterval&, jed_utils::timespan minimal_break);
         bool operator()(const TimetableEntry&);
-        bool operator()(const std::unique_ptr<TimetableEntry>&);
+        bool operator()(const std::unique_ptr<InnerTimetableEntry>&);
     private:
         TimeInterval interval;
         jed_utils::timespan minimal_break;

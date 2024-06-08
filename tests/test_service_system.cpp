@@ -3,6 +3,7 @@
 #include "../src/services/taxi_service.hpp"
 #include "../src/rooms/hpp/rooms_list.hpp"
 #include "../src/rooms/hpp/two_room.hpp"
+#include "../src/systems/clock.hpp"
 #include "../src/systems/guest_system.hpp"
 #include "../src/systems/worker_system.hpp"
 #include "../src/systems/stay_system.hpp"
@@ -11,7 +12,8 @@
 
 TEST_CASE("Test ServiceSystem")
 {
-    RoomsList rooms_list{};
+    auto ck = Clock{};
+    auto rooms_list = RoomsList{};
     rooms_list.add_room(TwoRoom{"237"});
     const auto& room1 = rooms_list.get_by_id("237");
     GuestSystem g_system{};
@@ -23,7 +25,7 @@ TEST_CASE("Test ServiceSystem")
     auto pay = Pay{PaycheckMethod::Salary, Amount{3200, 0}};
     auto worker1 = Receptionist{"id1", "name1", pay};
     w_system.add_worker(worker1);
-    StaySystem s_system{g_system, rooms_list};
+    StaySystem s_system{ck, g_system, rooms_list};
     jed_utils::datetime start1{2024, 5, 21};
     jed_utils::datetime end1{2024, 5, 24};
     auto stay1_temp = Stay{"id1", room1, guest1, start1, end1};

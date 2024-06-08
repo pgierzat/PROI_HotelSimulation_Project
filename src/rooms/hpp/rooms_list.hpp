@@ -36,10 +36,7 @@ void RoomsList::add_room(const T& room)
     if (room_exists(room.get_id()))
         throw std::invalid_argument("Tried to add a Room with duplicate id to RoomsList.");
     auto to_add = std::make_unique<T>(room);
-    auto p = rooms.begin();
-    rooms.push_back(std::move(to_add));
-    if (rooms.begin() != p)
-        publish_realloc();
+    rooms.emplace_back(std::move(to_add));
 }
 
 #endif

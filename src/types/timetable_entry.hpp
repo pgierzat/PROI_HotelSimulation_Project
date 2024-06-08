@@ -1,4 +1,5 @@
 #include "../workers/worker.hpp"
+#include "../auxiliary/own_system_observer.hpp"
 #include "time_interval.hpp"
 #include "datetime.h"
 #include <chrono>
@@ -9,7 +10,7 @@
 class WorkerSystem;
 class TimetableSystem;
 
-class TimetableEntry
+class TimetableEntry : protected OwnSystemObserver<Worker>
 {
     public:
         TimetableEntry(const std::string& id, const Worker&, const jed_utils::datetime&, Shift);
@@ -25,13 +26,9 @@ class TimetableEntry
         void set_shift(Shift);
         void set_date(const jed_utils::datetime&);
         bool operator==(const TimetableEntry&) const;
-        static void set_w_system(const WorkerSystem&) noexcept;
     private:
-        static const WorkerSystem* w_system;
-        static const TimetableSystem* tt_system;
         static void check_worker_shift(const Worker&, Shift);
         std::string id;
-        std::string worker_id;
         jed_utils::datetime date;
         Shift shift;
 };
