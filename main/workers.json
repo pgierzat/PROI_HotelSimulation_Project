@@ -1,0 +1,38 @@
+[
+    {
+        "id": "id1",
+        "name": "name1",
+        "pay": {
+            "amount": "3200.00",
+            "method": "Salary"
+        },
+        "type": "Receptionist"
+    },
+    {
+        "id": "id1",
+        "name": "name1",
+        "pay": {
+            "amount": "3200.00",
+            "method": "Salary"
+        },
+        "type": "Maid"
+    },
+    {
+        "id": "id1",
+        "name": "name1",
+        "pay": {
+            "amount": "3200.00",
+            "method": "Salary"
+        },
+        "type": "Cook"
+    },
+    {
+        "id": "id1",
+        "name": "name1",
+        "pay": {
+            "amount": "3200.00",
+            "method": "Salary"
+        },
+        "type": "Waiter"
+    }
+]
