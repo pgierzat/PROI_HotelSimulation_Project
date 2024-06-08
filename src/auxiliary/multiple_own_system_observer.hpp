@@ -97,7 +97,7 @@ std::optional<OwnSystemObserver<T>*> MultipleOwnSystemObserver<T>::find_observer
 {
     auto p = std::ranges::find_if(observers,
         [&](const auto& obs){ return obs.get_id() == id; });
-    if (p != observers.end())
+    if (p == observers.end())
         return std::nullopt;
     return &*p;
 }
@@ -107,7 +107,7 @@ OwnSystemObserver<T> MultipleOwnSystemObserver<T>::get_observer(const std::strin
 {
     auto p = std::ranges::find_if(observers,
         [&](const auto& obs){ return obs.get_id() == id; });
-    if (p != observers.end())
+    if (p == observers.end())
         throw MultipleOwnSystemObserverError<T>("Couldn't find observer among MOSObserver's observers.", *this);
     return *p;
 }
