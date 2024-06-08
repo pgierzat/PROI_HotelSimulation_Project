@@ -26,15 +26,7 @@ void PaycheckSystem::calculate_paychecks(std::chrono::year_month month)
         unsigned hours = hours_worked(all_entries, *worker, month);
         auto paycheck = worker -> calculate_paycheck(hours); 
         if (paycheck != Amount{0, 0})
-<<<<<<< HEAD
             paychecks.emplace_back(*worker, paycheck);
-=======
-        {
-            paychecks.emplace_back(*worker, paycheck);
-            
-        }
-            
->>>>>>> main
     }
 }
 
