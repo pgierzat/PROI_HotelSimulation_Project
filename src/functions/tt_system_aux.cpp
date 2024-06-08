@@ -7,7 +7,7 @@ SameWorkerID::SameWorkerID(const Worker& worker) : worker{worker} {}
 
 bool SameWorkerID::operator()(const TimetableEntry& entry) { return entry.get_worker() == worker; }
 
-bool SameWorkerID::operator()(const std::unique_ptr<TimetableEntry>& entry) {
+bool SameWorkerID::operator()(const std::unique_ptr<InnerTimetableEntry>& entry) {
     return entry -> get_worker() == worker;
 }
 
@@ -19,7 +19,7 @@ bool ShiftInInterval::operator()(const TimetableEntry& entry)
     return same_worker(entry) && is_in(entry.get_start(), interval);
 }
 
-bool ShiftInInterval::operator()(const std::unique_ptr<TimetableEntry>& entry)
+bool ShiftInInterval::operator()(const std::unique_ptr<InnerTimetableEntry>& entry)
 {
     return same_worker(entry) && is_in(entry -> get_start(), interval);
 }
@@ -32,7 +32,7 @@ bool TooShortBreak::operator()(const TimetableEntry& entry)
     return distance( interval, entry.get_interval() ) < minimal_break;
 }
 
-bool TooShortBreak::operator()(const std::unique_ptr<TimetableEntry>& entry)
+bool TooShortBreak::operator()(const std::unique_ptr<InnerTimetableEntry>& entry)
 {
     return distance( interval, entry -> get_interval() ) < minimal_break;
 }
