@@ -35,8 +35,8 @@ class StaySystem : public OtherSystemObserver<Room>, public OtherSystemObserver<
         InnerStay& get_stay(const Stay&) const;
         void check_overlap(const Stay&) const;
         jed_utils::datetime time{1970, 1, 1};
-        const GuestSystem* g_system;
-        const RoomsList* rooms_list;
+        const GuestSystem* g_system = nullptr;
+        const RoomsList* rooms_list = nullptr;
         std::vector<std::unique_ptr<InnerStay>> stays;
 };
 

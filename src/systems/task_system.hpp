@@ -35,9 +35,9 @@ class TaskSystem : public OtherSystemObserver<Worker>, public OtherSystemObserve
         std::optional<Task*> find_task(const Task&) const noexcept;
         Task& get_task(const Task&) const;
         IDGenerator id_gen{};
-        WorkerSystem* w_system;
-        RoomsList* rooms_list;
-        GuestSystem* g_system;
+        WorkerSystem* w_system = nullptr;
+        RoomsList* rooms_list = nullptr;
+        GuestSystem* g_system = nullptr;
         std::vector<std::unique_ptr<InnerTask>> tasks;
 };
 

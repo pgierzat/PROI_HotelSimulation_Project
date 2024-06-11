@@ -21,8 +21,8 @@ class PaycheckSystem : public TimeObserver, public OtherSystemObserver<Worker>
         void notify_erase(const std::string& erased_obj_id, dummy<Worker>);
     private:
         void calculate_paychecks(std::chrono::year_month);
-        WorkerSystem* w_system;
-        const TimetableSystem* tt_system;
+        WorkerSystem* w_system = nullptr;
+        const TimetableSystem* tt_system = nullptr;
         jed_utils::datetime time;
         std::vector<InnerPaycheck> paychecks;
 };

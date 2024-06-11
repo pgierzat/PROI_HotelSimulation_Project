@@ -5,7 +5,7 @@
 #include "../auxiliary/t_system_aux.hpp"
 
 TaskSystem::TaskSystem(WorkerSystem& w_system, RoomsList& rooms_list, GuestSystem& g_system) :
-    w_system{&w_system}
+    w_system{&w_system}, rooms_list{&rooms_list}, g_system{&g_system}
 {
     w_system.subscribe(*this);
     rooms_list.subscribe(*this);
