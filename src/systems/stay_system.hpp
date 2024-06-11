@@ -27,9 +27,7 @@ class StaySystem : public OtherSystemObserver<Room>, public OtherSystemObserver<
         std::vector<const Stay*> get_stays() const noexcept;
         void check_in(const Stay&);
         void check_out(const Stay&);
-        void notify_realloc(dummy<Room>) override;
         void notify_erase(const std::string& erased_obj_id, dummy<Room>) override;
-        void notify_realloc(dummy<Guest>) override;
         void notify_erase(const std::string& erased_obj_id, dummy<Guest>) override;
         bool check_room(const Room&) const;
     private:
@@ -37,8 +35,8 @@ class StaySystem : public OtherSystemObserver<Room>, public OtherSystemObserver<
         InnerStay& get_stay(const Stay&) const;
         void check_overlap(const Stay&) const;
         jed_utils::datetime time{1970, 1, 1};
-        const GuestSystem* g_system;
-        const RoomsList* rooms_list;
+        const GuestSystem* g_system = nullptr;
+        const RoomsList* rooms_list = nullptr;
         std::vector<std::unique_ptr<InnerStay>> stays;
 };
 

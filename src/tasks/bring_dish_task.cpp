@@ -1,9 +1,13 @@
 #include "bring_dish_task.hpp"
 #include "../utilities/errors.hpp"
 
-BringDishTask::BringDishTask(const std::string& id, Dish dish, const Table& table) :
-    SmallTask{id, "Bring a dish to a table."}, dish{dish}, table{table} {}
+const std::string BringDishTask::description = "Bring a dish to a table.";
+
+BringDishTask::BringDishTask(const std::string& id, Dish dish, const std::string& table_nr) :
+    Task{id}, SmallTask{id}, dish{dish}, table_nr{table_nr} {}
 
 Dish BringDishTask::get_dish() const noexcept { return dish; }
 
-const Table& BringDishTask::get_table() const noexcept { return table; }
+const std::string& BringDishTask::get_table_nr() const noexcept { return table_nr; }
+
+const std::string& BringDishTask::get_description() const noexcept { return description; }

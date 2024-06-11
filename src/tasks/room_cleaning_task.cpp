@@ -3,10 +3,14 @@
 #include "room_cleaning_task.hpp"
 #include "../utilities/errors.hpp"
 
-RoomCleaningTask::RoomCleaningTask(const std::string& id, const Room& room) :
-    BigTask{id, "Clean a room.", room.calculatePersonel()}, room_id{room.get_id()} {}
 
-const Room& RoomCleaningTask::get_room() const noexcept
-{
-    return rooms_list -> get_by_id(room_id);
-}
+const std::string RoomCleaningTask::description = "Clean a room.";
+
+RoomCleaningTask::RoomCleaningTask(const std::string& id, const Room& room) :
+    Task{id}, BigTask{id, room.calculatePersonel()}, RoomObs{room} {}
+
+const Room& RoomCleaningTask::get_room() const noexcept { return RoomObs::get(); }
+
+void RoomCleaningTask::set_room(const Room& room) noexcept { RoomObs::set(room); }
+
+const std::string& RoomCleaningTask::get_description() const noexcept { return description; }

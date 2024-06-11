@@ -10,8 +10,7 @@ TEST_CASE("Test BringDishTask")
     auto w_system = WorkerSystem{};
     auto g_system = GuestSystem{};
     auto t_system = TaskSystem{w_system, rooms_list, g_system};
-    Table table{"25"};
-    BringDishTask bringtask{"1111", Dish::Omelette, table};
+    BringDishTask bringtask{"1111", Dish::Omelette, "25"};
     t_system.add_task(bringtask);
     Task& task = bringtask;
 
@@ -19,6 +18,6 @@ TEST_CASE("Test BringDishTask")
     {
         REQUIRE(task.get_description() == "Bring a dish to a table.");
         REQUIRE(bringtask.get_dish() == Dish::Omelette);
-        REQUIRE(bringtask.get_table() == table);
+        REQUIRE(bringtask.get_table_nr() == "25");
     }
 }
