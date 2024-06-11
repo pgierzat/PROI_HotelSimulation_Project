@@ -26,9 +26,11 @@ enum class StayStatus : unsigned {
 
 class Stay : protected OwnSystemObserver<Room>, protected MultipleOwnSystemObserver<Guest>
 {
-    public:
+            using wRoomObs = WeakOwnSystemObserver<Room>;
+            using wGuestsObs = WeakMultipleOwnSystemObserver<Guest>;
             using RoomObs = OwnSystemObserver<Room>;
             using GuestsObs = MultipleOwnSystemObserver<Guest>;
+    public:
         Stay(const std::string& id, const Room&, const Guest& main_guest,
             const jed_utils::datetime& start, const jed_utils::datetime& end);
         const std::string& get_id() const noexcept;

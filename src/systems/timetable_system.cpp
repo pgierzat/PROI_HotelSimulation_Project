@@ -38,7 +38,7 @@ void TimetableSystem::add_entry(const TTEntry& entry)
     auto& stay_obj = *entries.back();
     OwnSystemObserver<Worker>& worker_observer = stay_obj.get_worker_observer();
     try {
-        auto worker_id = worker_observer.get_id();
+        auto worker_id = worker_observer.get_observed_id();
         worker_observer.notify_realloc(w_system -> get_by_id(worker_id));
     } catch (const RoomNotInSystemError& e) {
         entries.pop_back();

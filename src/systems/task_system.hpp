@@ -46,7 +46,7 @@ template<SupportedTask T>
 void TaskSystem::add_task(const T& task)
 {
     check_task_status(task);
-    if (find_by_id(task.Task::get_id()))
+    if (find_by_id(task.get_id()))
         throw DuplicateTaskIDError("Tried to add a duplicate task to TaskSystem.", task);
     auto to_add = std::make_unique<ConcreteInnerTask<T>>(task);
     tasks.emplace_back(std::move(to_add));
@@ -54,10 +54,10 @@ void TaskSystem::add_task(const T& task)
     auto& wmosog = task_obj.get_wosog();
     auto& wmosor = task_obj.get_wosor();
     try {
-        auto guest_id = wmosog.get_id();
+        auto guest_id = wmosog.get_observed_id();
         if (not guest_id.empty())
             wmosog.notify_realloc(g_system -> get_by_id(guest_id));
-        auto room_id = wmosor.get_id();
+        auto room_id = wmosor.get_observed_id();
         if (not room_id.empty())
             wmosor.notify_realloc(rooms_list -> get_by_id(room_id));
     } catch (const RoomNotInSystemError& e) {

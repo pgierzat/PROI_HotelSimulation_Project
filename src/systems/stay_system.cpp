@@ -38,9 +38,9 @@ void StaySystem::add_stay(const Stay& stay)
     OwnSystemObserver<Room>& room_observer = stay_obj.get_room_observer();
     MultipleOwnSystemObserver<Guest>& guests_observer = stay_obj.get_guests_observer();
     try {
-        auto room_id = room_observer.get_id();
+        auto room_id = room_observer.get_observed_id();
         room_observer.notify_realloc(rooms_list -> get_by_id(room_id));
-        for (auto guest_id : guests_observer.get_ids())
+        for (auto guest_id : guests_observer.get_observed_ids())
             guests_observer.notify_realloc(g_system -> get_by_id(*guest_id));
     } catch (const RoomNotInSystemError& e) {
         stays.pop_back();

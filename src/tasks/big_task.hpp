@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "task.hpp"
 #include "../auxiliary/multiple_own_system_observer.hpp"
+#include "../auxiliary/pseudo_own_system_observer.hpp"
 #include "../systems/task_system.hpp"
 #include "../utilities/errors.hpp"
 #include "../utilities/concepts.hpp"
@@ -12,7 +13,8 @@
 template<SupportedWorker T>
 class BigTask :
     public virtual Task,
-    protected MultipleOwnSystemObserver<Worker>
+    protected MultipleOwnSystemObserver<Worker>,
+    protected PseudoOwnSystemObserver<Worker>
 {
     protected:
             using MOSO = MultipleOwnSystemObserver<Worker>;

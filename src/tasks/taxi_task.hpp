@@ -3,12 +3,16 @@
 
 #include "small_task.hpp"
 #include "../auxiliary/own_system_observer.hpp"
+#include "../auxiliary/pseudo_own_system_observer.hpp"
 #include "../rooms/hpp/room.hpp"
 #include "../types/datetime.h"
 #include "../types/guest.hpp"
 #include "../workers/receptionist.hpp"
 
-class TaxiTask : public SmallTask<Receptionist>, protected OwnSystemObserver<Guest>
+class TaxiTask :
+    public SmallTask<Receptionist>,
+    protected PseudoOwnSystemObserver<Room>,
+    protected OwnSystemObserver<Guest>
 {
         using GuestObs = OwnSystemObserver<Guest>;
     public:

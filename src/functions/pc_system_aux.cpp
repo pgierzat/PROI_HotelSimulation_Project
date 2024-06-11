@@ -7,5 +7,5 @@ PaycheckSameWorkerID::PaycheckSameWorkerID(const std::string& id) : id{id} {}
 
 bool PaycheckSameWorkerID::operator()(const InnerPaycheck& otr_paycheck)
 {
-    return otr_paycheck.get_cworker_observer().get_id() == id;
+    return otr_paycheck.get_cworker_observer().get_observed_id() == id;
 }

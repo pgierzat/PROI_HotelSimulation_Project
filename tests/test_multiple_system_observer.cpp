@@ -14,7 +14,7 @@ TEST_CASE("Test MultipleOwnSystemObserver")
     SECTION("Test init")
     {
         REQUIRE( observer.get().empty() );
-        REQUIRE( observer.get_ids().empty() );
+        REQUIRE( observer.get_observed_ids().empty() );
         REQUIRE( observer.size() == 0 );
     }
 
@@ -26,7 +26,7 @@ TEST_CASE("Test MultipleOwnSystemObserver")
         std::vector<const Worker*> exp{&cook, &maid};
         REQUIRE( observer.get() == exp );
         auto exp_ids = std::vector<std::string>{"id1", "id2"};
-        REQUIRE( observer.get_ids() == exp_ids );
+        REQUIRE( observer.get_observed_ids() == exp_ids );
         REQUIRE( observer.size() == 2 );
     }
 
@@ -35,7 +35,7 @@ TEST_CASE("Test MultipleOwnSystemObserver")
         observer.notify_erase("id1");
         REQUIRE_THROWS_AS( observer.get(), OwnSystemObserverError<Worker> );
         auto exp_ids = std::vector<std::string>{"id1", "id2"};
-        REQUIRE( observer.get_ids() == exp_ids );
+        REQUIRE( observer.get_observed_ids() == exp_ids );
     }
 
     SECTION("Test notify realloc")
@@ -46,7 +46,7 @@ TEST_CASE("Test MultipleOwnSystemObserver")
         std::vector<const Worker*> exp{&cook2, &maid};
         REQUIRE( observer.get() == exp );
         auto exp_ids = std::vector<std::string>{"id1", "id2"};
-        REQUIRE( observer.get_ids() == exp_ids );
+        REQUIRE( observer.get_observed_ids() == exp_ids );
     }
 
     SECTION("Test notify realloc, wrong id")

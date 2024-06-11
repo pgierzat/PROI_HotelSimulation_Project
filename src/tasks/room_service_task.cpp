@@ -5,9 +5,9 @@
 const std::string RoomServiceTask::description = "Bring a dish to a room.";
 
 RoomServiceTask::RoomServiceTask(const std::string& id, const Room& room, Dish dish) :
-    Task{id}, SmallTask{id}, room{room}, dish{dish} {}
+    Task{id}, SmallTask{id}, RoomObs{room}, dish{dish} {}
 
-const Room& RoomServiceTask::get_room() const noexcept { return room; }
+const Room& RoomServiceTask::get_room() const noexcept { return RoomObs::get(); }
 
 Dish RoomServiceTask::get_dish() const noexcept { return dish; }
 

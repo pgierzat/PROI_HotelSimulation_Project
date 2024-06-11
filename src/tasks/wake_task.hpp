@@ -3,11 +3,15 @@
 
 #include "small_task.hpp"
 #include "../auxiliary/own_system_observer.hpp"
+#include "../auxiliary/pseudo_own_system_observer.hpp"
 #include "../rooms/hpp/room.hpp"
 #include "../types/datetime.h"
 #include "../workers/maid.hpp"
 
-class WakeTask : public SmallTask<Maid>, protected OwnSystemObserver<Room>
+class WakeTask :
+    public SmallTask<Maid>,
+    protected OwnSystemObserver<Room>,
+    protected PseudoOwnSystemObserver<Guest>
 {
         using RoomObs = OwnSystemObserver<Room>;
     public:

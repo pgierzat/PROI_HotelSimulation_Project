@@ -4,11 +4,15 @@
 #include <vector>
 #include "big_task.hpp"
 #include "../auxiliary/own_system_observer.hpp"
+#include "../auxiliary/pseudo_own_system_observer.hpp"
 #include "../workers/maid.hpp"
 #include "../rooms/hpp/room.hpp"
 
 
-class RoomCleaningTask : public BigTask<Maid>, protected OwnSystemObserver<Room>
+class RoomCleaningTask :
+    public BigTask<Maid>,
+    protected OwnSystemObserver<Room>,
+    protected PseudoOwnSystemObserver<Guest>
 {
         using RoomObs = OwnSystemObserver<Room>;
     public:
