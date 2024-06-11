@@ -31,7 +31,7 @@ TEST_CASE("Test TaskSystem")
     t_system.add_task(PrepareDishTask{"1", Dish::FrenchToasts});
     t_system.add_task(RoomCleaningTask{"2", TwoAppartment{"237"}});
     t_system.add_task(TaxiTask{"3", Guest{"id", "name"}, jed_utils::datetime{2024, 5, 19}});
-    t_system.add_task(BringDishTask{"5", Dish::FrenchToasts, Table{"10"}});
+    t_system.add_task(BringDishTask{"5", Dish::FrenchToasts, "10"});
     const auto& preptask = *t_system.find_by_id("1").value();
     const auto& roomtask = *t_system.find_by_id("2").value();
     const auto& taxitask = *t_system.find_by_id("3").value();
