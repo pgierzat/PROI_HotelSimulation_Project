@@ -12,25 +12,29 @@ TEST_CASE("Test TaskSystem")
 {
     WorkerSystem w_system{};
     Pay pay{PaycheckMethod::Wage, Amount{22, 50}};
-    Cook cook{"name1", "1111", pay};
-    Maid maid1{"name2", "2222", pay};
-    Maid maid2{"name3", "3333", pay};
-    Receptionist receptionist{"name4", "4444", pay};
-    Waiter waiter{"name5", "5555", pay};
-    w_system.add_worker(cook);
-    w_system.add_worker(maid1);
-    w_system.add_worker(maid2);
-    w_system.add_worker(receptionist);
-    w_system.add_worker(waiter);
+    w_system.add_worker(Cook{"1111", "id1", pay});
+    w_system.add_worker(Maid{"2222", "id2", pay});
+    w_system.add_worker(Maid{"3333", "id3", pay});
+    w_system.add_worker(Receptionist{"4444", "id4", pay});
+    w_system.add_worker(Waiter{"5555", "id5", pay});
+    //auto& cook = w_system.get_by_id("1111");
+    auto& maid1 = w_system.get_by_id("2222");
+    auto& maid2 = w_system.get_by_id("3333");
+    auto& receptionist = w_system.get_by_id("4444");
+    auto& waiter = w_system.get_by_id("5555");
     RoomsList rooms_list{};
+    rooms_list.add_room(TwoAppartment{"237"});
+    auto& room1 = rooms_list.get_by_id("237");
     GuestSystem g_system{};
+    g_system.add_guest(Guest{"id", "name"});
+    auto& guest1 = g_system.get_by_id("id");
     TaskSystem t_system{w_system, rooms_list, g_system};
 
     SECTION("init") { REQUIRE(t_system.get_tasks().empty()); }
 
     t_system.add_task(PrepareDishTask{"1", Dish::FrenchToasts});
-    t_system.add_task(RoomCleaningTask{"2", TwoAppartment{"237"}});
-    t_system.add_task(TaxiTask{"3", Guest{"id", "name"}, jed_utils::datetime{2024, 5, 19}});
+    t_system.add_task(RoomCleaningTask{"2", room1});
+    t_system.add_task(TaxiTask{"3", guest1, jed_utils::datetime{2024, 5, 19}});
     t_system.add_task(BringDishTask{"5", Dish::FrenchToasts, "10"});
     const auto& preptask = *t_system.find_by_id("1").value();
     const auto& roomtask = *t_system.find_by_id("2").value();

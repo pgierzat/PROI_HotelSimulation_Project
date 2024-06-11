@@ -27,8 +27,8 @@ class ServiceSystem
             void add_service(const T&);
     private:
         std::vector<std::unique_ptr<Service>> services;
-        static TaskSystem* t_system = nullptr;
-        static StaySystem* s_system = nullptr;
+        static TaskSystem* t_system;
+        static StaySystem* s_system;
 };
 
 
