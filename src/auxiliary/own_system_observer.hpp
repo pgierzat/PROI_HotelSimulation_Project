@@ -16,6 +16,7 @@ class OwnSystemObserver : public virtual WeakOwnSystemObserver<T>
         void notify_erase() noexcept override;
         const T& get() const;
         explicit operator bool() const noexcept;
+        bool has_value() const noexcept;
         void set(const T&);
         void reset() noexcept;
     private:
@@ -65,6 +66,9 @@ void OwnSystemObserver<T>::reset() noexcept
 
 template<typename T>
 OwnSystemObserver<T>::operator bool() const noexcept { return observed; }
+
+template<typename T>
+bool OwnSystemObserver<T>::has_value() const noexcept { return observed; }
 
 
 #endif
