@@ -9,13 +9,13 @@
 
 template<SupportedWorker T>
 class SmallTask :
-    public Task,
+    public virtual Task,
     protected OwnSystemObserver<Worker>,
     protected PseudoMultipleOwnSystemObserver<Worker>
 {
     protected:
         using WorkerObs = OwnSystemObserver<Worker>;    
-        SmallTask(const std::string& id, const std::string& description);
+        SmallTask(const std::string& id);
     public:
         const T& get_assignee() const;
         void assign(const T&);
@@ -25,8 +25,7 @@ class SmallTask :
 
 
 template<SupportedWorker T>
-SmallTask<T>::SmallTask(const std::string& id, const std::string& description) :
-    Task{id, description}, OwnSystemObserver<Worker>{} {}
+SmallTask<T>::SmallTask(const std::string& id) : Task{id}, OwnSystemObserver<Worker>{} {}
 
 template<SupportedWorker T>
 const T& SmallTask<T>::get_assignee() const

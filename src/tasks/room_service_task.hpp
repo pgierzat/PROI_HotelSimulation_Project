@@ -14,7 +14,9 @@ class RoomServiceTask : public SmallTask<Waiter>
         RoomServiceTask(const std::string& id, const Room&, Dish);
         const Room& get_room() const noexcept;
         Dish get_dish() const noexcept;
+        const std::string& get_description() const noexcept override;
     protected:
+        static const std::string description;
         const Room& room;
         Dish dish;
 };

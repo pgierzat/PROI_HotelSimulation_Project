@@ -15,23 +15,22 @@ enum class TaskStatus {
     completed
 };
 
-using WOSOw = WeakOwnSystemObserver<Worker>;
-using WMOSOw = WeakMultipleOwnSystemObserver<Worker>;
-using WOSOr = WeakOwnSystemObserver<Room>;
-using WOSOg = WeakOwnSystemObserver<Guest>;
 
-
-class Task : protected virtual WOSOw, protected virtual WMOSOw, protected virtual WOSOr, protected virtual WOSOg
+class Task :
+    protected virtual WeakOwnSystemObserver<Worker>,
+    protected virtual WeakMultipleOwnSystemObserver<Worker>,
+    protected virtual WeakOwnSystemObserver<Room>,
+    protected virtual WeakOwnSystemObserver<Guest>
 {
     protected:
-        Task(const std::string& id, const std::string& description);
+        Task(const std::string& id);
     public:
         virtual ~Task() = default;
         const std::string& get_id() const noexcept;
-        const std::string& get_description() const noexcept;
         TaskStatus get_status() const noexcept;
         void mark_completed();
         void set_id(const std::string&) noexcept;
+        virtual const std::string& get_description() const noexcept;
         virtual void assign(const Worker&) = 0;
         virtual void unassign() = 0;
         bool operator==(const Task&) const noexcept;
@@ -39,7 +38,6 @@ class Task : protected virtual WOSOw, protected virtual WMOSOw, protected virtua
         virtual void can_assign(const Worker&) const;
         virtual void can_unassign() const;
         std::string id;
-        std::string description;
         TaskStatus status{TaskStatus::unassigned};
 };
 

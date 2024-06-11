@@ -11,12 +11,12 @@
 
 template<SupportedWorker T>
 class BigTask :
-    public Task,
+    public virtual Task,
     protected MultipleOwnSystemObserver<Worker>
 {
     protected:
             using MOSO = MultipleOwnSystemObserver<Worker>;
-        BigTask(const std::string& id, const std::string& description, unsigned workers_required);
+        BigTask(const std::string& id, unsigned workers_required);
         virtual void can_assign(const Worker&) const override;
         unsigned required;
         unsigned assigned = 0;
@@ -31,7 +31,7 @@ class BigTask :
 
 
 template<SupportedWorker T>
-BigTask<T>::BigTask(const std::string& id, const std::string& description, unsigned workers_required) :
+BigTask<T>::BigTask(const std::string& id, unsigned workers_required) :
     Task{id, description}, MOSO{}, required{workers_required}
 {
     if (workers_required == 0)

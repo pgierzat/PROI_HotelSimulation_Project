@@ -3,12 +3,9 @@
 #include "../utilities/errors.hpp"
 
 
-Task::Task(const std::string& id, const std::string& description) :
-    id{id}, description{description}, status{TaskStatus::unassigned} {}
+Task::Task(const std::string& id) : id{id}, status{TaskStatus::unassigned} {}
 
 const std::string& Task::get_id() const noexcept { return id; }
-
-const std::string& Task::get_description() const noexcept { return description; }
 
 TaskStatus Task::get_status() const noexcept { return status; }
 

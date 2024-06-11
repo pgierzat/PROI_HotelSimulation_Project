@@ -11,7 +11,9 @@ class PrepareDishTask : public SmallTask<Cook>
     public:
         PrepareDishTask(const std::string& id, Dish);
         Dish get_dish() const noexcept;
+        const std::string& get_description() const noexcept override;
     protected:
+        static const std::string description;
         Dish dish;
 };
 

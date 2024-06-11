@@ -9,14 +9,16 @@
 
 class WakeTask : public SmallTask<Maid>, protected OwnSystemObserver<Room>
 {
+        using RoomObs = OwnSystemObserver<Room>;
     public:
         WakeTask(const std::string& id, const Room&, const jed_utils::datetime&);
         const Room& get_room() const noexcept;
         const jed_utils::datetime& get_time() const noexcept;
         void set_room(const Room&) noexcept;
         void set_time(const jed_utils::datetime&) noexcept;
-    protected:
-            using RoomObs = OwnSystemObserver<Room>;
+        const std::string& get_description() const noexcept override;
+    protected:   
+        static const std::string description;
         jed_utils::datetime time;
 };
 

@@ -10,14 +10,16 @@
 
 class TaxiTask : public SmallTask<Receptionist>, protected OwnSystemObserver<Guest>
 {
+        using GuestObs = OwnSystemObserver<Guest>;
     public:
         TaxiTask(const std::string& id, const Guest&, const jed_utils::datetime&);
         const Guest& get_guest() const noexcept;
         const jed_utils::datetime& get_time() const noexcept;
         void set_guest(const Guest&) noexcept;
         void set_time(const jed_utils::datetime&) noexcept;
-    protected:
-            using GuestObs = OwnSystemObserver<Guest>;
+        const std::string& get_description() const noexcept override;
+    protected:   
+        static const std::string description;
         jed_utils::datetime time;
 };
 

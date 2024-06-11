@@ -13,7 +13,9 @@ class BringDishTask : public SmallTask<Waiter>
         BringDishTask(const std::string& id, Dish, const std::string& table_nr);
         Dish get_dish() const noexcept;
         const std::string& get_table_nr() const noexcept;
+        const std::string& get_description() const noexcept override;
     protected:
+        static const std::string description;
         Dish dish;
         std::string table_nr;
 };

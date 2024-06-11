@@ -15,6 +15,9 @@ class RoomCleaningTask : public BigTask<Maid>, protected OwnSystemObserver<Room>
         RoomCleaningTask(const std::string& id, const Room&);
         const Room& get_room() const noexcept;
         void set_room(const Room&) noexcept;
+        const std::string& get_description() const noexcept override;
+    protected:
+        static const std::string description;
 };
 
 
