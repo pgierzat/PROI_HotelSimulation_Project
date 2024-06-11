@@ -13,7 +13,7 @@ class PseudoMultipleOwnSystemObserver : public virtual WeakMultipleOwnSystemObse
     public:
         void notify_realloc(const T& new_obj) override;
         void notify_erase(const std::string& erased_id) noexcept override;
-        std::vector<const std::string*> get_ids() const noexcept override;
+        std::vector<const std::string*> get_observed_ids() const noexcept override;
         bool has_id(const std::string&) const noexcept override;
 };
 
@@ -25,7 +25,7 @@ template<typename T>
 void PseudoMultipleOwnSystemObserver<T>::notify_erase(const std::string& erased_id) noexcept {}
 
 template<typename T>
-std::vector<const std::string*> PseudoMultipleOwnSystemObserver<T>::get_ids() const noexcept {
+std::vector<const std::string*> PseudoMultipleOwnSystemObserver<T>::get_observed_ids() const noexcept {
     return std::vector<const std::string*>{};
 }
 

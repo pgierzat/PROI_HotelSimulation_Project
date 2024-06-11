@@ -16,7 +16,7 @@ class MultipleOwnSystemObserver : public virtual WeakMultipleOwnSystemObserver<T
         MultipleOwnSystemObserver(const MultipleOwnSystemObserver<T>&&);
         void notify_realloc(const T& new_obj) override;
         void notify_erase(const std::string& erased_id) noexcept override;
-        std::vector<const std::string*> get_ids() const noexcept override;
+        std::vector<const std::string*> get_observed_ids() const noexcept override;
         bool has_id(const std::string&) const noexcept override;
         unsigned size() const noexcept;
         void add_observed(const T&);
@@ -61,10 +61,10 @@ void MultipleOwnSystemObserver<T>::notify_erase(const std::string& erased_id) no
 }
 
 template<typename T>
-std::vector<const std::string*> MultipleOwnSystemObserver<T>::get_ids() const noexcept
+std::vector<const std::string*> MultipleOwnSystemObserver<T>::get_observed_ids() const noexcept
 {
     auto ids = std::vector<const std::string*>{};
-    std::ranges::for_each(observers, [&](const auto& obs){ ids.push_back(&obs -> get_id()); });
+    std::ranges::for_each(observers, [&](const auto& obs){ ids.push_back(&obs -> get_observed_id()); });
     return ids;
 }
 
@@ -72,7 +72,7 @@ template<typename T>
 bool MultipleOwnSystemObserver<T>::has_id(const std::string& id) const noexcept
 {
     auto p = std::ranges::find_if(observers,
-        [&](const auto& obs){ return obs -> get_id() == id; });
+        [&](const auto& obs){ return obs -> get_observed_id() == id; });
     return p != observers.end();
 }
 
@@ -82,7 +82,7 @@ unsigned MultipleOwnSystemObserver<T>::size() const noexcept { return observers.
 template<typename T>
 void MultipleOwnSystemObserver<T>::remove_observed(const std::string& id) noexcept
 {
-    std::erase_if(observers, [&](const auto& obs){ return obs -> get_id() == id; });
+    std::erase_if(observers, [&](const auto& obs){ return obs -> get_observed_id() == id; });
 }
 
 template<typename T>
@@ -97,7 +97,7 @@ template<typename T>
 std::optional<const T*> MultipleOwnSystemObserver<T>::find_by_id(const std::string& id) const
 {
     auto p = std::ranges::find_if(observers,
-        [&](const auto& obs){ return obs -> get_id() == id; });
+        [&](const auto& obs){ return obs -> get_observed_id() == id; });
     if (p != observers.end())
         return std::nullopt;
     return &p -> get() -> get();
@@ -107,7 +107,7 @@ template<typename T>
 const T& MultipleOwnSystemObserver<T>::get_by_id(const std::string& id) const
 {
     auto p = std::ranges::find_if(observers,
-        [&](const auto& obs){ return obs -> get_id() == id; });
+        [&](const auto& obs){ return obs -> get_observed_id() == id; });
     if (p == observers.end())
         throw MultipleOwnSystemObserverError<T>("Couldn't get observed object by id.", *this);
     return p -> get() -> get();
@@ -125,7 +125,7 @@ void MultipleOwnSystemObserver<T>::add_observed(const T& obj)
 template<typename T>
 void MultipleOwnSystemObserver<T>::remove_observed(const T& obj) noexcept
 {
-    std::erase_if(observers, [&](const auto& obs){ return obs -> get_id() == obj.get_id(); });
+    std::erase_if(observers, [&](const auto& obs){ return obs -> get_observed_id() == obj.get_id(); });
 }
 
 template<typename T>
@@ -138,7 +138,7 @@ template<typename T>
 std::optional<OwnSystemObserver<T>*> MultipleOwnSystemObserver<T>::find_observer(const std::string& id)
 {
     auto p = std::ranges::find_if(observers,
-        [&](const auto& obs){ return obs -> get_id() == id; });
+        [&](const auto& obs){ return obs -> get_observed_id() == id; });
     if (p == observers.end())
         return std::nullopt;
     return  p -> get();
@@ -148,7 +148,7 @@ template<typename T>
 OwnSystemObserver<T>& MultipleOwnSystemObserver<T>::get_observer(const std::string& id)
 {
     auto p = std::ranges::find_if(observers,
-        [&](const auto& obs){ return obs -> get_id() == id; });
+        [&](const auto& obs){ return obs -> get_observed_id() == id; });
     if (p == observers.end())
         throw MultipleOwnSystemObserverError<T>("Couldn't find observer among MOSObserver's observers.", *this);
     return **p;
