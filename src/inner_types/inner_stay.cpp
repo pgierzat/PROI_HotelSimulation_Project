@@ -2,6 +2,8 @@
 #include <algorithm>
 
 
+InnerStay::InnerStay(const Stay& stay) : Stay{stay} {}
+
 OwnSystemObserver<Room>& InnerStay::get_room_observer() noexcept { return *this; }
 
 MultipleOwnSystemObserver<Guest>& InnerStay::get_guests_observer() noexcept { return *this; }
