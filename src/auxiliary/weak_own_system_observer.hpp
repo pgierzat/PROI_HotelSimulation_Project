@@ -10,6 +10,7 @@ class WeakOwnSystemObserver
     public:
         WeakOwnSystemObserver() = default;
         WeakOwnSystemObserver(const std::string& id);
+        virtual ~WeakOwnSystemObserver() {};
         virtual void notify_realloc(const T& new_obj);
         virtual void notify_erase() noexcept;
         const std::string& get_id() const noexcept;

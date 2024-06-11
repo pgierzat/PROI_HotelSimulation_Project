@@ -14,6 +14,7 @@ class WeakMultipleOwnSystemObserver
         WeakMultipleOwnSystemObserver() = default;
         WeakMultipleOwnSystemObserver(const WeakMultipleOwnSystemObserver&);
         WeakMultipleOwnSystemObserver(const WeakMultipleOwnSystemObserver&&);
+        virtual ~WeakMultipleOwnSystemObserver() {};
         virtual void notify_realloc(const T& new_obj);
         virtual void notify_erase(const std::string& erased_id) noexcept;
         std::vector<const std::string*> get_ids() const noexcept;

@@ -8,10 +8,11 @@
 #include "../functions/vec_to_pvec.hpp"
 
 template<typename T>
-class MultipleOwnSystemObserver : private WeakMultipleOwnSystemObserver<T>
+class MultipleOwnSystemObserver : public virtual WeakMultipleOwnSystemObserver<T>
 {
     public:
             using WMOSO = WeakMultipleOwnSystemObserver<T>;
+            using WOSO = WeakOwnSystemObserver<T>;
             using OSO = OwnSystemObserver<T>;
             using WMOSO::get_ids;
             using WMOSO::has_id;
@@ -29,7 +30,7 @@ class MultipleOwnSystemObserver : private WeakMultipleOwnSystemObserver<T>
         void remove_observed(const T&) noexcept;
         void remove_all_observed() noexcept;
     private:
-            using WMOSO::observers;
+        using WMOSO::observers;
         std::optional<OwnSystemObserver<T>*> find_observer(const std::string& id);
         OwnSystemObserver<T>& get_observer(const std::string& id);
 };
@@ -41,7 +42,7 @@ MultipleOwnSystemObserver<T>::MultipleOwnSystemObserver(const MultipleOwnSystemO
     for (const auto& obs : other.observers)
     {
         auto& oso = dynamic_cast<OSO&>(*obs);
-        auto obs_to_add = std::make_unique<OSO>(oso);
+        std::unique_ptr<WOSO> obs_to_add = std::make_unique<OSO>(oso);
         observers.emplace_back(std::move(obs_to_add));
     }
 }
@@ -95,7 +96,7 @@ void MultipleOwnSystemObserver<T>::add_observed(const T& obj)
 {
     if (find_observer(obj.get_id()))
         throw MultipleOwnSystemObserverError<T>("Tried to add duplicate observed object.", *this);
-    auto to_add = std::make_unique<OwnSystemObserver<T>>(obj);
+    std::unique_ptr<WOSO> to_add = std::make_unique<OSO>(obj);
     observers.emplace_back(std::move(to_add));
 }
 
