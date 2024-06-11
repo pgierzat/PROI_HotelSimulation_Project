@@ -15,9 +15,8 @@ void GuestSystem::add_guest(const Guest& guest)
 
 void GuestSystem::remove_guest(const Guest& guest) noexcept
 {
-    std::erase_if(guests, [&](const auto& otr){ return otr -> get_id() == guest.get_id(); });
     publish_erase(guest.get_id());
-    publish_realloc();
+    std::erase_if(guests, [&](const auto& otr){ return otr -> get_id() == guest.get_id(); });
 }
 
 std::optional<const Guest*> GuestSystem::find_by_id(const std::string& id) const noexcept
