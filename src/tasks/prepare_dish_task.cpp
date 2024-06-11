@@ -2,7 +2,7 @@
 #include "../utilities/errors.hpp"
 
 
-const std::string PrepareDishTask::description = "Bring a dish to a table.";
+const std::string PrepareDishTask::description = "Prepare a dish.";
 
 PrepareDishTask::PrepareDishTask(const std::string& id, Dish dish) :
     Task{id}, SmallTask{id}, dish{dish} {}

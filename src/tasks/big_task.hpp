@@ -32,7 +32,7 @@ class BigTask :
 
 template<SupportedWorker T>
 BigTask<T>::BigTask(const std::string& id, unsigned workers_required) :
-    Task{id, description}, MOSO{}, required{workers_required}
+    Task{id}, MOSO{}, required{workers_required}
 {
     if (workers_required == 0)
         throw std::invalid_argument("workers required cannot be 0.");
