@@ -2,10 +2,14 @@
 #include <algorithm>
 #include "task_system.hpp"
 #include "../functions/has_elem.hpp"
+#include "../auxiliary/t_system_aux.hpp"
 
 TaskSystem::TaskSystem(WorkerSystem& w_system, RoomsList& rooms_list, GuestSystem& g_system) :
     w_system{&w_system}
 {
+    w_system.subscribe(*this);
+    rooms_list.subscribe(*this);
+    g_system.subscribe(*this);
 }
 
 void TaskSystem::assign_task(const Task& task, const Worker& worker)
@@ -64,6 +68,21 @@ Task& TaskSystem::get_task(const Task& task) const
     if (p == tasks.end())
         throw TaskNotInSystemError("Unsuccesfull task validation", task);
     return **p;
+}
+
+void TaskSystem::notify_erase(const std::string& erased_id, dummy<Worker>) {
+    auto pred = TaskSameWorker(erased_id);
+    std::erase_if(tasks, [&](const auto& task){ return pred(*task); });
+}
+
+void TaskSystem::notify_erase(const std::string& erased_id, dummy<Room>) {
+    auto pred = TaskSameRoom(erased_id);
+    std::erase_if(tasks, [&](const auto& task){ return pred(*task); });
+}
+
+void TaskSystem::notify_erase(const std::string& erased_id, dummy<Guest>) {
+    auto pred = TaskSameGuest(erased_id);
+    std::erase_if(tasks, [&](const auto& task){ return pred(*task); });
 }
 
 void TaskSystem::check_task_status(const Task& task)
