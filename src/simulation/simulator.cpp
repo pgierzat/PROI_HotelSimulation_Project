@@ -22,7 +22,7 @@ Simulator::Simulator(HotelSystem& hotel_system) :
 
 void Simulator::simulate()
 {
-    auto clock = hotel_system.get_ck();
+    auto &clock = hotel_system.get_ck();
     // Simulation loop
     while (true)
     {

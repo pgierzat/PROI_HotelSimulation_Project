@@ -5,6 +5,7 @@
 #include "../rooms/hpp/rooms_list.hpp"
 #include "../systems/stay_system.hpp"
 #include "generator.hpp"
+#include "../auxiliary/id_generator.hpp"
 
 // create rand * guest
 // move them to matching room
@@ -15,9 +16,11 @@ class StayGenerator : public Generator
 {
         const RoomsList* rooms_list;
         StaySystem* s_system;
+        GuestSystem* g_system;
     public:
         StayGenerator(HotelSystem&);
     private:
+        IDGenerator IDGen;
         void generate() override;
         void set_time_next() noexcept override;
         void initiate_time_next();
