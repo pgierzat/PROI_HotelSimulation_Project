@@ -28,7 +28,8 @@ class TaskSystem
         bool operator==(const TaskSystem&) const = default;
     private:
         static void check_task_status(const Task&);
-        Task& validate_task(const Task&) const;
+        std::optional<Task*> find_task(const Task&) const noexcept;
+        Task& get_task(const Task&) const;
         IDGenerator id_gen{};
         WorkerSystem* w_system;
         RoomsList* rooms_list;
