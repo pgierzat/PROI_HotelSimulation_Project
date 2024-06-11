@@ -2,16 +2,21 @@
 #define SMALL_TASK_HPP
 
 #include "task.hpp"
+#include "../auxiliary/own_system_observer.hpp"
+#include "../auxiliary/pseudo_multiple_own_system_observer.hpp"
 #include "../utilities/errors.hpp"
 #include "../utilities/concepts.hpp"
 
 template<SupportedWorker T>
-class SmallTask : public Task, protected OwnSystemObserver<Worker>
+class SmallTask :
+    public Task,
+    protected OwnSystemObserver<Worker>,
+    protected PseudoMultipleOwnSystemObserver<Worker>
 {
     protected:
+        using WorkerObs = OwnSystemObserver<Worker>;    
         SmallTask(const std::string& id, const std::string& description);
     public:
-            using WorkerObs = OwnSystemObserver<Worker>;
         const T& get_assignee() const;
         void assign(const T&);
         void assign(const Worker&) override;
@@ -26,6 +31,8 @@ SmallTask<T>::SmallTask(const std::string& id, const std::string& description) :
 template<SupportedWorker T>
 const T& SmallTask<T>::get_assignee() const
 {
+    if (not WorkerObs::has_value())
+        throw TaskStatusError("Tried to get assignee of an unassigned task.", *this);
     return dynamic_cast<const T&>(WorkerObs::get());
 }
 

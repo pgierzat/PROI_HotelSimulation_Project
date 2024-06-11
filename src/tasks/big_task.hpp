@@ -10,7 +10,9 @@
 #include "../utilities/concepts.hpp"
 
 template<SupportedWorker T>
-class BigTask : public Task, protected MultipleOwnSystemObserver<Worker>
+class BigTask :
+    public Task,
+    protected MultipleOwnSystemObserver<Worker>
 {
     protected:
             using MOSO = MultipleOwnSystemObserver<Worker>;

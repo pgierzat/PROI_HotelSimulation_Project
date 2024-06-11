@@ -3,17 +3,18 @@
 
 #include <vector>
 #include "big_task.hpp"
+#include "../auxiliary/own_system_observer.hpp"
 #include "../workers/maid.hpp"
 #include "../rooms/hpp/room.hpp"
 
 
-class RoomCleaningTask : public BigTask<Maid>
+class RoomCleaningTask : public BigTask<Maid>, protected OwnSystemObserver<Room>
 {
+        using RoomObs = OwnSystemObserver<Room>;
     public:
         RoomCleaningTask(const std::string& id, const Room&);
         const Room& get_room() const noexcept;
-    protected:
-        std::string room_id;
+        void set_room(const Room&) noexcept;
 };
 
 

@@ -10,12 +10,12 @@
 class BringDishTask : public SmallTask<Waiter>
 {
     public:
-        BringDishTask(const std::string& id, Dish, const Table&);
+        BringDishTask(const std::string& id, Dish, const std::string& table_nr);
         Dish get_dish() const noexcept;
-        const Table& get_table() const noexcept;
+        const std::string& get_table_nr() const noexcept;
     protected:
         Dish dish;
-        const Table& table;
+        std::string table_nr;
 };
 
 
