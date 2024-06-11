@@ -5,7 +5,7 @@
 #include "weak_own_system_observer.hpp"
 
 template<typename T>
-class OwnSystemObserver : private WeakOwnSystemObserver<T>
+class OwnSystemObserver : public WeakOwnSystemObserver<T>
 {
     public:
             using WeakObs = WeakOwnSystemObserver<T>;

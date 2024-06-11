@@ -55,7 +55,7 @@ std::string TaskSystem::add_task_id(const T& task)
     auto task_to_add = task;
     auto new_id = id_gen.generate_id();
     task_to_add.set_id(new_id);
-    tasks.push_back(std::move(std::make_unique<T>(task_to_add)));
+    tasks.emplace_back(std::move(std::make_unique<T>(task_to_add)));
     return new_id;
 }
 
@@ -65,7 +65,7 @@ std::string TaskSystem::add_task_id(T&& task)
     check_task_status(task);
     auto new_id = id_gen.generate_id();
     task.Task::set_id(new_id);
-    tasks.push_back(std::move(std::make_unique<T>(task)));
+    tasks.emplace_back(std::move(std::make_unique<T>(task)));
     return new_id;
 }
 

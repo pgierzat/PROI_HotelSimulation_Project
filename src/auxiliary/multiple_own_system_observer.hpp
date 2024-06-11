@@ -12,12 +12,14 @@ class MultipleOwnSystemObserver : private WeakMultipleOwnSystemObserver<T>
 {
     public:
             using WMOSO = WeakMultipleOwnSystemObserver<T>;
+            using OSO = OwnSystemObserver<T>;
             using WMOSO::get_ids;
             using WMOSO::has_id;
             using WMOSO::size;
             using WMOSO::remove_observed;
         MultipleOwnSystemObserver() = default;
-        MultipleOwnSystemObserver(const MultipleOwnSystemObserver<T>&) = delete;
+        MultipleOwnSystemObserver(const MultipleOwnSystemObserver<T>&);
+        MultipleOwnSystemObserver(const MultipleOwnSystemObserver<T>&&);
         void notify_realloc(const T& new_obj) override;
         void notify_erase(const std::string& erased_id) noexcept override;
         std::vector<const T*> get() const;
@@ -32,6 +34,21 @@ class MultipleOwnSystemObserver : private WeakMultipleOwnSystemObserver<T>
         OwnSystemObserver<T>& get_observer(const std::string& id);
 };
 
+
+template<typename T>
+MultipleOwnSystemObserver<T>::MultipleOwnSystemObserver(const MultipleOwnSystemObserver<T>& other)
+{
+    for (const auto& obs : other.observers)
+    {
+        auto& oso = dynamic_cast<OSO&>(*obs);
+        auto obs_to_add = std::make_unique<OSO>(oso);
+        observers.emplace_back(std::move(obs_to_add));
+    }
+}
+
+template<typename T>
+MultipleOwnSystemObserver<T>::MultipleOwnSystemObserver(const MultipleOwnSystemObserver<T>&& other) :
+    WMOSO::observers{std::move(other.observers)} {}
 
 template<typename T>
 void MultipleOwnSystemObserver<T>::notify_realloc(const T& new_obj)
@@ -101,7 +118,7 @@ std::optional<OwnSystemObserver<T>*> MultipleOwnSystemObserver<T>::find_observer
         [&](const auto& obs){ return obs -> get_id() == id; });
     if (p == observers.end())
         return std::nullopt;
-    return dynamic_cast<OwnSystemObserver<T>*>(*p -> get());
+    return dynamic_cast<OwnSystemObserver<T>*>(&**p);
 }
 
 template<typename T>

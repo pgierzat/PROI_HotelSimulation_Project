@@ -12,7 +12,8 @@ class WeakMultipleOwnSystemObserver
     public:
             using WOSO = WeakOwnSystemObserver<T>;
         WeakMultipleOwnSystemObserver() = default;
-        WeakMultipleOwnSystemObserver(const WeakMultipleOwnSystemObserver&) = delete;
+        WeakMultipleOwnSystemObserver(const WeakMultipleOwnSystemObserver&);
+        WeakMultipleOwnSystemObserver(const WeakMultipleOwnSystemObserver&&);
         virtual void notify_realloc(const T& new_obj);
         virtual void notify_erase(const std::string& erased_id) noexcept;
         std::vector<const std::string*> get_ids() const noexcept;
@@ -23,6 +24,20 @@ class WeakMultipleOwnSystemObserver
     protected:
         std::vector<std::unique_ptr<WOSO>> observers;
 };
+
+template<typename T>
+WeakMultipleOwnSystemObserver<T>::WeakMultipleOwnSystemObserver(const WeakMultipleOwnSystemObserver<T>& other)
+{
+    for (const auto& obs : other.observers)
+    {
+        auto obs_to_add = std::make_unique<WOSO>(*obs);
+        observers.emplace_back(std::move(obs_to_add));
+    }
+}
+
+template<typename T>
+WeakMultipleOwnSystemObserver<T>::WeakMultipleOwnSystemObserver(const WeakMultipleOwnSystemObserver<T>&& other) :
+    observers{std::move(other.observers)} {}
 
 template<typename T>
 void WeakMultipleOwnSystemObserver<T>::notify_realloc(const T& new_obj) {}
