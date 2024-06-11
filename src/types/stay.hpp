@@ -31,7 +31,6 @@ class Stay : protected OwnSystemObserver<Room>, protected MultipleOwnSystemObser
             using GuestsObs = MultipleOwnSystemObserver<Guest>;
         Stay(const std::string& id, const Room&, const Guest& main_guest,
             const jed_utils::datetime& start, const jed_utils::datetime& end);
-        Stay(const Stay&) = delete;
         const std::string& get_id() const noexcept;
         const std::vector<const Guest*> get_guests() const;
         const Guest& get_main_guest() const;
