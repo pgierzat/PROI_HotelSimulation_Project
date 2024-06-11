@@ -31,7 +31,7 @@ void StaySystem::add_stay(const Stay& stay)
     if (time - stay.get_start() >= jed_utils::timespan(1))
         throw StayBackwardBookError("Tried to book a stay that starts on a past hotel nigth.", stay, time);
     if (stay.get_status() != StayStatus::booked)
-        throw StayStatusError("Stay added to system must be in initial state.", stay);
+        throw StayStatusError("Stay added to system must be in booked state.", stay);
     check_overlap(stay);
     stays.emplace_back(std::make_unique<InnerStay>(stay));
     auto& stay_obj = *stays.back();

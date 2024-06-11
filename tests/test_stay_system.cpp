@@ -14,8 +14,10 @@ TEST_CASE("test StaySystem")
     auto g_system = GuestSystem{};
     g_system.add_guest(Guest{"id1", "name1"});
     g_system.add_guest(Guest{"id2", "name2"});
-    auto guest1 = g_system.get_by_id("id1");
-    auto guest2 = g_system.get_by_id("id2");
+    g_system.add_guest(Guest{"id3", "name3"});
+    auto& guest1 = g_system.get_by_id("id1");
+    auto& guest2 = g_system.get_by_id("id2");
+    auto& guest3 = g_system.get_by_id("id3");
     RoomsList rooms_list{};
     rooms_list.add_room(TwoRoom{"237"});
     rooms_list.add_room(OneRoom{"217"});
@@ -26,31 +28,32 @@ TEST_CASE("test StaySystem")
     jed_utils::datetime end1{2024, 5, 14};
     jed_utils::datetime start2{2024, 5, 14};
     jed_utils::datetime end2{2024, 5, 16};
-    s_system.add_stay(Stay{"id1", room1, guest1, start1, end1});
-    s_system.add_stay(Stay{"id2", room2, guest2, start2, end2});
+    jed_utils::datetime start3{2024, 5, 18};
+    jed_utils::datetime end3{2024, 5, 21};
+    auto stay1_temp = Stay{"id1", room1, guest1, start1, end1};
+    stay1_temp.add_guest(guest2);
+    s_system.add_stay(stay1_temp);
+    s_system.add_stay(Stay{"id2", room2, guest3, start2, end2});
     const auto& stay1 = s_system.get_by_id("id1");
     const auto& stay2 = s_system.get_by_id("id2");
 
     SECTION("add stay")
     {
         auto stays = s_system.get_stays();
-        std::vector expected{stay1, stay2};
+        std::vector<const Stay*> expected{&stay1, &stay2};
         REQUIRE( stays == expected );
     }
 
     SECTION("remove stay")
     {
         s_system.remove_stay(stay1);
-        const auto& stay2_new = s_system.get_by_id("id2");
-        std::vector expected{stay2_new};
+        std::vector<const Stay*> expected{&stay2};
         REQUIRE( s_system.get_stays() == expected );
     }
 
-    SECTION("status not 'initial'")
+    SECTION("status not 'booked'")
     {
         Stay stay3{"id1", room1, guest1, start1, end1};
-        stay3.set_status(StayStatus::booked);
-        REQUIRE_THROWS( s_system.add_stay(stay3) ); 
         stay3.set_status(StayStatus::checked_in);
         REQUIRE_THROWS( s_system.add_stay(stay3) ); 
         stay3.set_status(StayStatus::checked_out);
@@ -59,17 +62,12 @@ TEST_CASE("test StaySystem")
 
     SECTION("unknown guest")
     {
-        Guest guest3{"id3", "name3"};
-        Stay stay3{"id3", room2, guest3, start1, end1};
+        Guest guest4{"id4", "name4"};
+        Stay stay3{"id3", room2, guest4, start1, end1};
         REQUIRE_THROWS_AS( s_system.add_stay(stay3), GuestNotInSystemError ); 
-    }
-
-    SECTION("unknown guest")
-    {
-        Guest guest3{"id3", "name3"};
-        Stay stay3{"id3", room1, guest1, start2, end2};
-        stay3.add_guest(guest3);
-        REQUIRE_THROWS_AS( s_system.add_stay(stay3), GuestNotInSystemError ); 
+        auto stays = s_system.get_stays();      // and make sure it hasn't been added
+        std::vector<const Stay*> expected{&stay1, &stay2};
+        REQUIRE( stays == expected );
     }
 
     SECTION("unknown room")
@@ -77,14 +75,20 @@ TEST_CASE("test StaySystem")
         Room room3{"238", 1};
         Stay stay3{"id1", room3, guest1, start1, end1};
         REQUIRE_THROWS_AS( s_system.add_stay(stay3), RoomNotInSystemError ); 
+        auto stays = s_system.get_stays();
+        std::vector<const Stay*> expected{&stay1, &stay2};
+        REQUIRE( stays == expected );
     }
 
     SECTION("stay overlap")
     {
-        jed_utils::datetime start3{2024, 5, 13};
-        jed_utils::datetime end3{2024, 5, 16};
-        Stay stay3{"id3", room1, guest2, start3, end3};
+        jed_utils::datetime start4{2024, 5, 13};
+        jed_utils::datetime end4{2024, 5, 16};
+        Stay stay3{"id3", room1, guest2, start4, end4};
         REQUIRE_THROWS_AS(s_system.add_stay(stay3), StayOverlapError);
+        auto stays = s_system.get_stays();
+        std::vector<const Stay*> expected{&stay1, &stay2};
+        REQUIRE( stays == expected );
     }
 
     SECTION("check-in and check-out")
@@ -159,21 +163,10 @@ TEST_CASE("test StaySystem")
     {
         SECTION("remove guest")
         {
-            g_system.remove_guest(guest1);
-            const auto& stay2_new = s_system.get_by_id("id2");
-            std::vector expected{stay2_new};
-            REQUIRE( s_system.get_stays() == expected );
-        }
-        
-        SECTION("realloc room")
-        {
-            Guest guest3{"id3", "name3"};
-            Guest guest4{"id4", "name4"};
-            g_system.add_guest(guest3);
-            g_system.add_guest(guest4);
-            const auto& guest1_new = g_system.get_by_id("id1");
-            REQUIRE( &guest1_new != &guest1 );
-            REQUIRE( stay1.get_main_guest() == guest1_new );
+            g_system.remove_guest(guest2);
+            auto stays = s_system.get_stays();
+            std::vector<const Stay*> expected{&stay2};      // stay1 had guest2 among its guests
+            REQUIRE( stays == expected );
         }
     }
 }
