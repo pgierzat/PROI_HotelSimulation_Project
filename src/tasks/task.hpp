@@ -7,7 +7,7 @@
 #include "../rooms/hpp/rooms_list.hpp"
 #include "../systems/guest_system.hpp"
 #include "../auxiliary/weak_own_system_observer.hpp"
-#include "../auxiliary/own_system_observer.hpp"
+#include "../auxiliary/weak_multiple_own_system_observer.hpp"
 
 enum class TaskStatus {
     unassigned,
@@ -15,8 +15,13 @@ enum class TaskStatus {
     completed
 };
 
+using WOSOw = WeakOwnSystemObserver<Worker>;
+using WMOSOw = WeakMultipleOwnSystemObserver<Worker>;
+using WOSOr = WeakOwnSystemObserver<Room>;
+using WOSOg = WeakOwnSystemObserver<Guest>;
 
-class Task
+
+class Task : protected virtual WOSOw, protected virtual WMOSOw, protected virtual WOSOr, protected virtual WOSOg
 {
     protected:
         Task(const std::string& id, const std::string& description);
@@ -29,7 +34,7 @@ class Task
         void set_id(const std::string&) noexcept;
         virtual void assign(const Worker&) = 0;
         virtual void unassign() = 0;
-        bool operator==(const Task&) const = default;
+        bool operator==(const Task&) const noexcept;
     protected:
         virtual void can_assign(const Worker&) const;
         virtual void can_unassign() const;

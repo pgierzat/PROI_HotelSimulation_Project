@@ -32,3 +32,8 @@ void Task::can_unassign() const
     if (status == TaskStatus::completed)
         throw TaskStatusError("Tried to unassign a completed Task.", *this);
 }
+
+bool Task::operator==(const Task& other) const noexcept
+{
+    return id == other.id;
+}
