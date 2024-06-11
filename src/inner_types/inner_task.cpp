@@ -3,11 +3,11 @@
 
 InnerTask::InnerTask(const Task& task) : Task{task} {}
 
-WOSOw& InnerTask::get_wosow() { return *this; }
-WMOSOw& InnerTask::get_wmosow() { return *this; }
-WOSOr& InnerTask::get_wosor() { return *this; }
-WOSOg& InnerTask::get_wosog() { return *this; }
-const WOSOw& InnerTask::get_wosow() const noexcept { return *this; }
-const WMOSOw& InnerTask::get_wmosow() const noexcept { return *this; }
-const WOSOr& InnerTask::get_wosor() const noexcept { return *this; }
-const WOSOg& InnerTask::get_wosog() const noexcept { return *this; }
+WeakOwnSystemObserver<Worker>& InnerTask::get_wosow() { return *this; }
+WeakMultipleOwnSystemObserver<Worker>& InnerTask::get_wmosow() { return *this; }
+WeakOwnSystemObserver<Room>& InnerTask::get_wosor() { return *this; }
+WeakOwnSystemObserver<Guest>& InnerTask::get_wosog() { return *this; }
+const WeakOwnSystemObserver<Worker>& InnerTask::get_wosow() const noexcept { return *this; }
+const WeakMultipleOwnSystemObserver<Worker>& InnerTask::get_wmosow() const noexcept { return *this; }
+const WeakOwnSystemObserver<Room>& InnerTask::get_wosor() const noexcept { return *this; }
+const WeakOwnSystemObserver<Guest>& InnerTask::get_wosog() const noexcept { return *this; }
