@@ -1,5 +1,6 @@
 #include <iostream>
 #include "amount.hpp"
+#include "../workers/worker.hpp"
 #include "../auxiliary/own_system_observer.hpp"
 
 #ifndef PAYCHECK_HPP

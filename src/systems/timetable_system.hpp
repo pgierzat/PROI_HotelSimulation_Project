@@ -35,7 +35,6 @@ class TimetableSystem : public TimeObserver, public OtherSystemObserver<Worker>
         std::vector<const TTEntry*> get_entries() const noexcept;
         EntryStatus get_entry_status(const TTEntry&) const noexcept;
         std::vector<const Worker*> workers_available() const noexcept;
-        void notify_realloc(dummy<Worker>);
         void notify_erase(const std::string& erased_obj_id, dummy<Worker>);
         bool check_minimal_break(const TTEntry&);
         static const jed_utils::timespan minimal_break;

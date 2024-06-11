@@ -2,33 +2,35 @@
 #define OWN_SYSTEM_OBSERVER_HPP
 
 #include "../utilities/errors.hpp"
+#include "weak_own_system_observer.hpp"
 
 template<typename T>
-class OwnSystemObserver
+class OwnSystemObserver : public WeakOwnSystemObserver<T>
 {
     public:
+            using WeakObs = WeakOwnSystemObserver<T>;
+            using WeakObs::get_id;
         OwnSystemObserver() = default;
         explicit OwnSystemObserver(const T& observed);
-        void notify_realloc(const T& new_obj);
-        void notify_erase() noexcept;
+        void notify_realloc(const T& new_obj) override;
+        void notify_erase() noexcept override;
         const T& get() const;
-        const std::string& get_id() const noexcept;
         explicit operator bool() const noexcept;
         void set(const T&);
+        void reset() noexcept;
     private:
         const T* observed = nullptr;
-        std::string observed_id;
 };
 
 
 template<typename T>
-OwnSystemObserver<T>::OwnSystemObserver(const T& obj):
-    observed{&obj}, observed_id{obj.get_id()} {}
+OwnSystemObserver<T>::OwnSystemObserver(const T& obj) : WeakObs{obj.get_id()},
+    observed{&obj} {}
 
 template<typename T>
 void OwnSystemObserver<T>::notify_realloc(const T& new_obj)
 {
-    if (new_obj.get_id() != observed_id)
+    if (new_obj.get_id() != WeakObs::get_id())
         throw OwnSystemObserverError<T>("Observer got different object upon deallocation of the original.", *this);
     observed = &new_obj;
 }
@@ -48,13 +50,17 @@ const T& OwnSystemObserver<T>::get() const
 }
 
 template<typename T>
-const std::string& OwnSystemObserver<T>::get_id() const noexcept { return observed_id; }
-
-template<typename T>
 void OwnSystemObserver<T>::set(const T& obj)
 {
-    observed_id = obj.get_id();
+    WeakObs::set_id(obj.get_id());
     observed = &obj;
+}
+
+template<typename T>
+void OwnSystemObserver<T>::reset() noexcept
+{
+    observed = nullptr;
+    WeakObs::set_id("");
 }
 
 template<typename T>

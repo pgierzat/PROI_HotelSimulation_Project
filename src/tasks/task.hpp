@@ -6,8 +6,8 @@
 #include "../systems/worker_system.hpp"
 #include "../rooms/hpp/rooms_list.hpp"
 #include "../systems/guest_system.hpp"
-
-class TaskSystem;
+#include "../auxiliary/weak_own_system_observer.hpp"
+#include "../auxiliary/own_system_observer.hpp"
 
 enum class TaskStatus {
     unassigned,
@@ -30,15 +30,9 @@ class Task
         virtual void assign(const Worker&) = 0;
         virtual void unassign() = 0;
         bool operator==(const Task&) const = default;
-        static void set_w_system(const WorkerSystem&);
-        static void set_rooms_list(const RoomsList&);
-        static void set_g_system(const GuestSystem&);
     protected:
         virtual void can_assign(const Worker&) const;
         virtual void can_unassign() const;
-        static const WorkerSystem* w_system;
-        static const RoomsList* rooms_list;
-        static const GuestSystem* g_system;
         std::string id;
         std::string description;
         TaskStatus status{TaskStatus::unassigned};

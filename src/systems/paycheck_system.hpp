@@ -18,7 +18,6 @@ class PaycheckSystem : public TimeObserver, public OtherSystemObserver<Worker>
         PaycheckSystem(const PaycheckSystem&) = delete;
         std::vector<const Paycheck*> get_paychecks() const noexcept;
         void notify(const jed_utils::datetime&) override;
-        void notify_realloc(dummy<Worker>);
         void notify_erase(const std::string& erased_obj_id, dummy<Worker>);
     private:
         void calculate_paychecks(std::chrono::year_month);
