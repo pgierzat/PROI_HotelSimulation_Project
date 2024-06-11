@@ -5,6 +5,40 @@
     },
     {
         "id": "238",
+        "type": "FourRoom"
+    },
+    {
+        "id": "227",
+        "type": "ThreeRoom"
+    },
+    {
+        "id": "228",
+        "type": "ThreeRoom"
+    },
+    {
+        "id": "217",
+        "type": "TwoRoom"
+    },
+    {
+        "id": "218",
+        "type": "TwoRoom"
+    },
+    {
+        "id": "207",
+        "type": "OneRoom"
+    },
+    {
+        "id": "208",
+        "type": "OneRoom"
+    }
+]
+[
+    {
+        "id": "237",
+        "type": "FourRoom"
+    },
+    {
+        "id": "238",
         "type": "TwoRoom"
     },
     {

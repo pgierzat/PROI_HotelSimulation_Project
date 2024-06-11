@@ -79,6 +79,7 @@ std::vector<const Stay*> StaySystem::get_stays() const noexcept
     return vec_to_pvec<InnerStay, Stay>(stays);
 }
 
+
 void StaySystem::check_in(const Stay& stay)
 {
     if (check_regression(stay, StayStatus::checked_in) == RegressionStatus::equal)
@@ -96,7 +97,7 @@ void StaySystem::check_out(const Stay& stay)
         throw StayStatusError("Tried to check-out a stay that wasn't checked-in.", stay);
     if (time < stay.get_start() + Stay::checkin_time)
         throw StayStatusError("Tried to check-out a stay that hasn't yet started.", stay);
-    get_stay(stay).set_status(StayStatus::checked_out);   // here, can impose fees for late check-out 
+    get_stay(stay).set_status(StayStatus::checked_out);   // here, can impose fees for late check-out
 }
 
 std::optional<InnerStay*> StaySystem::find_stay(const Stay& stay) const noexcept

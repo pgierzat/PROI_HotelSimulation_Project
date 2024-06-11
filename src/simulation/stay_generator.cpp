@@ -9,25 +9,29 @@
 #include <random>
 #include <algorithm>
 #include <vector>
+#include <fstream>
+#include <iostream>
+
 
 StayGenerator::StayGenerator(HotelSystem& h_system) : Generator{time},
-    rooms_list{&h_system.get_crooms_list()}, s_system{&h_system.get_s_system()}
+    rooms_list{&h_system.get_crooms_list()}, s_system{&h_system.get_s_system()}, g_system{&h_system.get_g_system()}
 {
     initiate_time_next();
 }
 
 void StayGenerator::generate()
 {
-    IDGenerator IDGenerator;
     std::srand(std::time(0));
     int guests = std::rand() % 4 + 1;
     int days = std::rand() % 7 + 1;
+    auto guests_num = guests;
     std::vector<Guest> guestslist{};
     for (; guests != 0 ; guests--){
-        Guest guest = Guest(IDGenerator.generate_id(), "guest");
+        Guest guest = Guest(IDGen.generate_id(), "guest");
         guestslist.push_back(guest);
+        g_system -> add_guest(guest);
     }
-    switch (guests)
+    switch (guests_num)
     {
     case 1:
     {
@@ -40,8 +44,14 @@ void StayGenerator::generate()
         if(!free_room)
             break;
         jed_utils::datetime end_time = time + jed_utils::timespan(days);
-        Stay stay = Stay(IDGenerator.generate_id(), *free_room, main_guest, time, end_time);
+        Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
         s_system -> add_stay(stay);
+        std::ofstream file("output.txt", std::ios::app); // Open the file in append mode
+        if (file.is_open()) {
+            file << guestslist.size() << " guests came to hotel, and their Stay is till " << end_time.to_string() << "\n";
+            file.close();
+    }
+
         break;
     }
     case 2:
@@ -55,8 +65,13 @@ void StayGenerator::generate()
         if(!free_room)
             break;
         jed_utils::datetime end_time = time + jed_utils::timespan(days);
-        Stay stay = Stay(IDGenerator.generate_id(), *free_room, main_guest, time, end_time);
+        Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
         s_system -> add_stay(stay);
+        std::ofstream file("output.txt", std::ios::app); // Open the file in append mode
+        if (file.is_open()) {
+            file << guestslist.size() << " guests came to hotel, and their Stay is till " << end_time.to_string() << "\n";
+            file.close();
+    }
         break;
     }
     case 3:
@@ -70,8 +85,13 @@ void StayGenerator::generate()
         if(!free_room)
             break;
         jed_utils::datetime end_time = time + jed_utils::timespan(days);
-        Stay stay = Stay(IDGenerator.generate_id(), *free_room, main_guest, time, end_time);
+        Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
         s_system -> add_stay(stay);
+        std::ofstream file("output.txt", std::ios::app); // Open the file in append mode
+        if (file.is_open()) {
+            file << guestslist.size() << " guests came to hotel, and their Stay is till " << end_time.to_string() << "\n";
+            file.close();
+    }
         break;
     }
     case 4:
@@ -85,8 +105,13 @@ void StayGenerator::generate()
         if(!free_room)
         break;
         jed_utils::datetime end_time = time + jed_utils::timespan(days);
-        Stay stay = Stay(IDGenerator.generate_id(), *free_room, main_guest, time, end_time);
+        Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
         s_system -> add_stay(stay);
+        std::ofstream file("output.txt", std::ios::app); // Open the file in append mode
+        if (file.is_open()) {
+            file << guestslist.size() << " guests came to hotel, and their Stay is till " << end_time.to_string() << "\n";
+            file.close();
+        }
         break;
         }
     default:
