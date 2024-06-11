@@ -1,10 +1,8 @@
-#include "../types/amount.hpp"
-#include "../types/paycheck.hpp"
-
-class Worker;
-
 #ifndef PAYCHECK_CALCULATOR
 #define PAYCHECK_CALCULATOR
+
+class Amount;
+class Worker;
 
 class PaycheckCalculator
 {
