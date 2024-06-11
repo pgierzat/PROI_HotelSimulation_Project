@@ -12,6 +12,7 @@ class Generator
         Generator(const jed_utils::datetime&);
         virtual void set_time(const jed_utils::datetime&);
     protected:
+        virtual ~Generator() {};
         virtual void generate() = 0;
         virtual jed_utils::timespan get_time_of_gen() const noexcept;
         virtual void set_time_next() noexcept;
