@@ -12,7 +12,7 @@ class RestaurantOrder
         void addDish(Dish& dish);
     public:
         Amount get_price() const noexcept;
-        const std::vector<Dish>& get_dishes();
+        const std::vector<Dish>& get_dishes() const noexcept;
 };
 
 #endif
