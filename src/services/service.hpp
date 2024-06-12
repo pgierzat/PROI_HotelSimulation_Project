@@ -9,7 +9,7 @@
 
 enum class ServiceStatus {
     ordered,
-    in_progress,   // it means i.e. all TaskService's Tasks are assigned, what's left is to wait
+    in_progress,   // it means e.g. all TaskService's Tasks are assigned, what's left is to wait
     completed,
     paid_for
 };
@@ -20,9 +20,7 @@ class Service
 {
     protected:
         Service(const std::string& id, const Guest& requestee);
-        static const GuestSystem* g_system;
         std::string id;
-        std::string requestee_id;
         Amount price;
         ServiceStatus status{ServiceStatus::ordered};
     public:
@@ -38,7 +36,6 @@ class Service
         virtual ServiceStatus refresh_status(const ServiceSystem&) = 0;
         virtual void add_to_systems(ServiceSystem&) = 0;
         bool operator==(const Service&) const = default;
-        static void set_g_system(const GuestSystem&);
 };
 
 #endif

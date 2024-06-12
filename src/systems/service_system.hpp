@@ -11,24 +11,31 @@ class StaySystem;
 class TaskSystem;
 
 
-class ServiceSystem
+class ServiceSystem :
+    public OtherSystemObserver<Worker>,
+    public OtherSystemObserver<Room>,
+    public OtherSystemObserver<Guest>,
+    public OtherSystemObserver<Stay>,
+    public OtherSystemObserver<Task>
 {
-        using GS = GuestSystem;
         using WS = WorkerSystem;
         using RL = RoomsList;
+        using GS = GuestSystem;
         using SS = StaySystem;
         using TS = TaskSystem;
     public:
-        ServiceSystem(const GS&, const WS&, const RL&, SS&, TS&);
-        ServiceSystem(const ServiceSystem&) = delete;
+        ServiceSystem(GS&, WS&, RL&, SS&, TS&);
         std::optional<const Service*> find_by_id(const std::string& id) const noexcept;
         const Service& get_by_id(const std::string& id) const;
         template <SupportedService T>
             void add_service(const T&);
     private:
         std::vector<std::unique_ptr<Service>> services;
-        static TaskSystem* t_system;
-        static StaySystem* s_system;
+        const GuestSystem* g_system = nullptr;
+        const RoomsList* rooms_list = nullptr;
+        WorkerSystem* w_system = nullptr;
+        StaySystem* s_system = nullptr;
+        TaskSystem* t_system = nullptr;
 };
 
 
