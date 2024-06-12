@@ -13,6 +13,7 @@ class Generator : public TimeObserver
         Generator(TimePublisher&, const jed_utils::datetime&);
         void notify(const jed_utils::datetime&) override;
     protected:
+        virtual ~Generator() {};
         virtual void generate() = 0;
         virtual jed_utils::timespan get_time_of_gen() const noexcept;
         virtual void set_time_next() noexcept;

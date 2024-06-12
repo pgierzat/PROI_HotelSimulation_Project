@@ -31,16 +31,16 @@ void StaySystem::add_stay(const Stay& stay)
     if (time - stay.get_start() >= jed_utils::timespan(1))
         throw StayBackwardBookError("Tried to book a stay that starts on a past hotel nigth.", stay, time);
     if (stay.get_status() != StayStatus::booked)
-        throw StayStatusError("Stay added to system must be in initial state.", stay);
+        throw StayStatusError("Stay added to system must be in booked state.", stay);
     check_overlap(stay);
     stays.emplace_back(std::make_unique<InnerStay>(stay));
     auto& stay_obj = *stays.back();
     OwnSystemObserver<Room>& room_observer = stay_obj.get_room_observer();
     MultipleOwnSystemObserver<Guest>& guests_observer = stay_obj.get_guests_observer();
     try {
-        auto room_id = room_observer.get_id();
+        auto room_id = room_observer.get_observed_id();
         room_observer.notify_realloc(rooms_list -> get_by_id(room_id));
-        for (auto guest_id : guests_observer.get_ids())
+        for (auto guest_id : guests_observer.get_observed_ids())
             guests_observer.notify_realloc(g_system -> get_by_id(*guest_id));
     } catch (const RoomNotInSystemError& e) {
         stays.pop_back();
@@ -127,33 +127,10 @@ void StaySystem::check_overlap(const Stay& stay) const
         throw StayOverlapError("Attempt to add overlapping stay.", **p, stay);
 }
 
-
-void StaySystem::notify_realloc(dummy<Room>)
-{
-    for(auto& stay : stays)
-    {
-        auto& room_observer = stay -> get_room_observer();
-        auto& id = room_observer.get_id();
-        const auto& new_obj = rooms_list -> get_by_id(id);
-        room_observer.notify_realloc(new_obj);
-    }
-}
-
 void StaySystem::notify_erase(const std::string& erased_obj_id, dummy<Room>)
 {
     std::erase_if(stays, StaySameRoomID(erased_obj_id));
     // notify observers
-}
-
-void StaySystem::notify_realloc(dummy<Guest>)
-{
-    for(auto& stay : stays) {
-        auto& guests_observer = stay -> get_guests_observer();
-        for (auto id : guests_observer.get_ids()) {
-            const auto& new_obj = g_system -> get_by_id(*id);
-            guests_observer.notify_realloc(new_obj);
-        }
-    }
 }
 
 void StaySystem::notify_erase(const std::string& erased_obj_id, dummy<Guest>)

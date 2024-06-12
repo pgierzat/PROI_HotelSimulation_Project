@@ -2,25 +2,26 @@
 #include <algorithm>
 #include "task_system.hpp"
 #include "../functions/has_elem.hpp"
+#include "../auxiliary/t_system_aux.hpp"
 
 TaskSystem::TaskSystem(WorkerSystem& w_system, RoomsList& rooms_list, GuestSystem& g_system) :
-    w_system{&w_system}
+    w_system{&w_system}, rooms_list{&rooms_list}, g_system{&g_system}
 {
-    Task::set_w_system(w_system);
-    Task::set_rooms_list(rooms_list);
-    Task::set_g_system(g_system);
+    w_system.subscribe(*this);
+    rooms_list.subscribe(*this);
+    g_system.subscribe(*this);
 }
 
 void TaskSystem::assign_task(const Task& task, const Worker& worker)
 {
-    if (!has_elem_ptr(w_system -> get_workers(), worker))
+    if (not w_system -> find_by_id(worker.get_id()))
         throw WorkerNotInSystemError("Cannot assign task to an unknown worker.", worker);
-    validate_task(task).assign(worker);
+    get_task(task).assign(worker);
 }
 
-void TaskSystem::unassign_task(const Task& task) { validate_task(task).unassign(); }
+void TaskSystem::unassign_task(const Task& task) { get_task(task).unassign(); }
 
-void TaskSystem::complete_task(const Task& task) { validate_task(task).mark_completed(); }
+void TaskSystem::complete_task(const Task& task) { get_task(task).mark_completed(); }
 
 std::optional<const Task*> TaskSystem::find_by_id(const std::string& id) const noexcept
 {
@@ -40,22 +41,48 @@ const Task& TaskSystem::get_by_id(const std::string& id) const
 
 void TaskSystem::remove_task(const Task& task) noexcept
 {
-    std::erase_if(tasks, [&](const auto& ptr){ return *ptr == task; });
+    auto id_to_erase = task.get_id();
+    std::erase_if(tasks, [&](const auto& ptr){ return ptr -> get_id() == id_to_erase; });
 }
 
 std::vector<const Task*> TaskSystem::get_tasks() const noexcept
 {
     std::vector<const Task*> tasks_cp{};
-    std::ranges::for_each(tasks, [&](const auto& ptr){ tasks_cp.push_back(&*ptr); });
+    std::ranges::for_each(tasks, [&](const auto& ptr){ tasks_cp.push_back(ptr.get()); });
     return tasks_cp;
 }
 
-Task& TaskSystem::validate_task(const Task& task) const
+std::optional<Task*> TaskSystem::find_task(const Task& task) const noexcept
 {
-    auto p = std::ranges::find_if(tasks, [&](const auto& otr_task){ return *otr_task == task; });
+    auto p = std::ranges::find_if(tasks,
+        [&](const auto& otr_task){ return otr_task -> get_id() == task.get_id(); });
+    if (p == tasks.end())
+        return std::nullopt;
+    return p -> get();
+}
+
+Task& TaskSystem::get_task(const Task& task) const
+{
+    auto p = std::ranges::find_if(tasks,
+        [&](const auto& otr_task){ return otr_task -> get_id() == task.get_id(); });
     if (p == tasks.end())
         throw TaskNotInSystemError("Unsuccesfull task validation", task);
     return **p;
+}
+
+void TaskSystem::notify_erase(const std::string& erased_id, dummy<Worker>) {
+    auto pred = TaskSameWorker(erased_id);
+    std::erase_if(tasks, [&](const auto& task){ return pred(*task); });
+}
+
+void TaskSystem::notify_erase(const std::string& erased_id, dummy<Room>) {
+    auto pred = TaskSameRoom(erased_id);
+    std::erase_if(tasks, [&](const auto& task){ return pred(*task); });
+}
+
+void TaskSystem::notify_erase(const std::string& erased_id, dummy<Guest>) {
+    auto pred = TaskSameGuest(erased_id);
+    std::erase_if(tasks, [&](const auto& task){ return pred(*task); });
 }
 
 void TaskSystem::check_task_status(const Task& task)

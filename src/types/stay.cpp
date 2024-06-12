@@ -12,7 +12,8 @@ const jed_utils::timespan Stay::checkin_time = jed_utils::timespan{0, 16, 0, 0};
 
 Stay::Stay(const std::string& id, const Room& room, const Guest& main_guest,
            const jed_utils::datetime& start, const jed_utils::datetime& end) :
-    RoomObs{room}, id{id}, main_guest_id{main_guest.get_id()}, start{start}, end{end}
+    RoomObs{room}, GuestsObs{}, id{id}, main_guest_id{main_guest.get_id()},
+    start{start}, end{end}
 {
     GuestsObs::add_observed(main_guest);
     (this -> start).trunkate();
@@ -88,7 +89,7 @@ bool Stay::operator==(const Stay& other) const
     return
         id == other.id &&
         main_guest_id == other.main_guest_id &&
-        RoomObs::get_id() == other.RoomObs::get_id() &&
+        RoomObs::get_observed_id() == other.RoomObs::get_observed_id() &&
         start == other.start &&
         end == other.end;
 }

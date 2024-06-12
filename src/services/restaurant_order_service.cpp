@@ -11,8 +11,8 @@ const std::string RestaurantOrderService::description = "Order a meal for a gues
 
 
 RestaurantOrderService::RestaurantOrderService(const std::string& id, const Guest& requestee,
-    const jed_utils::datetime& time, const Table& table) :
-        TaskService{id, requestee}, time{time}, table{&table} {}
+    const jed_utils::datetime& time, const std::string& table_nr) :
+        TaskService{id, requestee}, time{time}, table_nr{table_nr} {}
 
 
 RestaurantOrderService::RestaurantOrderService(const std::string& id, const Guest& requestee,
@@ -26,7 +26,7 @@ void RestaurantOrderService::add_to_systems(ServiceSystem& sc_system)
     {
         prepdish_id = t_system -> add_task_id(PrepareDishTask("", dish));
         if (not room)
-            bringtask_id = t_system -> add_task_id(BringDishTask(id, dish, *table));
+            bringtask_id = t_system -> add_task_id(BringDishTask(id, dish, table_nr));
         else
             roomservice_id = t_system -> add_task_id(RoomServiceTask(id, *room, dish));
     }

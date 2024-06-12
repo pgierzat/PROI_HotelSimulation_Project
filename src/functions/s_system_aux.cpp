@@ -15,11 +15,11 @@ StaySameRoomID::StaySameRoomID(const Room& room) noexcept : room_id{room.get_id(
 StaySameRoomID::StaySameRoomID(const std::string& room_id) noexcept : room_id{room_id} {}
 
 bool StaySameRoomID::operator()(const InnerStay& stay) const noexcept {
-    return stay.get_croom_observer().get_id() == room_id;
+    return stay.get_croom_observer().get_observed_id() == room_id;
 }
 
 bool StaySameRoomID::operator()(const std::unique_ptr<InnerStay>& stay) const noexcept {
-    return stay -> get_croom_observer().get_id() == room_id;
+    return stay -> get_croom_observer().get_observed_id() == room_id;
 }
 
 
