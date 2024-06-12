@@ -12,7 +12,11 @@ class HotelSystem;
 class RoomsList;
 class GuestSystem;
 
-class StaySystem : public OtherSystemObserver<Room>, public OtherSystemObserver<Guest>, public TimeObserver
+class StaySystem :
+    public TimeObserver,
+    public OtherSystemObserver<Room>,
+    public OtherSystemObserver<Guest>,
+    public OtherSystemPublisher<Stay>
 {
         using RObserver = OtherSystemObserver<Room>;
         using GObserver = OtherSystemObserver<Guest>;
@@ -27,9 +31,9 @@ class StaySystem : public OtherSystemObserver<Room>, public OtherSystemObserver<
         std::vector<const Stay*> get_stays() const noexcept;
         void check_in(const Stay&);
         void check_out(const Stay&);
+        bool check_room(const Room&) const;
         void notify_erase(const std::string& erased_obj_id, dummy<Room>) override;
         void notify_erase(const std::string& erased_obj_id, dummy<Guest>) override;
-        bool check_room(const Room&) const;
     private:
         std::optional<InnerStay*> find_stay(const Stay&) const noexcept;
         InnerStay& get_stay(const Stay&) const;
