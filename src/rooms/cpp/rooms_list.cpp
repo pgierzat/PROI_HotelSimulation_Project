@@ -16,27 +16,35 @@
 void RoomsList::add_room(const Room& room)
 {
     auto one_room = dynamic_cast<const OneRoom*>(&room);
-    if (one_room)
+    if (one_room) {
         add_room(*one_room);
     return;
+    }
     auto two_room = dynamic_cast<const TwoRoom*>(&room);
-    if (two_room)
+    if (two_room) {
         add_room(*two_room);
     return;
+    }
     auto three_room = dynamic_cast<const ThreeRoom*>(&room);
-    if (three_room)
+    if (three_room) {
         add_room(*three_room);
     return;
+    }
     auto four_room = dynamic_cast<const FourRoom*>(&room);
-    if (four_room)
+    if (four_room) {
         add_room(*four_room);
     return;
+    }
     auto two_appartment = dynamic_cast<const TwoAppartment*>(&room);
-    if (two_appartment)
+    if (two_appartment) {
         add_room(*two_appartment);
+    return;
+    }
     auto four_appartment = dynamic_cast<const FourAppartment*>(&room);
-    if (four_appartment)
+    if (four_appartment) {
         add_room(*four_appartment);
+    return;
+    }
     throw UnsupportedRoomTypeError{"Tried to add a Room of unknown type to RoomsList.", room.get_type()};
 }
 

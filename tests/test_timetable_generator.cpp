@@ -44,10 +44,10 @@ TEST_CASE("Test TimetableGenerator")
     SECTION("time test")
     {
         auto time1 = jed_utils::datetime{2024, 6, 1, 22};   // still saturday
-        gen.set_time(time1);
+        gen.notify(time1);
         REQUIRE(tt_system.get_entries().empty());
         auto time2 = jed_utils::datetime{2024, 6, 9, 4};    // sunday
-        gen.set_time(time2);
+        gen.notify(time2);
         auto cook_entries = 7 * worker10.get_workers_per_shift() * worker10.get_shifts();
         auto maid_entries = 7 * worker8.get_workers_per_shift() * worker8.get_shifts();
         auto receptionist_entries = 7 * worker14.get_workers_per_shift() * worker14.get_shifts();

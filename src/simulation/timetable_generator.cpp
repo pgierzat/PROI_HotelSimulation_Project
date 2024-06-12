@@ -3,7 +3,7 @@
 
 
 TimetableGenerator::TimetableGenerator(HotelSystem& h_system) :
-    Generator{h_system.get_time()}, tt_system{&h_system.get_tt_system()}, w_system{&h_system.get_w_system()}
+    Generator{h_system.get_ck(), h_system.get_time()}, tt_system{&h_system.get_tt_system()}, w_system{&h_system.get_w_system()}
 {
     initiate_time_next();
 }
