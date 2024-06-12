@@ -6,7 +6,7 @@
 
 class StayService : public Service, protected OwnSystemObserver<Stay>
 {
-        using OSO = OwnSystemObserver<Stay>;
+        using StayObs = OwnSystemObserver<Stay>;
     public:
         StayService(const std::string& id, const Stay&);
         Amount get_default_price() const noexcept override;

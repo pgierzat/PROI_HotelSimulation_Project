@@ -3,6 +3,6 @@
 
 
 TaskService::TaskService(const std::string& id, const Guest& requestee) :
-    Service{id, requestee}, MOSO{} {}
+    Service{id, requestee}, TasksObs{} {}
 
-std::vector<const Task*> TaskService::get_tasks() const { return MOSO::get(); }
+std::vector<const Task*> TaskService::get_tasks() const { return TasksObs::get(); }

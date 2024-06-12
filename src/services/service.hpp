@@ -19,7 +19,7 @@ class ServiceSystem;
 
 class Service : protected OwnSystemObserver<Guest>
 {
-        using OSO = OwnSystemObserver<Guest>;
+        using GuestObs = OwnSystemObserver<Guest>;
     protected:
         Service(const std::string& id, const Guest& requestee);
         std::string id;

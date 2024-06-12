@@ -10,21 +10,16 @@ TaxiService::TaxiService(const std::string& id, const Guest& requestee, const je
 
 void TaxiService::add_to_systems(ServiceSystem& sc_system)
 {
-    const auto& requestee = g_system -> get_by_id(requestee_id);
-    t_system -> add_task(TaxiTask(id, requestee, time));   // need id generator
-    taxitask_id  = id;
+    auto& t_system = sc_system.get_t_system();
+    auto& task = t_system.add_task_id(TaxiTask("", get_requestee(), time));
+    TasksObs::add_observed(task);
 }
 
 const std::string& TaxiService::get_description() const noexcept { return description; }
 
 const TaxiTask& TaxiService::get_taxitask() const
 {
-    return dynamic_cast<const TaxiTask&>(t_system -> get_by_id(taxitask_id));
-}
-
-std::vector<const Task*> TaxiService::get_tasks() const
-{
-    return std::vector<const Task*>{&get_taxitask()};
+    return *TasksObs::get().front();
 }
 
 Amount TaxiService::get_default_price() const noexcept { return Amount{0, 0}; }
