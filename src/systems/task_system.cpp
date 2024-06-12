@@ -42,6 +42,7 @@ const Task& TaskSystem::get_by_id(const std::string& id) const
 void TaskSystem::remove_task(const Task& task) noexcept
 {
     auto id_to_erase = task.get_id();
+    publish_erase(id_to_erase);
     std::erase_if(tasks, [&](const auto& ptr){ return ptr -> get_id() == id_to_erase; });
 }
 

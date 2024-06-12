@@ -9,7 +9,11 @@
 #include "../auxiliary/id_generator.hpp"
 #include "../tasks/task.hpp"
 
-class TaskSystem : public OtherSystemObserver<Worker>, public OtherSystemObserver<Room>, public OtherSystemObserver<Guest>
+class TaskSystem :
+    public OtherSystemObserver<Worker>,
+    public OtherSystemObserver<Room>,
+    public OtherSystemObserver<Guest>,
+    public OtherSystemPublisher<Task>
 {
     public:
         TaskSystem(WorkerSystem&, RoomsList&, GuestSystem&);
