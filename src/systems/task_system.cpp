@@ -3,6 +3,12 @@
 #include "task_system.hpp"
 #include "../functions/has_elem.hpp"
 #include "../auxiliary/t_system_aux.hpp"
+#include "../tasks/bring_dish_task.hpp"
+#include "../tasks/prepare_dish_task.hpp"
+#include "../tasks/room_cleaning_task.hpp"
+#include "../tasks/room_service_task.hpp"
+#include "../tasks/taxi_task.hpp"
+#include "../tasks/wake_task.hpp"
 
 TaskSystem::TaskSystem(WorkerSystem& w_system, RoomsList& rooms_list, GuestSystem& g_system) :
     w_system{&w_system}, rooms_list{&rooms_list}, g_system{&g_system}
@@ -39,9 +45,45 @@ const Task& TaskSystem::get_by_id(const std::string& id) const
     return **p;
 }
 
+const Task& TaskSystem::add_task(const Task& task)
+{
+    auto bringtask = dynamic_cast<const BringDishTask*>(&task);
+    if (bringtask) {
+        add_task(*bringtask);
+        return *tasks.back();
+    }
+    auto preptask = dynamic_cast<const PrepareDishTask*>(&task);
+    if (preptask) {
+        add_task(*preptask);
+        return *tasks.back();
+    }
+    auto roomtask = dynamic_cast<const RoomCleaningTask*>(&task);
+    if (roomtask) {
+        add_task(*roomtask);
+        return *tasks.back();
+    }
+    auto roomsctask = dynamic_cast<const RoomServiceTask*>(&task);
+    if (roomsctask) {
+        add_task(*roomsctask);
+        return *tasks.back();
+    }
+    auto taxitask = dynamic_cast<const TaxiTask*>(&task);
+    if (taxitask) {
+        add_task(*taxitask);
+        return *tasks.back();
+    }
+    auto waketask = dynamic_cast<const WakeTask*>(&task);
+    if (waketask) {
+        add_task(*waketask);
+        return *tasks.back();
+    }
+    throw UnsupportedTaskTypeError("Tried to add task of unsupported type", task);
+}
+
 void TaskSystem::remove_task(const Task& task) noexcept
 {
     auto id_to_erase = task.get_id();
+    publish_erase(id_to_erase);
     std::erase_if(tasks, [&](const auto& ptr){ return ptr -> get_id() == id_to_erase; });
 }
 

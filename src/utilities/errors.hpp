@@ -41,6 +41,13 @@ class UnsupportedRoomTypeError : public std::invalid_argument
         RoomType type;
 };
 
+class UnsupportedTaskTypeError : public std::invalid_argument
+{
+    public:
+        UnsupportedTaskTypeError(const std::string& what, const Task&);
+        const Task& task;
+};
+
 class DuplicateWorkerIDError : public std::invalid_argument
 {
     public:

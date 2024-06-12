@@ -36,7 +36,7 @@ TEST_CASE("Test Service")
     s_system.add_stay(stay1_temp);
     auto& stay1 = s_system.get_by_id("id1");
     TaskSystem t_system{w_system, rooms_list, g_system};
-    ServiceSystem sc_system{g_system, w_system, rooms_list, s_system, t_system};
+    ServiceSystem sc_system{w_system, rooms_list, g_system, s_system, t_system};
 
     StayService stayservice{"1111", stay1};
     Service& service = stayservice;
@@ -45,7 +45,7 @@ TEST_CASE("Test Service")
     {
         REQUIRE(service.get_description() == "Stay Service.");
         REQUIRE(service.get_id() == "1111");
-        REQUIRE(service.get_price() == Amount{0, 0});
+        REQUIRE(service.get_price() == room1.calculatePrice() * stay1.get_duration());
         REQUIRE(service.get_requestee() == guest1);
         REQUIRE(service.get_status() == ServiceStatus::ordered);
     }

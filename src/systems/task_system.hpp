@@ -9,7 +9,11 @@
 #include "../auxiliary/id_generator.hpp"
 #include "../tasks/task.hpp"
 
-class TaskSystem : public OtherSystemObserver<Worker>, public OtherSystemObserver<Room>, public OtherSystemObserver<Guest>
+class TaskSystem :
+    public OtherSystemObserver<Worker>,
+    public OtherSystemObserver<Room>,
+    public OtherSystemObserver<Guest>,
+    public OtherSystemPublisher<Task>
 {
     public:
         TaskSystem(WorkerSystem&, RoomsList&, GuestSystem&);
@@ -19,12 +23,13 @@ class TaskSystem : public OtherSystemObserver<Worker>, public OtherSystemObserve
         void complete_task(const Task&);
         std::optional<const Task*> find_by_id(const std::string& id) const noexcept;
         const Task& get_by_id(const std::string& id) const;
+        const Task& add_task(const Task&);
         template<SupportedTask T>
-            void add_task(const T&);
+            const Task& add_task(const T&);
         template<SupportedTask T>
-            std::string add_task_id(const T&);
+            const Task& add_task_id(const T&);
         template<SupportedTask T>
-            std::string add_task_id(T&&);
+            const Task& add_task_id(T&&);
         void remove_task(const Task&) noexcept;
         std::vector<const Task*> get_tasks() const noexcept;
         void notify_erase(const std::string& erased_id, dummy<Worker>) override;
@@ -43,7 +48,7 @@ class TaskSystem : public OtherSystemObserver<Worker>, public OtherSystemObserve
 
 
 template<SupportedTask T>
-void TaskSystem::add_task(const T& task)
+const Task& TaskSystem::add_task(const T& task)
 {
     check_task_status(task);
     if (find_by_id(task.get_id()))
@@ -68,25 +73,26 @@ void TaskSystem::add_task(const T& task)
         throw e;
     }
     id_gen.forbid_id(task.Task::get_id());
+    return *tasks.back();
 }
 
 template<SupportedTask T>
-std::string TaskSystem::add_task_id(const T& task)
+const Task& TaskSystem::add_task_id(const T& task)
 {
     auto task_to_add = task;
     auto new_id = id_gen.generate_id();
     task_to_add.set_id(new_id);
     add_task(task_to_add);
-    return new_id;
+    return *tasks.back();
 }
 
 template<SupportedTask T>
-std::string TaskSystem::add_task_id(T&& task)
+const Task& TaskSystem::add_task_id(T&& task)
 {
     auto new_id = id_gen.generate_id();
     task.set_id(new_id);
     add_task(task);
-    return new_id;
+    return *tasks.back();
 }
 
 

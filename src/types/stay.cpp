@@ -70,15 +70,17 @@ void Stay::remove_guest(const Guest& guest)
     GuestsObs::remove_observed(guest);
 }
 
-void Stay::set_start(const jed_utils::datetime start)
+void Stay::set_start(jed_utils::datetime start)
 {
     validate_duration(start, end);
+    start.trunkate();
     this -> start = start;
 }
 
-void Stay::set_end(const jed_utils::datetime end)
+void Stay::set_end(jed_utils::datetime end)
 {
     validate_duration(start, end);
+    end.trunkate();
     this -> end = end;
 }
 

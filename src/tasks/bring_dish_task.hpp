@@ -4,7 +4,7 @@
 #include "small_task.hpp"
 #include "../auxiliary/pseudo_own_system_observer.hpp"
 #include "../workers/waiter.hpp"
-#include "../types/dish.hpp"
+#include "../types/restaurant_order.hpp"
 #include "../types/table.hpp"
 
 

@@ -5,54 +5,27 @@
 #include "../tasks/bring_dish_task.hpp"
 #include "../tasks/room_service_task.hpp"
 #include "../types/table.hpp"
-#include "restaurant_order.hpp"
-
-const std::string RestaurantOrderService::description = "Order a meal for a guest.";
+#include "../types/restaurant_order.hpp"
 
 
 RestaurantOrderService::RestaurantOrderService(const std::string& id, const Guest& requestee,
-    const jed_utils::datetime& time, const std::string& table_nr) :
-        TaskService{id, requestee}, time{time}, table_nr{table_nr} {}
-
-
-RestaurantOrderService::RestaurantOrderService(const std::string& id, const Guest& requestee,
-    const jed_utils::datetime& time, const Room& room) :
-        TaskService{id, requestee}, time{time}, room{&room} {}
-
-
-void RestaurantOrderService::add_to_systems(ServiceSystem& sc_system)
+    const RestaurantOrder& order, const jed_utils::datetime& time) :
+        TaskService{id, requestee}, order{order}, time{time}
 {
-    for(auto dish : order.get_dishes())
+    std::ranges::for_each(order.get_dishes(),
+        [&](const auto& dish){ TasksObs::add_observed(PrepareDishTask{"", dish}); });
+}
+
+std::vector<const PrepareDishTask*> RestaurantOrderService::get_prepare_dish_tasks() const
+{
+    auto preptasks = std::vector<const PrepareDishTask*>{};
+    for ( auto task : TasksObs::get())
     {
-        prepdish_id = t_system -> add_task_id(PrepareDishTask("", dish));
-        if (not room)
-            bringtask_id = t_system -> add_task_id(BringDishTask(id, dish, table_nr));
-        else
-            roomservice_id = t_system -> add_task_id(RoomServiceTask(id, *room, dish));
+        auto casted_task = dynamic_cast<const PrepareDishTask*>(task);
+        if (casted_task)
+            preptasks.push_back(casted_task);  
     }
+    return preptasks;
 }
 
-const std::string& RestaurantOrderService::get_description() const noexcept { return description; }
-
-std::vector<const Task*> RestaurantOrderService::get_tasks() const
-{
-    return std::vector<const Task*>{&get_prepare_dish_task(), &get_bring_dish_task()};
-}
-
-const PrepareDishTask& RestaurantOrderService::get_prepare_dish_task() const
-{
-    return dynamic_cast<const PrepareDishTask&>(t_system -> get_by_id(prepdish_id));
-}
-
-
-const BringDishTask& RestaurantOrderService::get_bring_dish_task() const
-{
-    return dynamic_cast<const BringDishTask&>(t_system -> get_by_id(bringtask_id));
-}
-
-const RoomServiceTask& RestaurantOrderService::get_room_service_task() const
-{
-    return dynamic_cast<const RoomServiceTask&>(t_system -> get_by_id(roomservice_id));
-}
-
-Amount RestaurantOrderService::get_total_price() const noexcept { return order.get_price(); }
+Amount RestaurantOrderService::get_default_price() const noexcept { return order.get_price(); }
