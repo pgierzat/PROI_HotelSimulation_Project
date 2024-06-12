@@ -49,8 +49,8 @@ TEST_CASE("Test Stay")
         SECTION("setters")
         {
             auto stay2 = Stay{"id2", room1, guest2, start, end};
-            jed_utils::datetime nstart{2012, 12, 13};
-            jed_utils::datetime nend{2012, 12, 16};
+            jed_utils::datetime nstart{2012, 12, 13, 16};
+            jed_utils::datetime nend{2012, 12, 16, 10};
             stay2.set_end(nend);
             stay2.set_start(nstart);
             REQUIRE( stay2.get_start() == nstart );
