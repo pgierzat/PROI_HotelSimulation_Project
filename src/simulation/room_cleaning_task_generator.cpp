@@ -4,7 +4,7 @@
 #include "../systems/hotel_system.hpp"
 
 RoomCleaningTaskGenerator::RoomCleaningTaskGenerator(HotelSystem& h_system) :
-    SystematicTaskGenerator{h_system.get_time(), h_system.get_t_system()},
+    SystematicTaskGenerator{h_system.get_ck(), h_system.get_time(), h_system.get_t_system()},
     rooms_list{&h_system.get_crooms_list()}
 {
     initiate_time_next();

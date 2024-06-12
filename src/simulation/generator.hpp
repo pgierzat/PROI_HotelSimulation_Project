@@ -4,13 +4,14 @@
 #include "../systems/task_system.hpp"
 #include "../types/datetime.h"
 #include "../types/timespan.h"
+#include "../auxiliary/time_observer.hpp"
+#include "../auxiliary/time_publisher.hpp"
 
-
-class Generator
+class Generator : public TimeObserver
 {
     public:
-        Generator(const jed_utils::datetime&);
-        virtual void set_time(const jed_utils::datetime&);
+        Generator(TimePublisher&, const jed_utils::datetime&);
+        void notify(const jed_utils::datetime&) override;
     protected:
         virtual void generate() = 0;
         virtual jed_utils::timespan get_time_of_gen() const noexcept;
