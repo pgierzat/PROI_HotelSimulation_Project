@@ -6,13 +6,13 @@
 #include <algorithm>
 
 
-ServiceSystem::ServiceSystem(GS& g_system, WS& w_system, RL& rooms_list, SS& s_system, TS& t_system) :
-    g_system{&g_system}, w_system{&w_system}, rooms_list{&rooms_list},
+ServiceSystem::ServiceSystem(WS& w_system, RL& rooms_list, GS& g_system, SS& s_system, TS& t_system) :
+    w_system{&w_system}, rooms_list{&rooms_list}, g_system{&g_system}, 
     s_system{&s_system}, t_system{&t_system}
 {
-    g_system.subscribe(*this);
     w_system.subscribe(*this);
     rooms_list.subscribe(*this);
+    g_system.subscribe(*this);
     s_system.subscribe(*this);
     t_system.subscribe(*this);
 }
@@ -35,3 +35,9 @@ const Service& ServiceSystem::get_by_id(const std::string& id) const
 
 StaySystem& ServiceSystem::get_s_system() noexcept { return *s_system; }
 TaskSystem& ServiceSystem::get_t_system() noexcept { return *t_system; }
+
+void ServiceSystem::notify_erase(const std::string&, dummy<Worker>) {}
+void ServiceSystem::notify_erase(const std::string&, dummy<Room>) {}
+void ServiceSystem::notify_erase(const std::string&, dummy<Guest>) {}
+void ServiceSystem::notify_erase(const std::string&, dummy<Stay>) {}
+void ServiceSystem::notify_erase(const std::string&, dummy<Task>) {}
