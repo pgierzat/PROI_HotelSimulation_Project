@@ -18,8 +18,6 @@ class WakeService : public TaskService, OwnSystemObserver<Room>
     private:
         static const std::string description;
         jed_utils::datetime time;
-        const Room* room = nullptr;
-        const WakeTask* wake_task = nullptr;
 };
 
 #endif

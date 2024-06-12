@@ -20,11 +20,6 @@ class ServiceSystem;
 class Service : protected OwnSystemObserver<Guest>
 {
         using GuestObs = OwnSystemObserver<Guest>;
-    protected:
-        Service(const std::string& id, const Guest& requestee);
-        std::string id;
-        Amount price;
-        ServiceStatus status{ServiceStatus::ordered};
     public:
         virtual ~Service() = default;
         const std::string& get_id() const noexcept;
@@ -37,6 +32,16 @@ class Service : protected OwnSystemObserver<Guest>
         virtual const std::string& get_description() const noexcept = 0;
         virtual void add_to_systems(ServiceSystem&) = 0;
         bool operator==(const Service&) const = default;
+    protected:
+        enum class ServiceAdded {
+            added,
+            not_added
+        };
+        Service(const std::string& id, const Guest& requestee);
+        std::string id;
+        Amount price;
+        ServiceStatus status{ServiceStatus::ordered};
+        ServiceAdded added{ServiceAdded::not_added};
 };
 
 #endif

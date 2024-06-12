@@ -15,7 +15,6 @@ class StayService : public Service, protected OwnSystemObserver<Stay>
         void add_to_systems(ServiceSystem&) override;
     private:
         static const std::string description;
-        Amount price;
         const Stay* stay;
 };
 
