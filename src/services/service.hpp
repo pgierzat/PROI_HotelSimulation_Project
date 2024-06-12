@@ -31,7 +31,7 @@ class Service : protected OwnSystemObserver<Guest>
         void mark_paid_for();
         virtual const std::string& get_description() const noexcept = 0;
         virtual void add_to_systems(ServiceSystem&) = 0;
-        bool operator==(const Service&) const = default;
+        virtual bool operator==(const Service&) const;
     protected:
         enum class ServiceAdded {
             added,

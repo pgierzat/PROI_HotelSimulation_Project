@@ -2,6 +2,7 @@
 #define STAY_SYSTEM_HPP
 
 #include "../auxiliary/other_system_observer.hpp"
+#include "../auxiliary/other_system_publisher.hpp"
 #include "../auxiliary/time_observer.hpp"
 #include "../auxiliary/time_publisher.hpp"
 #include "../inner_types/inner_stay.hpp"

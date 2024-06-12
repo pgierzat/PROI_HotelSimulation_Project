@@ -19,3 +19,12 @@ void Service::mark_paid_for()
     status = ServiceStatus::paid_for;
 }
 
+bool Service::operator==(const Service& other) const
+{
+    return
+        id == other.id &&
+        price == other.price &&
+        status == other.status &&
+        added == other.added &&
+        get_description() == other.get_description();
+}
