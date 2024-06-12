@@ -1,7 +1,7 @@
 #ifndef TIMETABLE_GENERATOR_HPP
 #define TIMETABLE_GENERATOR_HPP
 
-#include "generator.hpp"
+#include "daily_generator.hpp"
 #include "../systems/timetable_system.hpp"
 #include "../types/timetable_entry.hpp"
 #include "../systems/worker_system.hpp"
@@ -13,16 +13,18 @@
 
 class HotelSystem;
 
-class TimetableGenerator : public Generator
+class TimetableGenerator : public DailyGenerator
 {
-    using TTE = TimetableEntry;
+        using TTE = TimetableEntry;
+        using datetime = jed_utils::datetime;
+        using timespan = jed_utils::timespan;
     public:
         TimetableGenerator(HotelSystem&);
     private:
         void generate() override;
-        void initiate_time_next();
+        void initiate_time_next() noexcept override;
         template<SupportedWorker T>
-            std::vector<TTE> generate_empty_entries(const jed_utils::datetime& monday);
+            std::vector<TTE> generate_empty_entries(const datetime& monday);
         template<SupportedWorker T>
             std::vector<TTE>& assign_entries(std::vector<TTE>&);
         void set_time_next() noexcept override;
@@ -31,7 +33,7 @@ class TimetableGenerator : public Generator
 };
 
 template<SupportedWorker T>
-std::vector<TimetableEntry> TimetableGenerator::generate_empty_entries(const jed_utils::datetime& monday)
+std::vector<TimetableEntry> TimetableGenerator::generate_empty_entries(const datetime& monday)
 {
     auto temp = T{};
     unsigned shifts = temp.get_shifts();

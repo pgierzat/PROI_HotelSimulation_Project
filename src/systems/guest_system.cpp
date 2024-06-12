@@ -11,7 +11,17 @@ void GuestSystem::add_guest(const Guest& guest)
     if (p != guests.end())
         throw std::invalid_argument("Tried to add Guest with duplicate id.");
     guests.push_back(std::make_unique<Guest>(guest));
+    gen.forbid_id(id);
 }
+
+void GuestSystem::add_guest_id(const Guest& guest)
+{
+    auto new_guest = guest;
+    new_guest.set_id(gen.generate_id());
+    add_guest(new_guest);
+}
+
+std::string GuestSystem::get_free_id() { return gen.generate_id(); }
 
 void GuestSystem::remove_guest(const Guest& guest) noexcept
 {

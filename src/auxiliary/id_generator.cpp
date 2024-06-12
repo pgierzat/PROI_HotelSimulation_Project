@@ -16,7 +16,10 @@ std::string IDGenerator::generate_id() noexcept
     return proposition;
 }
 
-void IDGenerator::forbid_id(const std::string& id) noexcept
-{
+void IDGenerator::forbid_id(const std::string& id) noexcept {
     forbidden.push_back(id);
+}
+
+void IDGenerator::unfordid(const std::string& id) noexcept {
+    std::erase(forbidden, id);
 }

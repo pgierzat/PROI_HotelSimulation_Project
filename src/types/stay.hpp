@@ -38,13 +38,16 @@ class Stay : protected OwnSystemObserver<Room>, protected MultipleOwnSystemObser
         const Guest& get_main_guest() const;
         const Room& get_room() const;
         jed_utils::datetime get_start() const noexcept;
+        jed_utils::datetime get_start_date() const noexcept;
         jed_utils::datetime get_end() const noexcept;
+        jed_utils::datetime get_end_date() const noexcept;
         TimeInterval get_interval() const noexcept;
         Amount get_price() const;
         unsigned get_duration() const noexcept;
         StayStatus get_status() const noexcept;
         void add_guest(const Guest&);
         void remove_guest(const Guest&);
+        void set_id(const std::string& id) noexcept;
         void set_start(jed_utils::datetime start);
         void set_end(jed_utils::datetime end);
         void set_status(StayStatus);
@@ -54,7 +57,6 @@ class Stay : protected OwnSystemObserver<Room>, protected MultipleOwnSystemObser
     protected:
         static void validate_duration(const jed_utils::datetime& start, const jed_utils::datetime& end);
         std::string id;
-        std::string main_guest_id;    // Guest that pays for everything
         jed_utils::datetime start;
         jed_utils::datetime end;
         StayStatus status{StayStatus::booked};

@@ -22,19 +22,19 @@ TEST_CASE("Test Stay")
 
     SECTION("init")
     {
-        
-
         SECTION("regular")
         {
             std::vector<const Guest*> exp{&guest1};
             REQUIRE( stay.get_guests() == exp );
             REQUIRE( stay.get_main_guest() == guest1 );
             REQUIRE( stay.get_room() == room1 );
-            REQUIRE( stay.get_start() == start );
-            REQUIRE( stay.get_end() == end );
+            REQUIRE( stay.get_start_date() == start );
+            REQUIRE( stay.get_end_date() == end );
             auto interval = stay.get_interval();
             REQUIRE( interval.get_start() == start + Stay::checkin_time);
             REQUIRE( interval.get_end() == end + Stay::checkout_time);
+            REQUIRE( stay.get_start() == start + Stay::checkin_time);
+            REQUIRE( stay.get_end() == end + Stay::checkout_time);
         }
 
         SECTION("long dates")

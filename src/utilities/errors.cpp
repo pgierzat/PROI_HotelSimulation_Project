@@ -61,8 +61,8 @@ EntryNotInSystemError::EntryNotInSystemError(const std::string& what, const std:
     std::invalid_argument(what), id{id} {}
 
 
-StayOverlapError::StayOverlapError(const std::string& what, const Stay& old_stay, const Stay& new_stay) :
-    std::invalid_argument{what}, old_stay{old_stay}, new_stay{new_stay} {}
+StayOverlapError::StayOverlapError(const std::string& what, const Stay& stay) :
+    std::invalid_argument{what}, stay{stay} {}
 
 
 WorkerNotInSystemError::WorkerNotInSystemError(const std::string& what, const Worker& worker) :

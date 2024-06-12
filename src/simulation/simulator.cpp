@@ -1,7 +1,6 @@
 #include "stay_generator.hpp"
 #include "room_cleaning_task_generator.hpp"
 #include "timetable_generator.hpp"
-#include "generator.hpp"
 #include "simulator.hpp"
 #include "../systems/task_system.hpp"
 #include "../rooms/hpp/rooms_list.hpp"
@@ -28,7 +27,7 @@ void Simulator::simulate()
     while (true)
     {
         ++clock;
-     }
+    }
 }
 
 // void Simulator::hotel_set_time(const jed_utils::datetime& time)
