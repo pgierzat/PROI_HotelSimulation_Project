@@ -127,6 +127,7 @@ void StaySystem::check_overlap(const Stay& stay) const
         throw StayOverlapError("Attempt to add overlapping stay.", **p, stay);
 }
 
+
 void StaySystem::notify_realloc(dummy<Room>)
 {
     for(auto& stay : stays)

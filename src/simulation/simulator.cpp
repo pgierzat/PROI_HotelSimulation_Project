@@ -23,10 +23,7 @@ Simulator::Simulator(HotelSystem& hotel_system) :
 void Simulator::simulate()
 {
     auto &clock = hotel_system.get_ck();
-    int i = 0;
     clock.set_unit_delta(jed_utils::timespan(0, 1, 0, 0));
-    i++;
-    std::cout << i << std::endl;
     // Simulation loop
     while (true)
     {

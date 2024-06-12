@@ -31,6 +31,7 @@ void StayGenerator::generate()
         guestslist.push_back(guest);
         g_system -> add_guest(guest);
     }
+    std::cout << guests_num << std::endl;
     switch (guests_num)
     {
     case 1:
@@ -44,8 +45,6 @@ void StayGenerator::generate()
         if(it == rooms.end())
             break;
         OneRoom* free_room = dynamic_cast<OneRoom*>(it->get());
-        if(!free_room)
-            break;
         jed_utils::datetime end_time = time + jed_utils::timespan(days);
         Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
         s_system -> add_stay(stay);
@@ -68,8 +67,6 @@ void StayGenerator::generate()
         if(it == rooms.end())
             break;
         TwoRoom* free_room = dynamic_cast<TwoRoom*>(it->get());
-        if(!free_room)
-            break;
         jed_utils::datetime end_time = time + jed_utils::timespan(days);
         Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
         s_system -> add_stay(stay);
@@ -91,8 +88,6 @@ void StayGenerator::generate()
         if(it == rooms.end())
             break;
         ThreeRoom* free_room = dynamic_cast<ThreeRoom*>(it->get());
-        if(!free_room)
-            break;
         jed_utils::datetime end_time = time + jed_utils::timespan(days);
         Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
         s_system -> add_stay(stay);
@@ -114,11 +109,10 @@ void StayGenerator::generate()
         if(it == rooms.end())
             break;
         FourRoom* free_room = dynamic_cast<FourRoom*>(it->get());
-        if(!free_room)
-        break;
         jed_utils::datetime end_time = time + jed_utils::timespan(days);
         Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
         s_system -> add_stay(stay);
+
         std::ofstream file("output.txt", std::ios::app); // Open the file in append mode
         if (file.is_open()) {
             file << guestslist.size() << " guest(s) came to hotel, and their Stay is till " << end_time.to_string() << "\n";
