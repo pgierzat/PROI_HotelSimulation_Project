@@ -29,11 +29,13 @@ class ServiceSystem :
         const Service& get_by_id(const std::string& id) const;
         template <SupportedService T>
             void add_service(const T&);
+        SS& get_s_system() noexcept;
+        TS& get_t_system() noexcept;
     private:
         std::vector<std::unique_ptr<Service>> services;
-        const GuestSystem* g_system = nullptr;
-        const RoomsList* rooms_list = nullptr;
         WorkerSystem* w_system = nullptr;
+        const RoomsList* rooms_list = nullptr;
+        const GuestSystem* g_system = nullptr;
         StaySystem* s_system = nullptr;
         TaskSystem* t_system = nullptr;
 };

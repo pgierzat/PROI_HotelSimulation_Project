@@ -32,3 +32,6 @@ const Service& ServiceSystem::get_by_id(const std::string& id) const
         throw ServiceNotInSystemError("ServiceSystem::get_by_id failed", id);
     return **p;
 }
+
+StaySystem& ServiceSystem::get_s_system() noexcept { return *s_system; }
+TaskSystem& ServiceSystem::get_t_system() noexcept { return *t_system; }
