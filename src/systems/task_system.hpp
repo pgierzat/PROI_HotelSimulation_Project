@@ -23,6 +23,7 @@ class TaskSystem :
         void complete_task(const Task&);
         std::optional<const Task*> find_by_id(const std::string& id) const noexcept;
         const Task& get_by_id(const std::string& id) const;
+        const Task& add_task(const Task&);
         template<SupportedTask T>
             const Task& add_task(const T&);
         template<SupportedTask T>

@@ -3,6 +3,12 @@
 #include "task_system.hpp"
 #include "../functions/has_elem.hpp"
 #include "../auxiliary/t_system_aux.hpp"
+#include "../tasks/bring_dish_task.hpp"
+#include "../tasks/prepare_dish_task.hpp"
+#include "../tasks/room_cleaning_task.hpp"
+#include "../tasks/room_service_task.hpp"
+#include "../tasks/taxi_task.hpp"
+#include "../tasks/wake_task.hpp"
 
 TaskSystem::TaskSystem(WorkerSystem& w_system, RoomsList& rooms_list, GuestSystem& g_system) :
     w_system{&w_system}, rooms_list{&rooms_list}, g_system{&g_system}
@@ -37,6 +43,41 @@ const Task& TaskSystem::get_by_id(const std::string& id) const
     if (p == tasks.end())
         throw TaskNotInSystemError("TaskSystem::get_by_id failed", id);
     return **p;
+}
+
+const Task& TaskSystem::add_task(const Task& task)
+{
+    auto proposition = dynamic_cast<const BringDishTask*>(&task);
+    if (proposition) {
+        add_task(*proposition);
+        return;
+    }
+    auto proposition = dynamic_cast<const PrepareDishTask*>(&task);
+    if (proposition) {
+        add_task(*proposition);
+        return;
+    }
+    auto proposition = dynamic_cast<const RoomCleaningTask*>(&task);
+    if (proposition) {
+        add_task(*proposition);
+        return;
+    }
+    auto proposition = dynamic_cast<const RoomServiceTask*>(&task);
+    if (proposition) {
+        add_task(*proposition);
+        return;
+    }
+    auto proposition = dynamic_cast<const TaxiTask*>(&task);
+    if (proposition) {
+        add_task(*proposition);
+        return;
+    }
+    auto proposition = dynamic_cast<const WakeTask*>(&task);
+    if (proposition) {
+        add_task(*proposition);
+        return;
+    }
+    throw UnsupportedTaskTypeError("Tried to add task of unsupported type", task);
 }
 
 void TaskSystem::remove_task(const Task& task) noexcept
