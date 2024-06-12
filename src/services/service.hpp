@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "../auxiliary/own_system_observer.hpp"
 #include "../types/guest.hpp"
 #include "../types/amount.hpp"
 #include "../tasks/task.hpp"
@@ -16,8 +17,9 @@ enum class ServiceStatus {
 
 class ServiceSystem;
 
-class Service
+class Service : protected OwnSystemObserver<Guest>
 {
+        using OSO = OwnSystemObserver<Guest>;
     protected:
         Service(const std::string& id, const Guest& requestee);
         std::string id;
@@ -33,7 +35,6 @@ class Service
         ServiceStatus get_status() const noexcept;
         void mark_paid_for();
         virtual const std::string& get_description() const noexcept = 0;
-        virtual ServiceStatus refresh_status(const ServiceSystem&) = 0;
         virtual void add_to_systems(ServiceSystem&) = 0;
         bool operator==(const Service&) const = default;
 };
