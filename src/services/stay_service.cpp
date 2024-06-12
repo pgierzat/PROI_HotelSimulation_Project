@@ -20,4 +20,8 @@ const Stay& StayService::get_stay() const noexcept { return StayObs::get(); }
 
 const std::string& StayService::get_description() const noexcept { return description; }
 
-void StayService::add_to_systems(ServiceSystem& sc_system) {}
+void StayService::add_to_systems(ServiceSystem& sc_system)
+{
+    if (added == ServiceAdded::added)
+        throw ServiceStatusError("Tried to add service to systems twice.", *this);
+}

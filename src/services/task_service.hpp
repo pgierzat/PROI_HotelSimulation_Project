@@ -12,6 +12,7 @@ class TaskService : public Service, public MultipleOwnSystemObserver<Task>
         using TasksObs = MultipleOwnSystemObserver<Task>;
     protected:
         TaskService(const std::string& id, const Guest& requestee);
+        void add_to_systems(ServiceSystem&) override;
     public:
         virtual std::vector<const Task*> get_tasks() const;
 };
