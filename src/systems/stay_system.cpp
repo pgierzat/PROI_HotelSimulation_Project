@@ -26,13 +26,14 @@ void StaySystem::notify(const jed_utils::datetime& time)
     this -> time = time;
 }
 
-void StaySystem::add_stay(const Stay& stay)
+const Stay& StaySystem::add_stay(const Stay& stay)
 {
     if (time - stay.get_start() >= jed_utils::timespan(1))
         throw StayBackwardBookError("Tried to book a stay that starts on a past hotel nigth.", stay, time);
     if (stay.get_status() != StayStatus::booked)
         throw StayStatusError("Stay added to system must be in booked state.", stay);
-    check_overlap(stay);
+    if (does_overlap(stay))
+        throw StayOverlapError("Attempt to add overlapping stay.", stay);
     stays.emplace_back(std::make_unique<InnerStay>(stay));
     auto& stay_obj = *stays.back();
     OwnSystemObserver<Room>& room_observer = stay_obj.get_room_observer();
@@ -50,6 +51,16 @@ void StaySystem::add_stay(const Stay& stay)
         throw e;
     }
     stay_obj.set_status(StayStatus::booked);
+    gen.forbid_id(stay.get_id());
+    return *stays.back();
+}
+
+const Stay& StaySystem::add_stay_id(const Stay& stay)
+{
+    auto id = gen.generate_id();
+    auto to_add = stay;
+    to_add.set_id(id);
+    return add_stay(to_add);
 }
 
 void StaySystem::remove_stay(const Stay& stay)
@@ -117,17 +128,6 @@ InnerStay& StaySystem::get_stay(const Stay& stay) const
     return *stay_opt.value();
 }
 
-void StaySystem::check_overlap(const Stay& stay) const
-{
-    auto interval = stay.get_interval();
-    auto same_room = StaySameRoomID(stay.get_room());
-    auto room_stays = stays | std::views::filter([&](const auto& otr_stay){ return same_room(*otr_stay); });
-    auto p = std::ranges::find_if(room_stays,
-        [&](const auto& otr_stay){ return distance( interval, otr_stay -> get_interval() ) < jed_utils::timespan{0}; });
-    if ( p != room_stays.end() )
-        throw StayOverlapError("Attempt to add overlapping stay.", **p, stay);
-}
-
 void StaySystem::notify_erase(const std::string& erased_obj_id, dummy<Room>)
 {
     std::erase_if(stays, StaySameRoomID(erased_obj_id));
@@ -138,6 +138,16 @@ void StaySystem::notify_erase(const std::string& erased_obj_id, dummy<Guest>)
 {
     std::erase_if(stays, StayHasGuestID(erased_obj_id));
     // notify observers
+}
+
+bool StaySystem::does_overlap(const Stay& stay) const noexcept
+{
+    auto interval = stay.get_interval();
+    auto same_room = StaySameRoomID(stay.get_room());
+    auto room_stays = stays | std::views::filter([&](const auto& otr_stay){ return same_room(*otr_stay); });
+    auto p = std::ranges::find_if(room_stays,
+        [&](const auto& otr_stay){ return distance( interval, otr_stay -> get_interval() ) < jed_utils::timespan{0}; });
+    return p != room_stays.end();
 }
 
 bool StaySystem::check_room(const Room& room) const

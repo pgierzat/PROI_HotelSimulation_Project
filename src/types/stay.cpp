@@ -12,8 +12,7 @@ const jed_utils::timespan Stay::checkin_time = jed_utils::timespan{0, 16, 0, 0};
 
 Stay::Stay(const std::string& id, const Room& room, const Guest& main_guest,
            const jed_utils::datetime& start, const jed_utils::datetime& end) :
-    RoomObs{room}, GuestsObs{}, id{id}, main_guest_id{main_guest.get_id()},
-    start{start}, end{end}
+    RoomObs{room}, GuestsObs{}, id{id}, start{start}, end{end}
 {
     GuestsObs::add_observed(main_guest);
     (this -> start).trunkate();
@@ -30,7 +29,7 @@ const std::vector<const Guest*> Stay::get_guests() const
 
 const Guest& Stay::get_main_guest() const
 {
-    return GuestsObs::get_by_id(main_guest_id);
+    return GuestsObs::front();
 }
 
 const Room& Stay::get_room() const
@@ -39,8 +38,10 @@ const Room& Stay::get_room() const
 }
 
 jed_utils::datetime Stay::get_start() const noexcept { return start + checkin_time; }
+jed_utils::datetime Stay::get_start_date() const noexcept { return start; }
 
 jed_utils::datetime Stay::get_end() const noexcept { return end + checkout_time; }
+jed_utils::datetime Stay::get_end_date() const noexcept { return end; }
 
 
 TimeInterval Stay::get_interval() const noexcept
@@ -62,10 +63,12 @@ void Stay::add_guest(const Guest& guest)
     GuestsObs::add_observed(guest);
 }
 
+void Stay::set_id(const std::string& id) noexcept { this -> id = id; }
+
 void Stay::remove_guest(const Guest& guest)
 {
     const auto& id = guest.get_id();
-    if (id == main_guest_id)
+    if (id == GuestsObs::front().get_id())
         throw std::invalid_argument("Cannot remove main Guest from Stay.");
     GuestsObs::remove_observed(guest);
 }
@@ -90,7 +93,7 @@ bool Stay::operator==(const Stay& other) const
 {
     return
         id == other.id &&
-        main_guest_id == other.main_guest_id &&
+        GuestsObs::get() == other.GuestsObs::get() &&
         RoomObs::get_observed_id() == other.RoomObs::get_observed_id() &&
         start == other.start &&
         end == other.end;

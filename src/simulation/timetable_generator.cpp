@@ -3,7 +3,8 @@
 
 
 TimetableGenerator::TimetableGenerator(HotelSystem& h_system) :
-    Generator{h_system.get_ck(), h_system.get_time()}, tt_system{&h_system.get_tt_system()}, w_system{&h_system.get_w_system()}
+    DailyGenerator{h_system.get_ck(), timespan{0}},
+    tt_system{&h_system.get_tt_system()}, w_system{&h_system.get_cw_system()}
 {
     initiate_time_next();
 }
@@ -22,14 +23,14 @@ void TimetableGenerator::generate()
     assign_entries<Waiter>(waiter_entries);
 }
 
-void TimetableGenerator::initiate_time_next()
+void TimetableGenerator::initiate_time_next() noexcept
 {
     auto weekday = time.get_weekday();
     auto weakday_int = static_cast<unsigned>(weekday);    // sunday = 0
     time_next = time;
     time_next.trunkate();
     time_next.add_days(-weakday_int);
-    time_next += get_time_of_gen();
+    time_next += time_of_gen;
     if (time >= time_next)
         time_next.add_days(7);
 }

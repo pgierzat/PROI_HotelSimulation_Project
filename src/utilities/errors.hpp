@@ -150,9 +150,8 @@ class EntryNotInSystemError : public std::invalid_argument
 class StayOverlapError : public std::invalid_argument
 {
     public:
-        StayOverlapError(const std::string& what, const Stay& old_stay, const Stay& new_stay);
-        const Stay& old_stay;
-        const Stay& new_stay;
+        StayOverlapError(const std::string& what, const Stay& stay);
+        const Stay& stay;
 };
 
 class WorkerNotInSystemError : public std::invalid_argument

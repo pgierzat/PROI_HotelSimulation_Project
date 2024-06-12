@@ -10,10 +10,14 @@
 template<typename T>
 class MultipleOwnSystemObserver : public virtual WeakMultipleOwnSystemObserver<T>
 {
+        using MOSO = MultipleOwnSystemObserver<T>;
+        using OSO = OwnSystemObserver<T>;
     public:
         MultipleOwnSystemObserver() = default;
         MultipleOwnSystemObserver(const MultipleOwnSystemObserver<T>&);
-        MultipleOwnSystemObserver(const MultipleOwnSystemObserver<T>&&);
+        MultipleOwnSystemObserver(MultipleOwnSystemObserver<T>&&);
+        MultipleOwnSystemObserver& operator=(const MultipleOwnSystemObserver&);
+        MultipleOwnSystemObserver& operator=(MultipleOwnSystemObserver&&);
         void notify_realloc(const T& new_obj) override;
         void notify_erase(const std::string& erased_id) noexcept override;
         std::vector<const std::string*> get_observed_ids() const noexcept override;
@@ -28,7 +32,6 @@ class MultipleOwnSystemObserver : public virtual WeakMultipleOwnSystemObserver<T
         std::optional<const T*> find_by_id(const std::string&) const;
         const T& get_by_id(const std::string&) const;
     private:
-            using OSO = OwnSystemObserver<T>;
         std::optional<OSO*> find_observer(const std::string& id);
         OSO& get_observer(const std::string& id);
         std::vector<std::unique_ptr<OSO>> observers;
@@ -36,7 +39,7 @@ class MultipleOwnSystemObserver : public virtual WeakMultipleOwnSystemObserver<T
 
 
 template<typename T>
-MultipleOwnSystemObserver<T>::MultipleOwnSystemObserver(const MultipleOwnSystemObserver<T>& other)
+MultipleOwnSystemObserver<T>::MultipleOwnSystemObserver(const MOSO& other)
 {
     for (const auto& obs : other.observers)
     {
@@ -46,8 +49,32 @@ MultipleOwnSystemObserver<T>::MultipleOwnSystemObserver(const MultipleOwnSystemO
 }
 
 template<typename T>
-MultipleOwnSystemObserver<T>::MultipleOwnSystemObserver(const MultipleOwnSystemObserver<T>&& other) :
+MultipleOwnSystemObserver<T>::MultipleOwnSystemObserver(MOSO&& other) :
     observers{std::move(other.observers)} {}
+
+template<typename T>
+MultipleOwnSystemObserver<T>& MultipleOwnSystemObserver<T>::operator=(const MOSO& other)
+{
+    observers.clear();
+    for (const auto& obs : other.observers)
+    {
+        auto to_add = std::make_unique<OSO>(*obs);
+        observers.emplace_back(std::move(to_add));
+    }
+    return *this;
+}
+
+template<typename T>
+MultipleOwnSystemObserver<T>& MultipleOwnSystemObserver<T>::operator=(MOSO&& other) {
+    observers.clear();
+    for (const auto& obs : other.observers)
+    {
+        auto to_add = std::make_unique<OSO>(*obs);
+        observers.emplace_back(std::move(to_add));
+    }
+    other.observers.clear();
+    return *this;
+}
 
 template<typename T>
 void MultipleOwnSystemObserver<T>::notify_realloc(const T& new_obj)

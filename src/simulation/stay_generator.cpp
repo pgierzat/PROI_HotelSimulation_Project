@@ -13,133 +13,54 @@
 #include <iostream>
 
 
-StayGenerator::StayGenerator(HotelSystem& h_system) : Generator{h_system.get_ck(), h_system.get_time()},
-    rooms_list{&h_system.get_crooms_list()}, s_system{&h_system.get_s_system()}, g_system{&h_system.get_g_system()}
-{
-    initiate_time_next();
-}
+StayGenerator::StayGenerator(HotelSystem& h_system) :
+    RandomGenerator{h_system.get_ck(), 0.1, timespan{0, 1}},
+    rooms_list{&h_system.get_crooms_list()},
+    s_system{&h_system.get_s_system()},
+    g_system{&h_system.get_g_system()} {}
 
 void StayGenerator::generate()
 {
-    std::srand(std::time(0));
-    int guests = std::rand() % 4 + 1;
-    int days = std::rand() % 7 + 1;
-    auto guests_num = guests;
-    std::vector<Guest> guestslist{};
-    for (; guests != 0 ; guests--){
-        Guest guest = Guest(IDGen.generate_id(), "guest");
-        guestslist.push_back(guest);
-        g_system -> add_guest(guest);
+    
+    const int guests_nr = guests_interval(normal_guests(engine));
+    const int days = 1 + days_interval(uniform_days(engine));
+    auto guests = generate_guests(guests_nr);
+    auto stay_opt = std::optional<Stay>{};
+    if (guests_nr == 1)
+        stay_opt = generate_stay<OneRoom>(guests, days);
+    else if (guests_nr == 2)
+        stay_opt = generate_stay<TwoRoom>(guests, days);
+    else if (guests_nr == 3)
+        stay_opt = generate_stay<ThreeRoom>(guests, days);
+    else if (guests_nr == 4)
+        stay_opt = generate_stay<FourRoom>(guests, days);
+    auto msg = std::string{};
+    if (not stay_opt)
+        msg = std::to_string(guests_nr) +
+            " guests came to the hotel, but there was no available room for them.";
+    else {
+        auto& stay = stay_opt.value();
+        std::ranges::for_each(guests, [&](const auto& guest){ g_system -> add_guest(guest); });
+        for (const auto& guest : guests | std::views::drop(1))
+            stay.add_guest(guest);
+        s_system -> add_stay_id(stay);
+        msg = std::to_string(guests_nr) +
+            " guests came to the hotel, they booked stay ending at " +
+            stay.get_end().to_string();
     }
-    std::cout << guests_num << std::endl;
-    switch (guests_num)
-    {
-    case 1:
-    {
-        const std::list<std::unique_ptr<Room>>& rooms = rooms_list -> getRooms();
-        Guest main_guest = guestslist[0];
-        auto it = find_if(rooms.begin(), rooms.end(), [this](const std::unique_ptr<Room>& room) {
-        OneRoom* oneRoom = dynamic_cast<OneRoom*>(room.get());
-        return oneRoom && s_system -> check_room(*room);
-    });
-        if(it == rooms.end())
-            break;
-        OneRoom* free_room = dynamic_cast<OneRoom*>(it->get());
-        jed_utils::datetime end_time = time + jed_utils::timespan(days);
-        Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
-        s_system -> add_stay(stay);
-        std::ofstream file("output.txt", std::ios::app); // Open the file in append mode
-        if (file.is_open()) {
-            file << guestslist.size() << " guests came to hotel, and their Stay is till " << end_time.to_string() << "\n";
-            file.close();
-    }
-
-        break;
-    }
-    case 2:
-    {
-        const std::list<std::unique_ptr<Room>>& rooms = rooms_list -> getRooms();
-        Guest main_guest = guestslist[0];
-        auto it = find_if(rooms.begin(), rooms.end(), [this](const std::unique_ptr<Room>& room) {
-        TwoRoom* twoRoom = dynamic_cast<TwoRoom*>(room.get());
-        return twoRoom && s_system -> check_room(*room);
-    });
-        if(it == rooms.end())
-            break;
-        TwoRoom* free_room = dynamic_cast<TwoRoom*>(it->get());
-        jed_utils::datetime end_time = time + jed_utils::timespan(days);
-        Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
-        s_system -> add_stay(stay);
-        std::ofstream file("output.txt", std::ios::app); // Open the file in append mode
-        if (file.is_open()) {
-            file << guestslist.size() << " guests came to hotel, and their Stay is till " << end_time.to_string() << "\n";
-            file.close();
-    }
-        break;
-    }
-    case 3:
-    {
-        const std::list<std::unique_ptr<Room>>& rooms = rooms_list -> getRooms();
-        Guest main_guest = guestslist[0];
-        auto it = find_if(rooms.begin(), rooms.end(), [this](const std::unique_ptr<Room>& room) {
-        ThreeRoom* threeRoom = dynamic_cast<ThreeRoom*>(room.get());
-        return threeRoom && s_system -> check_room(*room);
-    });
-        if(it == rooms.end())
-            break;
-        ThreeRoom* free_room = dynamic_cast<ThreeRoom*>(it->get());
-        jed_utils::datetime end_time = time + jed_utils::timespan(days);
-        Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
-        s_system -> add_stay(stay);
-        std::ofstream file("output.txt", std::ios::app); // Open the file in append mode
-        if (file.is_open()) {
-            file << guestslist.size() << " guests came to hotel, and their Stay is till " << end_time.to_string() << "\n";
-            file.close();
-    }
-        break;
-    }
-    case 4:
-        {
-        const std::list<std::unique_ptr<Room>>& rooms = rooms_list -> getRooms();
-        Guest main_guest = guestslist[0];
-        auto it = find_if(rooms.begin(), rooms.end(), [this](const std::unique_ptr<Room>& room) {
-        FourRoom* fourRoom = dynamic_cast<FourRoom*>(room.get());
-        return fourRoom && s_system -> check_room(*room);
-    });
-        if(it == rooms.end())
-            break;
-        FourRoom* free_room = dynamic_cast<FourRoom*>(it->get());
-        jed_utils::datetime end_time = time + jed_utils::timespan(days);
-        Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
-        s_system -> add_stay(stay);
-
-        std::ofstream file("output.txt", std::ios::app); // Open the file in append mode
-        if (file.is_open()) {
-            file << guestslist.size() << " guest(s) came to hotel, and their Stay is till " << end_time.to_string() << "\n";
-            file.close();
-        }
-        break;
-        }
-    default:
-        break;
+    std::ofstream file("output.txt", std::ios::app);
+    if (file.is_open()) {
+        file << time.to_string() << ": " << msg << '\n';
     }
 }
 
-void StayGenerator::set_time_next() noexcept
+std::vector<Guest> StayGenerator::generate_guests(unsigned guests_nr)
 {
-    std::srand(std::time(0));
-    int hours = std::rand() % 4 + 1;
-    time_next = time;
-    time_next.add_hours(hours);
-}
-
-void StayGenerator::initiate_time_next()
-{
-    std::srand(std::time(0));
-    int hours = std::rand() % 4 + 1;
-    time_next = time;
-    time_next.trunkate();
-    time_next += get_time_of_gen();
-    if (time >= time_next)
-        time_next.add_hours(hours);
+    std::vector<Guest> guests{};
+    for (int i = guests_nr; i != 0 ; i--) {
+        auto nr = g_system -> get_free_id();
+        Guest guest = Guest(nr, "name" + nr);
+        guests.push_back(guest);
+    }
+    return guests;
 }
