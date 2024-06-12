@@ -55,6 +55,7 @@ void StaySystem::add_stay(const Stay& stay)
 void StaySystem::remove_stay(const Stay& stay)
 {
     auto id = stay.get_id();
+    publish_erase(id);
     std::erase_if(stays, [&](const auto& otr){ return otr -> get_id() == id; });
 }
 

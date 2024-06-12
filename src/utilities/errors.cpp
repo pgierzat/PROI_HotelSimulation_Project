@@ -6,6 +6,9 @@ UnsupportedWorkerTypeError::UnsupportedWorkerTypeError(const std::string& what, 
 UnsupportedRoomTypeError::UnsupportedRoomTypeError(const std::string& what, RoomType type) :
     std::invalid_argument(what), type{type} {}
 
+UnsupportedTaskTypeError::UnsupportedTaskTypeError(const std::string& what, const Task& task) :
+std::invalid_argument(what), task{task} {}
+
 DuplicateWorkerIDError::DuplicateWorkerIDError(const std::string& what, const Worker& worker) :
     std::invalid_argument(what), worker{worker} {}
 

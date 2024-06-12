@@ -24,6 +24,7 @@ class MultipleOwnSystemObserver : public virtual WeakMultipleOwnSystemObserver<T
         void remove_observed(const T&) noexcept;
         void remove_all_observed() noexcept;
         std::vector<const T*> get() const;
+        const T& front() const;
         std::optional<const T*> find_by_id(const std::string&) const;
         const T& get_by_id(const std::string&) const;
     private:
@@ -92,6 +93,9 @@ std::vector<const T*> MultipleOwnSystemObserver<T>::get() const
     std::ranges::for_each(observers, [&](const auto& obs){ observed.push_back(&obs -> get()); });
     return observed;
 }
+
+template<typename T>
+const T& MultipleOwnSystemObserver<T>::front() const { return observers.front() -> get(); }
 
 template<typename T>
 std::optional<const T*> MultipleOwnSystemObserver<T>::find_by_id(const std::string& id) const

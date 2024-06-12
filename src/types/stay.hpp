@@ -45,8 +45,8 @@ class Stay : protected OwnSystemObserver<Room>, protected MultipleOwnSystemObser
         StayStatus get_status() const noexcept;
         void add_guest(const Guest&);
         void remove_guest(const Guest&);
-        void set_start(const jed_utils::datetime start);
-        void set_end(const jed_utils::datetime end);
+        void set_start(jed_utils::datetime start);
+        void set_end(jed_utils::datetime end);
         void set_status(StayStatus);
         bool operator==(const Stay&) const;
         static const jed_utils::timespan checkout_time;
