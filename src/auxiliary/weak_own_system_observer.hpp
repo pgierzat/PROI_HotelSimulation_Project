@@ -8,7 +8,7 @@ template<typename T>
 class WeakOwnSystemObserver
 {
     public:
-        virtual ~WeakOwnSystemObserver() {};
+        virtual ~WeakOwnSystemObserver() = default;
         virtual void notify_realloc(const T& new_obj) = 0;
         virtual void notify_erase() noexcept = 0;
         virtual const std::string& get_observed_id() const noexcept = 0;
