@@ -42,6 +42,7 @@ jed_utils::datetime Stay::get_start() const noexcept { return start + checkin_ti
 
 jed_utils::datetime Stay::get_end() const noexcept { return end + checkout_time; }
 
+
 TimeInterval Stay::get_interval() const noexcept
 {
     return TimeInterval{start + checkin_time, end + checkout_time};

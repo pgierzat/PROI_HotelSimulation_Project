@@ -1,9 +1,12 @@
 #include "generator.hpp"
 #include "../utilities/errors.hpp"
 
-Generator::Generator(const jed_utils::datetime& time) : time{time}, time_next{time} {}
+Generator::Generator(TimePublisher& t_publisher, const jed_utils::datetime& time) : time{time}, time_next{time}
+{
+    t_publisher.subscribe(*this);
+}
 
-void Generator::set_time(const jed_utils::datetime& time)
+void Generator::notify(const jed_utils::datetime& time)
 {
     auto prev_time = this -> time;
     if (time < prev_time)
@@ -16,7 +19,7 @@ void Generator::set_time(const jed_utils::datetime& time)
     this -> time = time;
 }
 
-jed_utils::timespan Generator::get_time_of_gen() const noexcept{ 
+jed_utils::timespan Generator::get_time_of_gen() const noexcept{
     return jed_utils::timespan{0};
 }
 
