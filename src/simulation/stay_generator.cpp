@@ -13,7 +13,7 @@
 #include <iostream>
 
 
-StayGenerator::StayGenerator(HotelSystem& h_system) : Generator{time},
+StayGenerator::StayGenerator(HotelSystem& h_system) : Generator{h_system.get_ck(), h_system.get_time()},
     rooms_list{&h_system.get_crooms_list()}, s_system{&h_system.get_s_system()}, g_system{&h_system.get_g_system()}
 {
     initiate_time_next();
@@ -31,18 +31,20 @@ void StayGenerator::generate()
         guestslist.push_back(guest);
         g_system -> add_guest(guest);
     }
+    std::cout << guests_num << std::endl;
     switch (guests_num)
     {
     case 1:
     {
         const std::list<std::unique_ptr<Room>>& rooms = rooms_list -> getRooms();
         Guest main_guest = guestslist[0];
-        auto it = find_if(rooms.begin(), rooms.end(), [this](const std::unique_ptr<Room>& room) {return s_system -> check_room(*room);});
+        auto it = find_if(rooms.begin(), rooms.end(), [this](const std::unique_ptr<Room>& room) {
+        OneRoom* oneRoom = dynamic_cast<OneRoom*>(room.get());
+        return oneRoom && s_system -> check_room(*room);
+    });
         if(it == rooms.end())
             break;
         OneRoom* free_room = dynamic_cast<OneRoom*>(it->get());
-        if(!free_room)
-            break;
         jed_utils::datetime end_time = time + jed_utils::timespan(days);
         Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
         s_system -> add_stay(stay);
@@ -58,12 +60,13 @@ void StayGenerator::generate()
     {
         const std::list<std::unique_ptr<Room>>& rooms = rooms_list -> getRooms();
         Guest main_guest = guestslist[0];
-        auto it = find_if(rooms.begin(), rooms.end(), [this](const std::unique_ptr<Room>& room) {return s_system -> check_room(*room);});
+        auto it = find_if(rooms.begin(), rooms.end(), [this](const std::unique_ptr<Room>& room) {
+        TwoRoom* twoRoom = dynamic_cast<TwoRoom*>(room.get());
+        return twoRoom && s_system -> check_room(*room);
+    });
         if(it == rooms.end())
             break;
         TwoRoom* free_room = dynamic_cast<TwoRoom*>(it->get());
-        if(!free_room)
-            break;
         jed_utils::datetime end_time = time + jed_utils::timespan(days);
         Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
         s_system -> add_stay(stay);
@@ -78,12 +81,13 @@ void StayGenerator::generate()
     {
         const std::list<std::unique_ptr<Room>>& rooms = rooms_list -> getRooms();
         Guest main_guest = guestslist[0];
-        auto it = find_if(rooms.begin(), rooms.end(), [this](const std::unique_ptr<Room>& room) {return s_system -> check_room(*room);});
+        auto it = find_if(rooms.begin(), rooms.end(), [this](const std::unique_ptr<Room>& room) {
+        ThreeRoom* threeRoom = dynamic_cast<ThreeRoom*>(room.get());
+        return threeRoom && s_system -> check_room(*room);
+    });
         if(it == rooms.end())
             break;
         ThreeRoom* free_room = dynamic_cast<ThreeRoom*>(it->get());
-        if(!free_room)
-            break;
         jed_utils::datetime end_time = time + jed_utils::timespan(days);
         Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
         s_system -> add_stay(stay);
@@ -98,18 +102,20 @@ void StayGenerator::generate()
         {
         const std::list<std::unique_ptr<Room>>& rooms = rooms_list -> getRooms();
         Guest main_guest = guestslist[0];
-        auto it = find_if(rooms.begin(), rooms.end(), [this](const std::unique_ptr<Room>& room) {return s_system -> check_room(*room);});
+        auto it = find_if(rooms.begin(), rooms.end(), [this](const std::unique_ptr<Room>& room) {
+        FourRoom* fourRoom = dynamic_cast<FourRoom*>(room.get());
+        return fourRoom && s_system -> check_room(*room);
+    });
         if(it == rooms.end())
             break;
         FourRoom* free_room = dynamic_cast<FourRoom*>(it->get());
-        if(!free_room)
-        break;
         jed_utils::datetime end_time = time + jed_utils::timespan(days);
         Stay stay = Stay(IDGen.generate_id(), *free_room, main_guest, time, end_time);
         s_system -> add_stay(stay);
+
         std::ofstream file("output.txt", std::ios::app); // Open the file in append mode
         if (file.is_open()) {
-            file << guestslist.size() << " guests came to hotel, and their Stay is till " << end_time.to_string() << "\n";
+            file << guestslist.size() << " guest(s) came to hotel, and their Stay is till " << end_time.to_string() << "\n";
             file.close();
         }
         break;

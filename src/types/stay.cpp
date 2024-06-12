@@ -38,9 +38,10 @@ const Room& Stay::get_room() const
     return RoomObs::get();
 }
 
-jed_utils::datetime Stay::get_start() const noexcept { return start; }
+jed_utils::datetime Stay::get_start() const noexcept { return start + checkin_time; }
 
-jed_utils::datetime Stay::get_end() const noexcept { return end; }
+jed_utils::datetime Stay::get_end() const noexcept { return end + checkout_time; }
+
 
 TimeInterval Stay::get_interval() const noexcept
 {

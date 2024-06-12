@@ -24,10 +24,10 @@ TEST_CASE("Test RoomCleaningTaskGenerator")
     SECTION("time test")
     {
         jed_utils::datetime time1{2024, 5, 19, 7};
-        gen.set_time(time1);
+        gen.notify(time1);
         REQUIRE(t_system.get_tasks().empty());
         jed_utils::datetime time2{2024, 5, 19, 8};
-        gen.set_time(time2);
+        gen.notify(time2);
         auto task1 = RoomCleaningTask{"1", room1};
         auto task2 = RoomCleaningTask{"2", room2};
         auto expected = std::vector{task1, task2};

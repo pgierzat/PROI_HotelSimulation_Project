@@ -7,10 +7,11 @@
 #include "../types/timespan.h"
 
 
+
 class SystematicTaskGenerator : public Generator
 {
     public:
-        SystematicTaskGenerator(const jed_utils::datetime&, TaskSystem&);
+        SystematicTaskGenerator(TimePublisher&, const jed_utils::datetime&, TaskSystem&);
     protected:
         TaskSystem* t_system;
 };
