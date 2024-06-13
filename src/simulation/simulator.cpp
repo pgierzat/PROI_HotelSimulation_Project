@@ -23,8 +23,8 @@ void Simulator::simulate()
 {
     auto &clock = hotel_system.get_ck();
     clock.set_unit_delta(jed_utils::timespan(0, 1, 0, 0));
-    // Simulation loop
-    while (true)
+    auto end = jed_utils::datetime{2024, 7, 1};
+    while (clock.get_time() < end)
     {
         ++clock;
     }

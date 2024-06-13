@@ -20,7 +20,6 @@ class Simulator {
 public:
     Simulator(HotelSystem&);
     void simulate();
-    void hotel_set_time(const jed_utils::datetime& time);
 };
 
 
