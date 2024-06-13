@@ -45,7 +45,7 @@ void StayGenerator::generate()
             stay.add_guest(guest);
         s_system -> add_stay_id(stay);
         msg = std::to_string(guests_nr) +
-            " guests came to the hotel, they booked stay ending at " +
+            " guests came to the hotel, they booked a stay ending at " +
             stay.get_end().to_string();
     }
     std::ofstream file("output.txt", std::ios::app);

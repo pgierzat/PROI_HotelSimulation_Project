@@ -30,11 +30,3 @@ void Simulator::simulate()
     }
 }
 
-// void Simulator::hotel_set_time(const jed_utils::datetime& time)
-// {
-//     stay_generator.set_time(time);
-//     room_cleaning_task_generator.set_time(time);
-//     timetable_generator.set_time(time);
-// }
-
-

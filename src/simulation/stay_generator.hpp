@@ -18,6 +18,7 @@ class StayGenerator : public RandomGenerator
         StayGenerator(HotelSystem&);
     protected:
         void generate() override;
+    private:
         template<SupportedRoom T>
             std::optional<Stay> generate_stay(const std::vector<Guest>&, int days);
         std::vector<Guest> generate_guests(unsigned guests_nr);
